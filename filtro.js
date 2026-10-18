@@ -9,38 +9,41 @@
 (function (g) {
   'use strict';
 
-  // Palabras exactas (se comparan ya sin tildes, en minúscula y con letras repetidas colapsadas)
-  const PALABRAS = [
-    'ctm', 'ctmre', 'csm', 'hdp', 'ql', 'qlo', 'qlos',
-    'mierda', 'mierdas', 'coño', 'puñeta', 'carajo', 'cojones', 'cojon', 'cojudo',
-    'pendejo', 'pendeja', 'pendejos', 'pelotudo', 'pelotuda', 'boludo', 'boluda',
-    'gilipollas', 'gilipolla', 'cabron', 'cabrona', 'cabrones', 'joto', 'maraco', 'maraca',
-    'verga', 'vergas', 'pija', 'pijas', 'poto', 'potos', 'ojete', 'tula',
-    'follar', 'follada', 'chingar', 'chinga', 'chingada', 'chingadera', 'chingatumadre',
-    'imbecil', 'imbeciles', 'idiota', 'idiotas', 'estupido', 'estupida', 'retrasado', 'retrasada',
-    'mogolico', 'mogolica', 'subnormal', 'sudaca',
-    'fuck', 'fucking', 'fucker', 'motherfucker', 'fck', 'shit', 'shitty', 'bitch', 'bitches',
-    'asshole', 'dick', 'dicks', 'cunt', 'bastard', 'pussy', 'cock', 'whore', 'slut',
-    'nigger', 'nigga', 'faggot'
+  // Palabras que SIEMPRE se permiten (platos y palabras legítimas que empiezan o contienen una raíz bloqueada)
+  const PERMITIDAS = ['putanesca', 'puttanesca', 'shitake', 'shiitake', 'carajillo', 'vergara', 'follaje', 'picoteo', 'picoteos',
+    'computador', 'computadora', 'disputa', 'reputacion', 'chuchoca', 'chuchoca', 'tulipan', 'tulipanes', 'cocktail', 'cocktails'];
+
+  // INICIO: se bloquea cualquier palabra que EMPIECE con la raíz (tula → tula, tulita, tulachi, tulazo…)
+  const INICIO = [
+    'puta', 'puto', 'putit', 'pute', 'tula', 'tulit', 'tulon', 'ojet', 'carajo', 'coñ', 'cojon', 'cojud', 'pendej', 'pelotud', 'bolud', 'gilipoll',
+    'cabron', 'cagad', 'cagar', 'cagon', 'culia', 'culea', 'culiao', 'culo', 'culit', 'culon', 'chucha', 'chuchet', 'chuches',
+    'pichul', 'pichon', 'imbecil', 'idiot', 'estupid', 'retrasad', 'mogolic', 'subnormal', 'sudaca',
+    'weon', 'hueon', 'huevon', 'webon', 'aweon', 'huevad', 'weada', 'hueada', 'chingad', 'chingar', 'chingat', 'chinga',
+    'follad', 'follar', 'mamaguevo', 'maricon', 'mariconad', 'ctm', 'csm', 'hdp', 'hijueput', 'hijoput', 'hijaput',
+    'fuck', 'fck', 'bitch', 'asshole', 'bastard', 'motherfuck', 'nigg', 'puñet', 'mierd'
   ];
 
-  // Familias de palabras (expresiones regulares sobre una palabra ya normalizada)
+  // CONTIENE: se bloquea aunque la raíz venga en medio o pegada a otra palabra (5 letras o más)
+  const CONTIENE = [
+    'mierda', 'culiao', 'culiad', 'maricon', 'pendejo', 'gilipolla', 'weon', 'hueon', 'huevon', 'webon',
+    'conchetumadre', 'conchetumare', 'conchesumare', 'conchadetumadre', 'conchadesumadre', 'putamadre', 'putamare',
+    'reputamadre', 'hijodeputa', 'hijoputa', 'hijoeputa', 'hijaeputa', 'hijueputa', 'hijadeputa',
+    'chingatumadre', 'mamaguevo', 'mamahuevo', 'pichula', 'chucha', 'carajo'
+  ];
+
+  // Familias (regex sobre una palabra normalizada) para palabras cortas o ambiguas que no se pueden bloquear por prefijo
   const FAMILIAS = [
-    '^a?(w|hu|gu)e[bv]?on(a|es|as|ao|ado|ada|azo|cito|cita)?$',          // weón, huevón, aweonao…
-    '^(w|hu)ea(s)?$', '^(w|hu)e[v]?ada(s)?$',                              // weá, huevada
-    '^cul(o|os|ia|iao|iaos|iado|iada|iados|iadas|iar|iando|ear|eo|eado|eada)$', // culo, culiao…
-    '^put(a|as|o|os|ita|ito|itas|itos|ear|eo|eada|eado|ada|illa)$',        // puta, putear…
-    '^chuch(a|as|e|esumare|etumare|esumadre|etumadre)$',                   // chucha
-    '^cag(ada|adas|ado|ar|on|ones|ona)$',                                  // cagada
-    '^maric(on|ones|a|as|onada)$',                                         // maricón
-    '^pichul(a|as|ita|itas)$'                                              // pichula
-  ];
-
-  // Fragmentos graves: se bloquean aunque vengan pegados a otra palabra (6 letras o más)
-  const FRAGMENTOS = [
-    'conchetumadre', 'conchetumare', 'conchesumare', 'conchadetumadre', 'conchadesumadre',
-    'hijodeputa', 'hijoputa', 'hijoeputa', 'hijaeputa', 'hijueputa', 'hijadeputa', 'putamadre', 'putamare', 'reputamadre',
-    'mierda', 'culiao', 'maricon', 'pendejo', 'gilipolla', 'chingatumadre', 'mamaguevo', 'mamahuevo', 'aweonao'
+    '^(w|hu)ea(s|ita|itas|zo)?$',          // weá, huevá
+    '^verg(a|as|on|ona|ones|azo|ita)$',    // verga (no "Vergara")
+    '^pij(a|as|ita|on|azo)$',              // pija (no "pijama")
+    '^pot(o|os|ito|itos|azo)$',            // poto
+    '^marac(o|a|os|as|azo)$',              // maraco
+    '^maric(a|as|ita|ote)$',               // marica
+    '^jot(o|os|ita)$',                     // joto
+    '^ql(o|a|os|as|ao|iao)?$',             // ql, qlo
+    '^pico(s)?$',                          // pico (ver excepción de "pico de gallo")
+    '^shit(s|ty|head|hole)?$', '^dick(s|head|y)?$', '^cunt(s|y)?$', '^cock(s|sucker)?$', '^pus(y|ies)$',
+    '^whore(s)?$', '^slut(s|ty)?$', '^fag(ot|ots)$'
   ];
 
   // Frases (sobre las palabras normalizadas separadas por un espacio)
@@ -54,10 +57,11 @@
   const LEET = { '0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', '7': 't', '@': 'a', '$': 's' };
   const colapsa = s => s.replace(/(.)\1+/g, '$1');
 
-  const SET = new Set(PALABRAS.map(colapsa));
+  const PER = new Set(PERMITIDAS.map(colapsa));
+  const INI = INICIO.map(colapsa);
+  const CON = CONTIENE.map(colapsa);
   const FAM = FAMILIAS.map(r => new RegExp(r));
   const FRA = FRASES.map(r => new RegExp(r));
-  const FRG = FRAGMENTOS.map(colapsa);
   const OK0 = colapsa(PICO_OK[0]), OK1 = colapsa(PICO_OK[1]);   // ya colapsadas (gallo → galo), como las palabras que se comparan
 
   function normalizar(texto) {
@@ -78,9 +82,10 @@
     if (!toks.length) return false;
     for (let i = 0; i < toks.length; i++) {
       const t = toks[i];
-      if (t === 'pico') { if (toks[i + 1] === OK0 && toks[i + 2] === OK1) continue; return true; }
-      if (SET.has(t) || FAM.some(r => r.test(t))) return true;
-      if (t.length >= 6 && FRG.some(f => t.includes(f))) return true;
+      if (PER.has(t)) continue;
+      if (t === 'pico' || t === 'picos') { if (toks[i + 1] === OK0 && toks[i + 2] === OK1) continue; return true; }
+      if (INI.some(r => t.startsWith(r)) || FAM.some(r => r.test(t))) return true;
+      if (CON.some(f => t.includes(f))) return true;
     }
     const frase = toks.join(' ');
     return FRA.some(r => r.test(frase));
@@ -90,6 +95,6 @@
   /* revisa varios textos a la vez: devuelve true si alguno es inapropiado */
   const alguno = (...textos) => textos.some(malo);
 
-  const F = { malo, alguno, normalizar, MSG, LISTAS: { PALABRAS, FAMILIAS, FRAGMENTOS, FRASES, PICO_OK } };
+  const F = { malo, alguno, normalizar, MSG, LISTAS: { PERMITIDAS, INICIO, CONTIENE, FAMILIAS, FRASES, PICO_OK } };
   if (typeof module !== 'undefined' && module.exports) module.exports = F; else g.FILTRO = F;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -12,9 +12,10 @@ create or replace function fogon_texto_prohibido(p text) returns boolean
 language plpgsql immutable set search_path = public as $f$
 declare
   t text; toks text[]; fin text[] := '{}'; tok text; c text; i int := 1; j int; n int; frase text;
-  palabras text[] := array['ctm', 'ctmre', 'csm', 'hdp', 'ql', 'qlo', 'qlos', 'mierda', 'mierdas', 'coño', 'puñeta', 'carajo', 'cojones', 'cojon', 'cojudo', 'pendejo', 'pendeja', 'pendejos', 'pelotudo', 'pelotuda', 'boludo', 'boluda', 'gilipolas', 'gilipola', 'cabron', 'cabrona', 'cabrones', 'joto', 'maraco', 'maraca', 'verga', 'vergas', 'pija', 'pijas', 'poto', 'potos', 'ojete', 'tula', 'folar', 'folada', 'chingar', 'chinga', 'chingada', 'chingadera', 'chingatumadre', 'imbecil', 'imbeciles', 'idiota', 'idiotas', 'estupido', 'estupida', 'retrasado', 'retrasada', 'mogolico', 'mogolica', 'subnormal', 'sudaca', 'fuck', 'fucking', 'fucker', 'motherfucker', 'fck', 'shit', 'shity', 'bitch', 'bitches', 'ashole', 'dick', 'dicks', 'cunt', 'bastard', 'pusy', 'cock', 'whore', 'slut', 'niger', 'niga', 'fagot']::text[];
-  familias text[] := array['^a?(w|hu|gu)e[bv]?on(a|es|as|ao|ado|ada|azo|cito|cita)?$', '^(w|hu)ea(s)?$', '^(w|hu)e[v]?ada(s)?$', '^cul(o|os|ia|iao|iaos|iado|iada|iados|iadas|iar|iando|ear|eo|eado|eada)$', '^put(a|as|o|os|ita|ito|itas|itos|ear|eo|eada|eado|ada|illa)$', '^chuch(a|as|e|esumare|etumare|esumadre|etumadre)$', '^cag(ada|adas|ado|ar|on|ones|ona)$', '^maric(on|ones|a|as|onada)$', '^pichul(a|as|ita|itas)$']::text[];
-  fragmentos text[] := array['conchetumadre', 'conchetumare', 'conchesumare', 'conchadetumadre', 'conchadesumadre', 'hijodeputa', 'hijoputa', 'hijoeputa', 'hijaeputa', 'hijueputa', 'hijadeputa', 'putamadre', 'putamare', 'reputamadre', 'mierda', 'culiao', 'maricon', 'pendejo', 'gilipola', 'chingatumadre', 'mamaguevo', 'mamahuevo', 'aweonao']::text[];
+  permitidas text[] := array['putanesca', 'putanesca', 'shitake', 'shitake', 'carajilo', 'vergara', 'folaje', 'picoteo', 'picoteos', 'computador', 'computadora', 'disputa', 'reputacion', 'chuchoca', 'chuchoca', 'tulipan', 'tulipanes', 'cocktail', 'cocktails']::text[];
+  inicio text[] := array['puta', 'puto', 'putit', 'pute', 'tula', 'tulit', 'tulon', 'ojet', 'carajo', 'coñ', 'cojon', 'cojud', 'pendej', 'pelotud', 'bolud', 'gilipol', 'cabron', 'cagad', 'cagar', 'cagon', 'culia', 'culea', 'culiao', 'culo', 'culit', 'culon', 'chucha', 'chuchet', 'chuches', 'pichul', 'pichon', 'imbecil', 'idiot', 'estupid', 'retrasad', 'mogolic', 'subnormal', 'sudaca', 'weon', 'hueon', 'huevon', 'webon', 'aweon', 'huevad', 'weada', 'hueada', 'chingad', 'chingar', 'chingat', 'chinga', 'folad', 'folar', 'mamaguevo', 'maricon', 'mariconad', 'ctm', 'csm', 'hdp', 'hijueput', 'hijoput', 'hijaput', 'fuck', 'fck', 'bitch', 'ashole', 'bastard', 'motherfuck', 'nig', 'puñet', 'mierd']::text[];
+  contiene text[] := array['mierda', 'culiao', 'culiad', 'maricon', 'pendejo', 'gilipola', 'weon', 'hueon', 'huevon', 'webon', 'conchetumadre', 'conchetumare', 'conchesumare', 'conchadetumadre', 'conchadesumadre', 'putamadre', 'putamare', 'reputamadre', 'hijodeputa', 'hijoputa', 'hijoeputa', 'hijaeputa', 'hijueputa', 'hijadeputa', 'chingatumadre', 'mamaguevo', 'mamahuevo', 'pichula', 'chucha', 'carajo']::text[];
+  familias text[] := array['^(w|hu)ea(s|ita|itas|zo)?$', '^verg(a|as|on|ona|ones|azo|ita)$', '^pij(a|as|ita|on|azo)$', '^pot(o|os|ito|itos|azo)$', '^marac(o|a|os|as|azo)$', '^maric(a|as|ita|ote)$', '^jot(o|os|ita)$', '^ql(o|a|os|as|ao|iao)?$', '^pico(s)?$', '^shit(s|ty|head|hole)?$', '^dick(s|head|y)?$', '^cunt(s|y)?$', '^cock(s|sucker)?$', '^pus(y|ies)$', '^whore(s)?$', '^slut(s|ty)?$', '^fag(ot|ots)$']::text[];
   frases text[] := array['(^| )(concha|chucha) (de )?(tu|su|la) ?(madre|mare)( |$)']::text[];
   ok0 text := 'de'; ok1 text := 'galo';
 begin
@@ -38,13 +39,14 @@ begin
   for i in 1..n loop fin[i] := regexp_replace(fin[i], '(.)\1+', '\1', 'g'); end loop;   -- puuuta → puta
   for i in 1..n loop
     tok := fin[i];
-    if tok = 'pico' then
+    if tok = any (permitidas) then continue; end if;
+    if tok = 'pico' or tok = 'picos' then
       if i + 2 <= n and fin[i + 1] = ok0 and fin[i + 2] = ok1 then continue; end if;   -- "pico de gallo" se permite
       return true;
     end if;
-    if tok = any (palabras) then return true; end if;
+    foreach c in array inicio loop if left(tok, length(c)) = c then return true; end if; end loop;
     foreach c in array familias loop if tok ~ c then return true; end if; end loop;
-    if length(tok) >= 6 then foreach c in array fragmentos loop if position(c in tok) > 0 then return true; end if; end loop; end if;
+    foreach c in array contiene loop if position(c in tok) > 0 then return true; end if; end loop;
   end loop;
   frase := array_to_string(fin, ' ');
   foreach c in array frases loop if frase ~ c then return true; end if; end loop;

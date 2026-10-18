@@ -21,9 +21,10 @@ create or replace function fogon_texto_prohibido(p text) returns boolean
 language plpgsql immutable set search_path = public as $f$
 declare
   t text; toks text[]; fin text[] := '{}'; tok text; c text; i int := 1; j int; n int; frase text;
-  palabras text[] := ${arr(LISTAS.PALABRAS.map(colapsa))};
+  permitidas text[] := ${arr(LISTAS.PERMITIDAS.map(colapsa))};
+  inicio text[] := ${arr(LISTAS.INICIO.map(colapsa))};
+  contiene text[] := ${arr(LISTAS.CONTIENE.map(colapsa))};
   familias text[] := ${arr(LISTAS.FAMILIAS)};
-  fragmentos text[] := ${arr(LISTAS.FRAGMENTOS.map(colapsa))};
   frases text[] := ${arr(LISTAS.FRASES)};
   ok0 text := ${q(colapsa(LISTAS.PICO_OK[0]))}; ok1 text := ${q(colapsa(LISTAS.PICO_OK[1]))};
 begin
@@ -47,13 +48,14 @@ begin
   for i in 1..n loop fin[i] := regexp_replace(fin[i], '(.)\\1+', '\\1', 'g'); end loop;   -- puuuta → puta
   for i in 1..n loop
     tok := fin[i];
-    if tok = 'pico' then
+    if tok = any (permitidas) then continue; end if;
+    if tok = 'pico' or tok = 'picos' then
       if i + 2 <= n and fin[i + 1] = ok0 and fin[i + 2] = ok1 then continue; end if;   -- "pico de gallo" se permite
       return true;
     end if;
-    if tok = any (palabras) then return true; end if;
+    foreach c in array inicio loop if left(tok, length(c)) = c then return true; end if; end loop;
     foreach c in array familias loop if tok ~ c then return true; end if; end loop;
-    if length(tok) >= 6 then foreach c in array fragmentos loop if position(c in tok) > 0 then return true; end if; end loop; end if;
+    foreach c in array contiene loop if position(c in tok) > 0 then return true; end if; end loop;
   end loop;
   frase := array_to_string(fin, ' ');
   foreach c in array frases loop if frase ~ c then return true; end if; end loop;

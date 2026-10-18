@@ -35,7 +35,7 @@
 1. **Supabase > SQL Editor**: ejecuta `supabase/migracion-filtro-groserias.sql` ANTES de subir los HTML (es repetible).
 2. Sube `filtro.js` junto a `index.html`, `carta.html` y `sw.js` (el panel y la carta lo cargan).
 - **Qué revisa**: nombre del negocio, platos (nombre, categoría y descripción), agregados, promociones, mesas, y del lado del cliente la mesa, las notas de cocina y el detalle al llamar al mesero.
-- **Qué detecta**: mayúsculas, tildes, letras repetidas (`puuuta`), números por letras (`p1c0`), símbolos en medio (`m.i.e.r.d.a`) y letras separadas (`p i c o`). Español (incluido Chile) e inglés.
+- **Qué detecta**: la palabra y todas sus variantes (tula → tulita, tulachi, tulazo…), con mayúsculas, tildes, letras repetidas (`puuuta`), números por letras (`p1c0`), símbolos en medio (`m.i.e.r.d.a`) y letras separadas (`p i c o`). Español (incluido Chile) e inglés.
 - **Dos barreras**: el navegador avisa al instante (con el mismo aviso de siempre, la interfaz no cambia) y la base de datos rechaza el texto aunque alguien intente saltarse la página. Lo ya guardado antes no estorba: solo se revisa lo que se escribe o se cambia.
 - **"pico"** se bloquea, pero **"pico de gallo"** está permitido.
-- **Agregar o quitar palabras**: edita las listas de arriba de `filtro.js`, corre `node tests/generar-filtro-sql.js` y vuelve a ejecutar el SQL generado. Prueba con `node tests/filtro.js`.
+- **Agregar o quitar palabras**: edita las listas de arriba de `filtro.js` (INICIO = bloquea todo lo que empiece así; CONTIENE = bloquea si aparece en cualquier parte; PERMITIDAS = excepciones, como "shitake" o "carajillo"), corre `node tests/generar-filtro-sql.js` y vuelve a ejecutar el SQL generado. Prueba con `node tests/filtro.js`.
