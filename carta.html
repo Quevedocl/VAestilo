@@ -153,6 +153,14 @@ dialog::backdrop{background:rgba(20,24,30,.5)}
 .pf .stp button{width:42px;height:42px}
 .pf .na{flex:1;text-align:center;font-weight:600;color:var(--mu)}
 
+/* fondo quieto mientras hay una hoja abierta (vista previa, pedido, cuenta…) */
+html.lk,html.lk body{overflow:hidden;overscroll-behavior:none}
+dialog,.pb,.sc,#lines{overscroll-behavior:contain}
+.hero{touch-action:none}
+/* ===== recomendación al pagar ===== */
+.rb{height:38px;padding:0 16px;border:0;border-radius:99px;background:var(--ink);color:#fff;font-weight:700;transition:background .2s,transform .15s}
+.rb:active{transform:scale(.94)}.rb.on{background:var(--grn)}
+.rcap{margin:0 0 12px;color:var(--mu);font-weight:600}
 /* ===== cómo va mi pedido ===== */
 .track{display:flex;gap:8px;padding:0 12px 10px}
 .tkm{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px;border:1.5px solid var(--ln);border-radius:14px;background:#fff;transition:background .3s,border-color .3s}
@@ -412,6 +420,12 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
   <div class="pf" id="prodFoot"></div>
 </dialog>
 
+<dialog id="rec" aria-labelledby="recT">
+  <div class="sh"><h3 id="recT">¿Desea agregar algo más?</h3><button class="x" id="recClose" aria-label="Cerrar">×</button></div>
+  <div class="sc" id="recBody"></div>
+  <div class="ft"><button class="pri dk" id="recNo" type="button">No, gracias</button></div>
+</dialog>
+
 <dialog id="ord" aria-labelledby="ordT">
   <div class="sh"><h3 id="ordT">Cómo va tu pedido</h3><button class="x" id="ordClose" aria-label="Cerrar">×</button></div>
   <div class="sc" id="ordBody"></div>
@@ -483,7 +497,26 @@ function uuid() {
   const h = [...b].map(x => x.toString(16).padStart(2, '0'));
   return `${h.slice(0, 4).join('')}-${h.slice(4, 6).join('')}-${h.slice(6, 8).join('')}-${h.slice(8, 10).join('')}-${h.slice(10).join('')}`;
 }
-['#cart', '#prod', '#ord', '#bill', '#call'].forEach(d => $(d).addEventListener('click', e => { if (e.target === $(d)) $(d).close(); }));
+['#cart', '#prod', '#ord', '#bill', '#call', '#rec'].forEach(d => $(d).addEventListener('click', e => { if (e.target === $(d)) $(d).close(); }));
+
+/* ===== el fondo no se mueve mientras hay una hoja abierta ===== */
+(function () {
+  let y = 0, on = false;
+  const sync = () => {
+    const want = !!document.querySelector('dialog[open]'), de = document.documentElement;
+    if (want && !on) { y = window.scrollY; de.classList.add('lk'); on = true; }
+    else if (!want && on) { de.classList.remove('lk'); on = false; window.scrollTo({ top: y, behavior: 'instant' }); }
+  };
+  new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['open'] });
+  document.addEventListener('touchmove', e => {                     // iPhone: bloquea el arrastre salvo dentro de una lista que sí se desplaza
+    const d = document.querySelector('dialog[open]'); if (!d) return;
+    for (let el = e.target; el && el.nodeType === 1; el = el.parentNode) {
+      if (el.scrollHeight > el.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(el).overflowY)) return;
+      if (el === d) break;
+    }
+    e.preventDefault();
+  }, { passive: false });
+})();
 
 const sb = window.supabase && CFG.url ? supabase.createClient(CFG.url, CFG.key) : null;
 let CART_KEY = 'carta-pedido-v1';
@@ -585,7 +618,7 @@ function bar() {
   $('#bl').textContent = editing ? 'Guardar cambios' : 'Ver pedido';
 }
 function bump() { const b = $('#bar'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
-function afterCart(id, up) { saveCart(); refreshCtl(id); bar(); if (up) bump(); if ($('#cart').open) renderCart(); }
+function afterCart(id, up) { if (!cart.size) recAsked = false; saveCart(); refreshCtl(id); bar(); if (up) bump(); if ($('#cart').open) renderCart(); }
 
 function change(key, d) {
   if (locked) return;
@@ -680,6 +713,37 @@ $('#lines').addEventListener('input', e => {
   const l = cart.get(e.target.closest('li').dataset.k); if (l) { l.note = e.target.value; saveCart(); }
 });
 
+/* ===== recomendación al pagar: productos que el restaurante marcó como "Recomendar al pagar" en el panel ===== */
+let recState = null, recAsked = false, recBillAsked = false;
+function recList() {
+  const inCart = new Set([...cart.values()].map(l => String(l.id)));
+  return products.filter(p => p.recommended && p.is_available && !inCart.has(String(p.id))).slice(0, 3);
+}
+/* 'none' (no hay nada que recomendar) | 'skip' (no, gracias) | 'added' (agregó algo) | 'cancel' (cerró la ventana) */
+function askRec(ctx) {
+  if (locked || CLOSED) return Promise.resolve('none');
+  const list = recList(); if (!list.length) return Promise.resolve('none');
+  return new Promise(res => {
+    recState = { res, how: '', added: new Set(), ctx };
+    $('#recT').textContent = list.length === 1 ? `¿Desea agregar ${list[0].name}?` : '¿Desea agregar algo más?';
+    $('#recBody').innerHTML = `<p class="rcap">${ctx === 'bill' ? 'Antes de pagar, te recomendamos:' : 'Te recomendamos para acompañar tu pedido:'}</p><div class="lst">${list.map(p => `<article class="it" data-rid="${esc(p.id)}">
+      <div class="ph" style="${p.image_url ? `background-image:url('${esc(p.image_url)}')` : ''}">${p.image_url ? '' : esc((p.name || '?')[0])}</div>
+      <div class="nm"><b>${esc(p.name)}</b>${p.description ? `<div class="ds">${esc(p.description)}</div>` : ''}<span class="pr">${clp(p.price)}</span></div>
+      <div class="ctl"><button class="rb" type="button" data-rec="${esc(p.id)}">Agregar</button></div></article>`).join('')}</div>`;
+    updRec(); $('#recBody').scrollTop = 0; $('#rec').showModal();
+  });
+}
+function updRec() { if (recState) $('#recNo').textContent = recState.added.size ? 'Listo · revisar mi pedido' : recState.ctx === 'bill' ? 'No, gracias · avisar para pagar' : 'No, gracias · enviar pedido'; }
+$('#rec').addEventListener('close', () => { if (!recState) return; const r = recState; recState = null; r.res(r.how || 'cancel'); });
+$('#recClose').onclick = () => $('#rec').close();
+$('#recNo').onclick = () => { if (!recState) return; recState.how = recState.added.size ? 'added' : 'skip'; $('#rec').close(); };
+$('#recBody').addEventListener('click', e => {
+  const b = e.target.closest('[data-rec]'); if (!b || !recState) return; const p = find(b.dataset.rec); if (!p) return;
+  if (recState.added.has(String(p.id))) { recState.added.delete(String(p.id)); change(keyOf(String(p.id), []), -1); b.classList.remove('on'); b.textContent = 'Agregar'; }
+  else if (p.is_available) { recState.added.add(String(p.id)); addLine(p, [], 1, ''); b.classList.add('on'); b.textContent = '✓ Agregado'; }
+  updRec();
+});
+
 /* ===== enviar pedido al panel (o guardar los cambios de un pedido) ===== */
 const fail = m => { $('#err').textContent = m; };
 $('#send').onclick = async () => {
@@ -689,6 +753,11 @@ $('#send').onclick = async () => {
   if (FILTRO.malo(t)) { fail(FILTRO.MSG); $('#mesaIn').focus(); return; }
   if ([...cart.values()].some(l => FILTRO.malo(l.note))) { fail('Alguna nota de tu pedido tiene palabras no permitidas. Corrígela para enviar.'); return; }
   if (!sb) { fail('Sin conexión con el restaurante. Avisa a un mesero.'); return; }
+  if (!editing && !recAsked) {                    // "¿Desea agregar …?" antes de enviar
+    const r = await askRec('send'); if (r === 'cancel') return;
+    if (r !== 'none') recAsked = true;
+    if (r === 'added') { renderCart(); toast('Agregado a tu pedido. Revísalo y envíalo.'); return; }
+  }
 
   await load();                                  // revisa disponibilidad justo antes de enviar
   const gone = lastGone; lastGone = [];
@@ -717,7 +786,7 @@ $('#send').onclick = async () => {
   }
 
   lastMesa = t; rememberOrder(pub);
-  cart.clear(); saveCart(); $('#cart').close();
+  cart.clear(); saveCart(); recAsked = false; $('#cart').close();
   render(); bar();
   $('#doneH').textContent = 'Pedido enviado';
   $('#doneTxt').textContent = `Lo recibimos en cocina para la mesa ${t}. Puedes seguirlo en vivo y, mientras no empiece a prepararse, modificarlo o cancelarlo.`;
@@ -918,7 +987,7 @@ function renderBill() {
     <h4>¿Cómo quieren pagar?</h4><div class="seg2" id="bmode">${modes.map(([m, l]) => `<button data-m="${m}" class="${bill.mode === m ? 'on' : ''}">${l}</button>`).join('')}</div>${pnl}${tips}<div class="res" id="billRes"></div>`;
   $('#billErr').hidden = true; updateRes(d);
 }
-function openBill() { bill.tip = bill.custom ? bill.tip : TIP_PCT; renderBill(); $('#bill').showModal(); refreshAccount(true); }
+function openBill() { recBillAsked = false; bill.tip = bill.custom ? bill.tip : TIP_PCT; renderBill(); $('#bill').showModal(); refreshAccount(true); }
 $('#billOpen').onclick = openBill;
 $('#billClose').onclick = () => $('#bill').close();
 $('#billBody').addEventListener('click', e => {
@@ -934,6 +1003,11 @@ $('#billBody').addEventListener('click', e => {
 $('#billBody').addEventListener('input', e => { if (e.target.id !== 'tipIn') return; bill.tip = Math.max(0, Math.min(100, Math.round(Number(e.target.value) || 0))); updateRes(); });
 $('#billPay').onclick = async () => {
   const d = billData(), c = calcBill(d), btn = $('#billPay'), er = $('#billErr'); er.hidden = true;
+  if (!recBillAsked) {                            // "¿Desea agregar …?" antes de avisar al mesero para pagar
+    const r = await askRec('bill'); if (r === 'cancel') return;
+    if (r !== 'none') recBillAsked = true;
+    if (r === 'added') { $('#bill').close(); renderCart(); $('#cart').showModal(); toast('Agregado a tu pedido. Envíalo para sumarlo a la cuenta.'); return; }
+  }
   const how = { all: 'Pagan toda la cuenta', equal: `Cuenta dividida en ${c.n}`, mine: 'Pago solo mis pedidos', items: 'Pago por producto' }[bill.mode];
   const note = `${how}: ${bill.mode === 'equal' ? clp(c.per) + ' c/u' : clp(c.grand)}${c.tip ? ' (propina ' + bill.tip + '% incluida)' : ' (sin propina)'}`;
   btn.disabled = true; const old = btn.textContent; btn.textContent = 'Avisando…';
@@ -964,7 +1038,7 @@ function lockUp(html) {
   locked = true; document.body.classList.add('locked'); $('#lockbar').hidden = false;
   editing = null; $('#editbar').hidden = true; $('#track').hidden = true;
   cart.clear(); try { localStorage.removeItem(CART_KEY); } catch (e) {}
-  ['#cart', '#call', '#prod', '#ord', '#bill'].forEach(d => { try { $(d).close(); } catch (e) {} });
+  ['#cart', '#call', '#prod', '#ord', '#bill', '#rec'].forEach(d => { try { $(d).close(); } catch (e) {} });
   render(); bar();
 }
 /* 'ok' | 'locked' | 'gone' — consulta la sesión vigente de la mesa */

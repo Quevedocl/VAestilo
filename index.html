@@ -15,6 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="filtro.js"></script>
+<script src="xlsx.js"></script>
 <style>
 /* sin zoom por doble toque y sin selección de texto (los campos de escritura sí se pueden seleccionar) */
 html{touch-action:manipulation;-webkit-text-size-adjust:100%}
@@ -546,6 +547,15 @@ dialog h3{font:600 22px/1.2 var(--serif)}
 .rvc2 .card{max-height:420px;overflow-y:auto}
 @media (max-width:860px){.rvc2{grid-template-columns:1fr}.cstat{padding-top:12px}}
 @media (max-width:720px){.cstat{display:flex;overflow-x:auto;scrollbar-width:none;padding-top:12px}.cstat div{flex:none;min-width:112px;padding:10px 14px}.mstat{grid-template-columns:repeat(4,1fr);gap:8px}.mstat div{padding:10px 12px}}
+
+/* demora del pedido: verde (< 10 min), amarillo (10-19) y rojo (20 o más) · y avance por estación (cocina / barra) */
+.tk{--dl:var(--ln);border-left:6px solid var(--dl);transition:border-color .3s}
+.tk.d-g{--dl:#4E9A6B}.tk.d-y{--dl:#E0A526}.tk.d-r{--dl:#C9544F}
+.tk.d-g .ago,.tk.d-y .ago,.tk.d-r .ago{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:3px 12px 3px 10px;font-size:15px}
+.tk .ago::before{content:none}.tk.d-g .ago::before,.tk.d-y .ago::before,.tk.d-r .ago::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dl)}
+.d-g .ago{background:#E3F1E8;color:#25613B}.d-y .ago{background:#FBEFC9;color:#7A5A00}.d-r .ago{background:#F6DAD8;color:#8F2F2B}
+.stc{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px 0}.stc span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;background:#EAF0F7;color:#3D5A80}
+.stc i{width:8px;height:8px;border-radius:50%;background:currentColor}.stc .sc-preparing{background:#FBF1DB;color:#6F5217}.stc .sc-ready{background:#E3EEE7;color:#2F5240}
 </style>
 <script>
 /* evita el zoom por doble toque en iOS/Android (el touch-action ya lo cubre; esto es un respaldo) */
@@ -630,7 +640,7 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
       <button class="gh" id="rvPrev" aria-label="Día anterior">‹</button>
       <input type="date" id="rvDay" aria-label="Día">
       <button class="gh" id="rvNext" aria-label="Día siguiente">›</button>
-      <button class="gh" id="rvToday">Hoy</button><button class="gh" id="rvCsv" title="Descargar los pedidos de este día para Excel">Exportar CSV</button>
+      <button class="gh" id="rvToday">Hoy</button><button class="gh" id="rvCsv" title="Descargar el reporte del día en Excel (resumen, pedidos y detalle)">Exportar Excel</button>
       <span class="stt sp" id="rvTitle"></span>
     </div>
     <div class="rv">
@@ -673,7 +683,7 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
         <div class="fld" id="cfgTipBox" style="margin-top:14px"><label for="cfgTip">Propina sugerida en la cuenta</label><select id="cfgTip"><option value="0">Sin sugerencia</option><option value="5">5%</option><option value="10">10% (habitual en Chile)</option><option value="15">15%</option><option value="20">20%</option></select><p class="hint" style="margin:6px 0 0">Tus clientes la ven al revisar la cuenta de su mesa. Es voluntaria y pueden cambiarla.</p></div>
         <div class="acts"><button class="gh" id="cfgReset" type="button">Descartar</button><button class="pri" id="cfgSave" type="button">Guardar cambios</button></div>
       </div>
-      <div class="card"><h3>Pantalla de cocina</h3><p class="hint">Enlace solo para el personal de cocina: ve los pedidos activos y los marca como preparando o listo. No ve cobros, ingresos ni la carta. Ábrelo en la tablet de cocina.</p><div class="fld"><input id="kLink" readonly aria-label="Enlace de cocina"></div><div class="acts"><button class="gh" id="kNew" type="button">Generar enlace nuevo</button><button class="pri" id="kCopy" type="button">Copiar enlace</button></div></div>
+      <div class="card"><h3>Pantalla de cocina y barra</h3><p class="hint">Enlaces solo para el personal: cada pantalla ve únicamente sus productos (lo de <b>cocina</b> o lo de <b>barra</b>, según lo que elijas en cada producto), los marca como preparando o listo, y no ve cobros, ingresos ni la carta. Ábrelos en la tablet de cada estación.</p><div class="fld"><label for="kLink" style="font-size:13px;font-weight:600;color:var(--mu)">Cocina</label><input id="kLink" readonly aria-label="Enlace de cocina"></div><div class="acts"><button class="gh" id="kCopy" type="button">Copiar enlace de cocina</button></div><div class="fld" style="margin-top:14px"><label for="bLink" style="font-size:13px;font-weight:600;color:var(--mu)">Barra</label><input id="bLink" readonly aria-label="Enlace de barra"></div><div class="acts"><button class="gh" id="bCopy" type="button">Copiar enlace de barra</button><button class="gh" id="kNew" type="button">Generar enlaces nuevos</button></div></div>
       <div class="card"><h3>Vista previa</h3><p class="hint">Así se ve la cabecera de tu carta en el celular del cliente.</p>
         <div class="pv"><div class="pvh"><div class="l"><div class="av" id="pvAv"></div><b id="pvName"></b></div><span class="tg">Mesa 5</span></div></div></div>
       <div class="card"><h3>Cuenta</h3><div class="acc"><span id="accMail"></span><button class="gh" id="logout2" type="button">Cerrar sesión</button></div></div>
@@ -699,6 +709,8 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
     <label for="f-cat">Categoría</label><select id="f-cat" required></select><input id="f-cat2" placeholder="Nombre de la nueva categoría" maxlength="40" hidden>
     <label for="f-price">Precio</label><input id="f-price" type="number" min="0" step="1" inputmode="numeric" required>
     <label for="f-desc">Descripción (opcional)</label><textarea id="f-desc" maxlength="240" placeholder="Ingredientes, tamaño, alérgenos… Se muestra en la vista previa del plato"></textarea>
+    <label for="f-st">Se prepara en</label><select id="f-st"><option value="kitchen">Cocina</option><option value="bar">Barra (bebidas, tragos, café…)</option></select>
+    <label for="f-rec" style="display:flex;align-items:center;gap:10px;color:var(--tx);font-size:14px;cursor:pointer"><input type="checkbox" id="f-rec"><span>Recomendar al pagar <small style="color:var(--mu);font-weight:500">(la carta le pregunta al cliente “¿Desea agregar …?”)</small></span></label>
     <label for="f-img" id="f-imgl">Foto (opcional)</label><input id="f-img" type="file" accept="image/*">
     <div class="bt"><button type="button" class="gh" id="cancel">Cancelar</button><button class="pri" type="submit">Guardar producto</button></div>
   </form>
@@ -870,9 +882,17 @@ function alertNew(list) {
 }
 
 /* ===== PEDIDOS ===== */
+const sigOf = o => JSON.stringify(o.items) + '|' + (o.modified_at || '') + '|' + (o.paid_at || '') + '|' + JSON.stringify(o.station_status || {}) + '|' + o.status;
+const stOfItem = i => { const p = (data.products || []).find(x => String(x.id) === String(i.id)); return p && p.station === 'bar' ? 'bar' : 'kitchen'; };
+const STN = { pending: 'Nuevo', preparing: 'Preparando', ready: 'Listo' };
+function stationChips(o) {                       // si el pedido lleva cocina y barra, muestra cómo va cada una
+  const set = [...new Set((o.items || []).map(stOfItem))]; if (set.length < 2 || !STN[o.status]) return '';
+  const ss = o.station_status || {};
+  return `<div class="stc">${['kitchen', 'bar'].map(k => { const st = ss[k] || o.status; return `<span class="sc-${st}"><i></i>${k === 'bar' ? 'Barra' : 'Cocina'} · ${STN[st] || st}</span>`; }).join('')}</div>`;
+}
 function ticketHTML(o) {
   const n = (o.items || []).reduce((a, i) => a + Number(i.qty || 0), 0);
-  return `<div class="hd"><div><b class="mn">${esc(tn(o))}</b><small>${n} ${n === 1 ? 'ítem' : 'ítems'}${o.modified_at ? '<span class="modb">Modificado</span>' : ''}${o.paid_at ? '<span class="paidb">Pagado</span>' : ''}</small></div><div class="rt"><span class="lt">Atrasado</span><span class="ago"></span></div><button class="prn" type="button" data-print title="Imprimir comanda" aria-label="Imprimir comanda"><svg viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H5a1 1 0 01-1-1v-6a1 1 0 011-1h14a1 1 0 011 1v6a1 1 0 01-1 1h-2M7 14h10v7H7z"/></svg></button></div>
+  return `<div class="hd"><div><b class="mn">${esc(tn(o))}</b><small>${n} ${n === 1 ? 'ítem' : 'ítems'}${o.modified_at ? '<span class="modb">Modificado</span>' : ''}${o.paid_at ? '<span class="paidb">Pagado</span>' : ''}</small></div><div class="rt"><span class="lt">Atrasado</span><span class="ago"></span></div><button class="prn" type="button" data-print title="Imprimir comanda" aria-label="Imprimir comanda"><svg viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H5a1 1 0 01-1-1v-6a1 1 0 011-1h14a1 1 0 011 1v6a1 1 0 01-1 1h-2M7 14h10v7H7z"/></svg></button></div>${stationChips(o)}
   <ul>${(o.items || []).map(i => `<li><b>${esc(i.qty)}×</b><span>${esc(i.name)}</span>${(i.addons || []).map(a => `<span class="nt ad">+ ${esc(a.name)}</span>`).join('')}${i.promo ? `<span class="nt">${esc(i.promo)}</span>` : ''}${i.note ? `<span class="nt">${esc(i.note)}</span>` : ''}</li>`).join('')}</ul><button class="go"></button>`;
 }
 function renderOrders() {
@@ -882,10 +902,10 @@ function renderOrders() {
     let el = map.get(o.id);
     if (!el) {
       el = document.createElement('article'); el.className = 'tk'; el.dataset.id = o.id; el.innerHTML = ticketHTML(o); map.set(o.id, el); $('#grid').appendChild(el);
-      el._sg = JSON.stringify(o.items) + '|' + (o.modified_at || '') + '|' + (o.paid_at || ''); if (!seen) el.style.animationDelay = Math.min(i, 8) * 45 + 'ms';
+      el._sg = sigOf(o); if (!seen) el.style.animationDelay = Math.min(i, 8) * 45 + 'ms';
       if (seen && o.status === 'pending') { fresh.push(o); el.classList.add('nuevo'); }
     } else if (el.dataset.st && el.dataset.st !== o.status) { el.classList.remove('nuevo', 'moved'); void el.offsetWidth; el.classList.add('moved'); }
-    const sg = JSON.stringify(o.items) + '|' + (o.modified_at || '') + '|' + (o.paid_at || '');
+    const sg = sigOf(o);
     if (el._sg !== sg) { el._sg = sg; el.innerHTML = ticketHTML(o); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }   // el cliente modificó el pedido
     el._mod = o.modified_at || '';
     el.classList.remove('pending', 'preparing', 'ready'); el.classList.add(o.status);
@@ -901,7 +921,8 @@ function tick() {
   for (const el of map.values()) {
     const m = mins(el._t);
     el.querySelector('.ago').textContent = m < 1 ? 'Recién' : m + ' min';
-    el.classList.toggle('late', el.dataset.st !== 'ready' && m >= 10);
+    const open = el.dataset.st !== 'ready'; el.classList.toggle('late', open && m >= 20);
+    el.classList.remove('d-g', 'd-y', 'd-r'); if (open) el.classList.add(m >= 20 ? 'd-r' : m >= 10 ? 'd-y' : 'd-g');   // demora: verde < 10 min, amarillo 10-19, rojo 20 o más
   }
 }
 function counts() {
@@ -1009,7 +1030,7 @@ function renderMenu(stagger) {
     const rows = data.products.filter(p => p.category === c && (!q || p.name.toLowerCase().includes(q)));
     return rows.length ? `<h3>${esc(c)}</h3><div class="lst">${rows.map(p => `<div class="rw${p.is_available ? '' : ' off'}" style="--i:${i++}">
       <div class="ph" style="${p.image_url ? `background-image:url('${esc(p.image_url)}')` : ''}">${p.image_url ? '' : esc(p.name[0])}</div>
-      <div class="nm"><b>${esc(p.name)}</b><small>${esc(p.category)}${addonCount(p) ? ' · ' + addonCount(p) + (addonCount(p) === 1 ? ' agregado' : ' agregados') : ''}</small></div>
+      <div class="nm"><b>${esc(p.name)}</b><small>${esc(p.category)}${addonCount(p) ? ' · ' + addonCount(p) + (addonCount(p) === 1 ? ' agregado' : ' agregados') : ''}${p.station === 'bar' ? ' · Barra' : ''}${p.recommended ? ' · ★ Recomendado' : ''}</small></div>
       <label class="pi">$<input type="number" min="0" step="1" inputmode="numeric" value="${p.price}" data-id="${p.id}" aria-label="Precio de ${esc(p.name)}"></label>
       <span class="st">${p.is_available ? 'Disponible' : 'Agotado'}</span>
       <input class="sw" type="checkbox" role="switch" ${p.is_available ? 'checked' : ''} data-id="${p.id}" aria-label="Disponible: ${esc(p.name)}"><button class="del ed" data-editp="${p.id}" aria-label="Editar ${esc(p.name)}" title="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg></button><button class="del" data-delp="${p.id}" aria-label="Borrar ${esc(p.name)}" title="Borrar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>`).join('')}</div>` : '';
@@ -1047,7 +1068,7 @@ function editProduct(id) {
   const p = data.products.find(x => String(x.id) === String(id)); if (!p) return;
   editPid = p.id; $('#f-title').textContent = 'Editar producto'; $('#f-imgl').textContent = 'Foto nueva (déjala vacía para mantener la actual)';
   $('#frm').reset(); fillCats();
-  $('#f-name').value = p.name; $('#f-price').value = p.price; $('#f-desc').value = p.description || '';
+  $('#f-name').value = p.name; $('#f-price').value = p.price; $('#f-desc').value = p.description || ''; $('#f-st').value = p.station === 'bar' ? 'bar' : 'kitchen'; $('#f-rec').checked = !!p.recommended;
   const sel = $('#f-cat');
   if ([...sel.options].some(o => o.value === p.category)) { sel.value = p.category; $('#f-cat2').hidden = true; $('#f-cat2').required = false; }
   else { sel.value = '__new'; $('#f-cat2').hidden = false; $('#f-cat2').required = true; $('#f-cat2').value = p.category; }
@@ -1055,7 +1076,7 @@ function editProduct(id) {
 }
 $('#cancel').onclick = () => $('#dlg').close();
 $('#frm').addEventListener('submit', async e => {
-  const row = { name: $('#f-name').value.trim(), category: ($('#f-cat').value === '__new' ? $('#f-cat2').value : $('#f-cat').value).trim(), price: Number($('#f-price').value), description: $('#f-desc').value.trim() || null };
+  const row = { name: $('#f-name').value.trim(), category: ($('#f-cat').value === '__new' ? $('#f-cat2').value : $('#f-cat').value).trim(), price: Number($('#f-price').value), description: $('#f-desc').value.trim() || null, station: $('#f-st').value === 'bar' ? 'bar' : 'kitchen', recommended: $('#f-rec').checked };
   if (FILTRO.alguno(row.name, row.category, row.description)) { e.preventDefault(); toast(FILTRO.MSG); return; }   // el formulario queda abierto para corregir
   const file = $('#f-img').files[0];
   if (editPid != null) { if (await api.editProduct(editPid, row, file)) toast('Producto actualizado'); }
@@ -1131,10 +1152,11 @@ async function loadKitchen() {
   if (!R) return;
   let { data: k } = await sb.from('kitchen_access').select('key').eq('restaurant_id', R.id).maybeSingle();
   if (!k) ({ data: k } = await sb.from('kitchen_access').insert({ restaurant_id: R.id }).select('key').maybeSingle());
-  $('#kLink').value = k ? new URL('cocina.html?k=' + k.key, location.href).href : '';
+  $('#kLink').value = k ? new URL('cocina.html?k=' + k.key, location.href).href : ''; $('#bLink').value = k ? new URL('cocina.html?k=' + k.key + '&e=bar', location.href).href : '';
 }
-$('#kCopy').onclick = async () => { const v = $('#kLink').value; if (!v) return; try { await navigator.clipboard.writeText(v); toast('Enlace copiado'); } catch (e) { $('#kLink').select(); toast('Selecciona y copia el enlace'); } };
-$('#kNew').onclick = async () => { if (!R || !confirm('¿Generar un enlace nuevo?\n\nEl de la tablet de cocina dejará de funcionar y tendrás que abrir el nuevo allí.')) return; const { error } = await sb.from('kitchen_access').update({ key: crypto.randomUUID() }).eq('restaurant_id', R.id); if (error) { toast('No se pudo generar el enlace'); return; } await loadKitchen(); toast('Enlace nuevo generado'); };
+const copyLink = id => async () => { const v = $(id).value; if (!v) return; try { await navigator.clipboard.writeText(v); toast('Enlace copiado'); } catch (e) { $(id).select(); toast('Selecciona y copia el enlace'); } };
+$('#kCopy').onclick = copyLink('#kLink'); $('#bCopy').onclick = copyLink('#bLink');
+$('#kNew').onclick = async () => { if (!R || !confirm('¿Generar enlaces nuevos?\n\nLos de las tablets de cocina y barra dejarán de funcionar y tendrás que abrir los nuevos allí.')) return; const { error } = await sb.from('kitchen_access').update({ key: crypto.randomUUID() }).eq('restaurant_id', R.id); if (error) { toast('No se pudo generar el enlace'); return; } await loadKitchen(); toast('Enlaces nuevos generados'); };
 $('#cfgSave').onclick = async () => {
   const name = $('#cfgName').value.trim();
   if (name.length < 2) return toast('Escribe el nombre del negocio');
@@ -1325,14 +1347,72 @@ function renderRevenue() {
   }));
   $('#rvNote').textContent = (s.canc ? `${s.canc} pedido${s.canc === 1 ? '' : 's'} cancelado${s.canc === 1 ? '' : 's'} no cuenta${s.canc === 1 ? '' : 'n'} en los ingresos. ` : '') + 'Cobrado = pedidos ya pagados (aunque la mesa siga abierta) · Por cobrar = pedidos aún sin pagar.';
 }
-const csvCell = v => { let t = String(v ?? ''); if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; return '"' + t.replace(/"/g, '""') + '"'; };   // evita fórmulas inyectadas desde notas de clientes
+/* ===== EXPORTAR A EXCEL (.xlsx con formato: Resumen, Pedidos y Detalle) ===== */
+const XL_ST = { pending: 'Recibido', preparing: 'Preparando', ready: 'Listo', completed: 'Pagado', cancelled: 'Cancelado' };
+function buildReport() {
+  const S = (v, s) => ({ v, s }), z = (b, i) => b + (i % 2 ? 'z' : '');
+  const s = revStats(REV), ok = REV.filter(o => o.status !== 'cancelled');
+  const fecha = new Date(revDay + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const now = new Date(), gen = `${pad2(now.getDate())}-${pad2(now.getMonth() + 1)}-${now.getFullYear()} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  const head = (name, cols, W) => [{ h: 32, cells: [S('Reporte de ventas · ' + name, 'title')] }, [S(`${R.name} · ${fecha}`, 'sub')], [S('Generado el ' + gen, 'sub')], []];
+  const pay = o => o.status === 'cancelled' ? '—' : (o.status === 'completed' || o.paid_at ? 'Pagado' : 'Por cobrar');
+  const lines = o => (o.items || []).map(i => `${i.qty}× ${i.name}${(i.addons || []).length ? ' (+ ' + i.addons.map(a => a.name).join(', + ') + ')' : ''}${i.note ? ' [' + i.note + ']' : ''}`);
+
+  /* --- Resumen --- */
+  const r1 = head('Resumen'); r1[0].cells = [S('Reporte de ventas', 'title')];
+  const sec = (t, n) => ({ h: 22, cells: Array.from({ length: n }, (_, i) => S(i ? '' : t, 'sec')) });
+  const kpi = [['Ventas totales', s.sales, 'kmoney'], ['Cobrado (ya pagado)', s.paid, 'kmoney'], ['Por cobrar', s.open, 'kmoney'], ['Pedidos (sin cancelados)', s.n, 'kint'], ['Ticket promedio', s.avg, 'kmoney'], ['Ingresos por agregados', s.addv, 'kmoney'], ['Pedidos cancelados', s.canc, 'kint']];
+  r1.push(sec('Resumen del día', 2), ...kpi.map(k => [S(k[0], 'lab'), S(k[1], k[2])]), []);
+  const table = (title, cols, data, n = 4) => {                        // título, encabezado, filas con cebra y fila de total con fórmulas
+    r1.push(sec(title, n), cols.map(c => S(c.h, 'head')));
+    const first = r1.length + 1;
+    data.forEach((row, i) => r1.push(row.map((v, j) => S(v, cols[j].t === 'txt' ? z('txt', i) : z(cols[j].t, i)))));
+    if (data.length) { const last = r1.length; r1.push(cols.map((c, j) => j === 0 ? S('Total', 'tot') : c.sum ? { v: data.reduce((a, r) => a + r[j], 0), s: c.t === 'money' ? 'totmoney' : 'totint', f: `SUM(${VAXLSX.colL(j)}${first}:${VAXLSX.colL(j)}${last})` } : S('', 'tot'))); }
+    else r1.push([S('Sin datos este día', 'sub')]);
+    r1.push([]);
+  };
+  const hrs = s.hours.map((v, h) => [pad2(h) + ':00 – ' + pad2(h) + ':59', Math.round(v)]).filter(r => r[1] > 0);
+  table('Ventas por hora', [{ h: 'Hora', t: 'txt' }, { h: 'Ventas', t: 'money', sum: 1 }], hrs, 2);
+  const prod = new Map();
+  for (const o of ok) { const t = oTotal(o), g = oGross(o), f = g > 0 ? t / g : 1; for (const i of o.items || []) { const q = Number(i.qty || 0), m = prod.get(i.name) || [i.name, 0, 0]; m[1] += q; m[2] += oUnit(i) * q * f; prod.set(i.name, m); } }
+  table('Productos vendidos', [{ h: 'Producto', t: 'txt' }, { h: 'Cantidad', t: 'int', sum: 1 }, { h: 'Ingresos', t: 'money', sum: 1 }], [...prod.values()].sort((a, b) => b[2] - a[2]).map(m => [m[0], m[1], Math.round(m[2])]), 3);
+  const byT = new Map(); ok.forEach(o => { const k = tn(o), m = byT.get(k) || [k, 0, 0]; m[1]++; m[2] += oTotal(o); byT.set(k, m); });
+  table('Ventas por mesa', [{ h: 'Mesa', t: 'txt' }, { h: 'Pedidos', t: 'int', sum: 1 }, { h: 'Ventas', t: 'money', sum: 1 }], [...byT.values()].sort((a, b) => b[2] - a[2]).map(m => [m[0], m[1], Math.round(m[2])]), 3);
+  r1.push([S('Cobrado = pedidos ya pagados (aunque la mesa siga abierta) · Por cobrar = pedidos aún sin pagar. Los cancelados no cuentan en los ingresos.', 'sub')]);
+
+  /* --- Pedidos (uno por fila) --- */
+  const r2 = head('Pedidos'), n0 = r2.length + 1;
+  r2.push({ h: 26, cells: ['Fecha', 'Hora', 'Mesa', 'Estado', 'Pago', 'Ítems', 'Detalle del pedido', 'Total'].map(h => S(h, 'head')) });
+  REV.forEach((o, i) => {
+    const d = new Date(o.created_at), ls = lines(o), cnt = (o.items || []).reduce((a, x) => a + Number(x.qty || 0), 0), wrap = ls.reduce((a, l) => a + Math.max(1, Math.ceil(l.length / 58)), 0);
+    r2.push({ h: Math.max(20, 15 * Math.max(1, wrap) + 6), cells: [S(`${pad2(d.getDate())}-${pad2(d.getMonth() + 1)}-${d.getFullYear()}`, z('ctr', i)), S(pad2(d.getHours()) + ':' + pad2(d.getMinutes()), z('ctr', i)), S(tn(o), z('txt', i)), S(XL_ST[o.status] || o.status, z('ctr', i)), S(pay(o), z('ctr', i)), S(cnt, z('int', i)), S(ls.join('\n'), z('txt', i)), S(Math.round(oTotal(o)), z('money', i))] });
+  });
+  const n1 = r2.length, tt = ok.reduce((a, o) => a + Math.round(oTotal(o)), 0), ti = ok.reduce((a, o) => a + (o.items || []).reduce((x, i) => x + Number(i.qty || 0), 0), 0);
+  r2.push({ h: 24, cells: [S('TOTAL', 'tot'), S('', 'tot'), S('', 'tot'), S('sin cancelados', 'tot'), S('', 'tot'), { v: ti, s: 'totint', f: `SUMIF(D${n0 + 1}:D${n1},"<>Cancelado",F${n0 + 1}:F${n1})` }, S('', 'tot'), { v: tt, s: 'totmoney', f: `SUMIF(D${n0 + 1}:D${n1},"<>Cancelado",H${n0 + 1}:H${n1})` }] });
+
+  /* --- Detalle (una fila por producto) --- */
+  const r3 = head('Detalle por producto'); r3[1] = [S(`${R.name} · ${fecha}`, 'sub')]; r3[2] = [S('Subtotales a precio de carta, antes de descuentos por promoción (el total real de cada pedido está en la hoja Pedidos).', 'sub')];
+  const m0 = r3.length + 1;
+  r3.push({ h: 26, cells: ['Hora', 'Mesa', 'Estado', 'Producto', 'Agregados', 'Cant.', 'Precio unit.', 'Subtotal', 'Nota', 'Promoción'].map(h => S(h, 'head')) });
+  let k = 0;
+  REV.forEach(o => { const d = new Date(o.created_at); (o.items || []).forEach(i => { const q = Number(i.qty || 0), u = oUnit(i); r3.push([S(pad2(d.getHours()) + ':' + pad2(d.getMinutes()), z('ctr', k)), S(tn(o), z('txt', k)), S(XL_ST[o.status] || o.status, z('ctr', k)), S(i.name, z('txt', k)), S((i.addons || []).map(a => '+ ' + a.name).join(', '), z('txt', k)), S(q, z('int', k)), S(Math.round(u), z('money', k)), S(Math.round(u * q), z('money', k)), S(i.note || '', z('txt', k)), S(i.promo || '', z('txt', k))]); k++; }); });
+  const m1 = r3.length;
+  let sq = 0, sm = 0; REV.forEach(o => { if (o.status !== 'cancelled') (o.items || []).forEach(i => { sq += Number(i.qty || 0); sm += Math.round(oUnit(i) * Number(i.qty || 0)); }); });
+  if (k) r3.push({ h: 24, cells: [S('TOTAL', 'tot'), S('', 'tot'), S('sin cancelados', 'tot'), S('', 'tot'), S('', 'tot'), { v: sq, s: 'totint', f: `SUMIF(C${m0 + 1}:C${m1},"<>Cancelado",F${m0 + 1}:F${m1})` }, S('', 'tot'), { v: sm, s: 'totmoney', f: `SUMIF(C${m0 + 1}:C${m1},"<>Cancelado",H${m0 + 1}:H${m1})` }, S('', 'tot'), S('', 'tot')] });
+
+  return { title: 'Reporte de ventas ' + revDay, sheets: [
+    { name: 'Resumen', widths: [34, 18, 18, 18], rows: r1, merges: ['A1:D1'] },
+    { name: 'Pedidos', widths: [12, 8, 16, 13, 13, 8, 62, 15], rows: r2, merges: ['A1:H1'], freeze: n0, filter: `A${n0}:H${n1}`, landscape: true },
+    { name: 'Detalle', widths: [8, 16, 13, 30, 28, 8, 14, 14, 26, 24], rows: r3, merges: ['A1:J1'], freeze: m0, filter: k ? `A${m0}:J${m1}` : undefined, landscape: true }
+  ] };
+}
 $('#rvCsv').onclick = () => {
   if (!REV.length) { toast('No hay pedidos este día'); return; }
-  const head = ['Fecha', 'Hora', 'Mesa', 'Estado', 'Pagado', 'Total', 'Detalle'];
-  const rows = REV.map(o => { const d = new Date(o.created_at); return [dayStr(d), pad2(d.getHours()) + ':' + pad2(d.getMinutes()), o.table_name || ('Mesa ' + o.table_number), { pending: 'Recibido', preparing: 'Preparando', ready: 'Listo', completed: 'Completado', cancelled: 'Cancelado' }[o.status] || o.status, o.status === 'cancelled' ? '' : (o.status === 'completed' || o.paid_at ? 'Sí' : 'No'), Math.round(oTotal(o)),
-    (o.items || []).map(i => `${i.qty}x ${i.name}${(i.addons || []).length ? ' (+' + i.addons.map(a => a.name).join(', +') + ')' : ''}${i.note ? ' [' + i.note + ']' : ''}`).join(' | ')]; });
-  const csv = '\uFEFF' + [head, ...rows].map(r => r.map(csvCell).join(';')).join('\r\n');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `pedidos-${revDay}.csv`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  if (!window.VAXLSX) { toast('No se pudo preparar el Excel. Recarga la página.'); return; }
+  try {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(VAXLSX.blob(buildReport())); a.download = `VAestilo-ventas-${revDay}.xlsx`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); toast('Excel descargado');
+  } catch (e) { toast('No se pudo crear el Excel'); }
 };
 function setDay(v) { revDay = v; $('#rvDay').value = v; loadRevenue(); }
 const shiftDay = n => { const [y, m, d] = revDay.split('-').map(Number); const t = dayStr(new Date(y, m - 1, d + n)); if (t <= dayStr(new Date())) setDay(t); };
