@@ -415,6 +415,21 @@ dialog h3{font:600 22px/1.2 var(--serif)}
   .rw{gap:8px;padding-left:12px;padding-right:12px}.rw .pi{padding:0 8px}.rw .pi input{width:56px;font-size:15px}.rw .nm b{font-size:14px}
   .card{padding:20px}dialog{padding:22px}
 }
+/* pedidos compactos en computador y pantallas grandes: caben más tickets a la vez sin tener que desplazarse (el celular queda igual) */
+@media (min-width:721px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;padding-left:16px;padding-right:16px;padding-bottom:22px}
+  .tk{border-radius:13px}
+  .hd{padding:9px 12px 8px;gap:8px}
+  .mn{font-size:16px}.hd small{font-size:12px}
+  .rt{font-size:14px}.lt{font-size:10px;padding:0 6px;margin-bottom:1px}
+  .prn{width:26px;height:26px;border-radius:7px}.prn svg{width:14px;height:14px}
+  .paidb,.modb{font-size:10px;padding:0 6px;margin-left:6px}
+  .tk ul{padding:3px 12px}
+  .tk li{gap:0 7px;padding:5px 0;font-size:13.5px;line-height:1.25}.tk li b{min-width:22px}
+  .nt{padding-left:29px;font-size:12px}
+  .go{padding:9px;font-size:13px}
+}
+@media (min-width:1600px){.grid{grid-template-columns:repeat(auto-fill,minmax(235px,1fr))}}
 </style>
 <script>
 /* evita el zoom por doble toque en iOS/Android (el touch-action ya lo cubre; esto es un respaldo) */
