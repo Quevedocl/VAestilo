@@ -1,8 +1,8 @@
 /* Service worker de VAestilo: deja instalar el panel como app y abrirlo aunque se cortó el internet.
    Estrategia "red primero": siempre intenta traer lo último; si no hay conexión, usa la copia guardada.
    Nunca guarda llamadas a Supabase (pedidos, cuentas, etc.): esas siempre van a la red. */
-const CACHE = 'vaestilo-shell-v7';
-const SHELL = ['./', 'index.html', 'carta.html', 'cocina.html', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png?v=4', 'icons/icon-512.png?v=4', 'icons/logo-mark.svg?v=4'];
+const CACHE = 'vaestilo-shell-v8';
+const SHELL = ['./', 'index.html', 'carta.html', 'cocina.html', 'config.js', 'filtro.js', 'manifest.webmanifest', 'icons/icon-192.png?v=4', 'icons/icon-512.png?v=4', 'icons/logo-mark.svg?v=4'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(SHELL.map(u => c.add(u)))).then(() => self.skipWaiting()));

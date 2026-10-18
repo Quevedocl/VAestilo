@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=4">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="filtro.js"></script>
 <style>
 /* sin zoom por doble toque y sin selección de texto (los campos de escritura sí se pueden seleccionar) */
 html{touch-action:manipulation;-webkit-text-size-adjust:100%}
@@ -645,6 +646,7 @@ $('#prod').addEventListener('click', e => {
   if (e.target.closest('#pvAdd') && pv) {
     const p = find(pv.id); if (!p || !p.is_available) { toast('Se agotó este plato.'); $('#prod').close(); return; }
     const ads = addonsFor(p).filter(a => pv.sel.has(String(a.id))).map(a => ({ id: a.id, name: a.name, price: Number(a.price) }));
+    if (FILTRO.malo(pv.note)) { toast(FILTRO.MSG); return; }
     addLine(p, ads, pv.qty, pv.note.trim()); $('#prod').close(); toast('Agregado a tu pedido');
   }
 });
@@ -684,6 +686,8 @@ $('#send').onclick = async () => {
   fail('');
   const t = mesa || $('#mesaIn').value.trim();
   if (!t) { fail('Escribe tu mesa.'); $('#mesaIn').focus(); return; }
+  if (FILTRO.malo(t)) { fail(FILTRO.MSG); $('#mesaIn').focus(); return; }
+  if ([...cart.values()].some(l => FILTRO.malo(l.note))) { fail('Alguna nota de tu pedido tiene palabras no permitidas. Corrígela para enviar.'); return; }
   if (!sb) { fail('Sin conexión con el restaurante. Avisa a un mesero.'); return; }
 
   await load();                                  // revisa disponibilidad justo antes de enviar
@@ -707,6 +711,7 @@ $('#send').onclick = async () => {
     if (error.code === '42501' && await checkSession() === 'locked') return;   // la mesa se cerró justo ahora
     if (error.code === '42501') { await checkOpen(); if (CLOSED) { fail('El local acaba de cerrar y ya no recibe pedidos nuevos.'); return; } }
     if (/demasiados_pedidos/.test(error.message || '')) { fail('Enviaste muchos pedidos seguidos. Espera unos minutos o avisa a un mesero.'); return; }
+    if (/texto_no_permitido/.test(error.message || '')) { fail(FILTRO.MSG); return; }
     if (/pedido_invalido/.test(error.message || '')) { await load(); lastGone = []; renderCart(); fail('Algo de tu pedido cambió (precio o disponibilidad). Revísalo y vuelve a enviar.'); return; }
     fail('No se pudo enviar el pedido. Revisa tu conexión e inténtalo otra vez.'); return;
   }
@@ -984,6 +989,7 @@ async function postCall(t, rsn, note) {                    // { dup } | { locked
   const dup = !!error && error.code === '23505';           // ya había un aviso abierto igual: el mesero ya viene
   if (error && !dup) {
     if (error.code === '42501' && await checkSession() === 'locked') return { locked: true };
+    if (/texto_no_permitido/.test(error.message || '')) return { err: FILTRO.MSG };
     return { err: 'No pudimos avisar. Revisa tu conexión o levanta la mano.' };
   }
   return { dup };
@@ -1007,6 +1013,7 @@ $('#callSend').onclick = async () => {
   const err = m => { $('#callErr').textContent = m; }; err('');
   const t = mesa || $('#callMesa').value.trim();
   if (!t) { err('Escribe tu mesa.'); $('#callMesa').focus(); return; }
+  if (FILTRO.alguno(t, $('#callNote').value)) { err(FILTRO.MSG); return; }
   const btn = $('#callSend'); btn.disabled = true; btn.textContent = 'Avisando…';
   const r = await postCall(t, reason, reason === 'pay' ? null : ($('#callNote').value.trim() || null));
   btn.disabled = false; btn.textContent = 'Avisar al mesero';

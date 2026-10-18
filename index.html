@@ -14,6 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="filtro.js"></script>
 <style>
 /* sin zoom por doble toque y sin selección de texto (los campos de escritura sí se pueden seleccionar) */
 html{touch-action:manipulation;-webkit-text-size-adjust:100%}
@@ -611,7 +612,8 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clp = n => '$' + Number(n).toLocaleString('es-CL');
 const pid = v => isNaN(v) ? v : Number(v);
-let tt; const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1800); };
+const errMsg = e => /texto_no_permitido/.test((e && e.message) || '') ? FILTRO.MSG : 'No se pudo guardar: ' + ((e && e.message) || e);
+let tt; const toast = m => { const t = $('#toast'), host = document.querySelector('dialog[open]') || document.body; if (t.parentNode !== host) host.appendChild(t); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1800); };
 
 /* ===== CAPA DE DATOS ===== */
 const sb = CFG.url && window.supabase ? supabase.createClient(CFG.url, CFG.key) : null;
@@ -639,17 +641,17 @@ const api = {
   async addProduct(p, file) {
     if (file) { const u = await api.uploadImg(file); if (u) p.image_url = u; }
     const { error } = await sb.from('products').insert({ ...p, restaurant_id: R.id });
-    if (error) { toast('No se pudo guardar: ' + error.message); return false; } return true;
+    if (error) { toast(errMsg(error)); return false; } return true;
   },
   async editProduct(id, patch, file) {
     const old = (data.products.find(x => String(x.id) === String(id)) || {}).image_url;
     if (file) { const u = await api.uploadImg(file); if (u) patch.image_url = u; }
     const { error } = await sb.from('products').update(patch).eq('id', id);
-    if (error) { toast('No se pudo guardar: ' + error.message); return false; }
+    if (error) { toast(errMsg(error)); return false; }
     if (patch.image_url && old && old !== patch.image_url) api.dropImg(old);
     return true;
   },
-  async add(table, row) { const { error } = await sb.from(table).insert({ ...row, restaurant_id: R.id }); if (error) toast('No se pudo guardar: ' + error.message); },
+  async add(table, row) { const { error } = await sb.from(table).insert({ ...row, restaurant_id: R.id }); if (error) { toast(errMsg(error)); return false; } return true; },
   async upd(table, id, patch) { await sb.from(table).update(patch).eq('id', id); },
   async del(table, id) { await sb.from(table).delete().eq('id', id); },
   async setStatus(id, status) { await sb.from('orders').update({ status }).eq('id', id).neq('status', 'cancelled'); },
@@ -891,8 +893,9 @@ function editProduct(id) {
   $('#dlg').showModal();
 }
 $('#cancel').onclick = () => $('#dlg').close();
-$('#frm').addEventListener('submit', async () => {
+$('#frm').addEventListener('submit', async e => {
   const row = { name: $('#f-name').value.trim(), category: ($('#f-cat').value === '__new' ? $('#f-cat2').value : $('#f-cat').value).trim(), price: Number($('#f-price').value), description: $('#f-desc').value.trim() || null };
+  if (FILTRO.alguno(row.name, row.category, row.description)) { e.preventDefault(); toast(FILTRO.MSG); return; }   // el formulario queda abierto para corregir
   const file = $('#f-img').files[0];
   if (editPid != null) { if (await api.editProduct(editPid, row, file)) toast('Producto actualizado'); }
   else if (await api.addProduct({ ...row, is_available: true, image_url: null }, file)) toast('Producto añadido');
@@ -974,6 +977,7 @@ $('#kNew').onclick = async () => { if (!R || !confirm('¿Generar un enlace nuevo
 $('#cfgSave').onclick = async () => {
   const name = $('#cfgName').value.trim();
   if (name.length < 2) return toast('Escribe el nombre del negocio');
+  if (FILTRO.malo(name)) return toast(FILTRO.MSG);
   const btn = $('#cfgSave'); btn.disabled = true; btn.textContent = 'Guardando…';
   const old = R.logo_url || null; let logo_url = old;
   try {
@@ -989,7 +993,7 @@ $('#cfgSave').onclick = async () => {
     if (error) throw error;
     if (old && old !== logo_url) { const m = old.split('/logos/')[1]; if (m) sb.storage.from('logos').remove([decodeURIComponent(m)]); }
     R = { ...R, ...patch }; setBrand(); cfgFill(); toast('Cambios guardados');
-  } catch (err) { toast('No se pudo guardar: ' + (err.message || err)); }
+  } catch (err) { toast(errMsg(err)); }
   btn.disabled = false; btn.textContent = 'Guardar cambios';
 };
 
@@ -1102,8 +1106,9 @@ $('#a-cancel').onclick = () => $('#ad').close();
 $('#a-save').onclick = async () => {
   const name = $('#a-name').value.trim(), raw = $('#a-price').value, price = Math.round(Number(raw)), cat = $('#a-scope').value === 'category';
   if (!name) return toast('Escribe el nombre del agregado');
+  if (FILTRO.malo(name)) return toast(FILTRO.MSG);
   if (raw === '' || !(price >= 0)) return toast('Escribe el precio extra (0 si es gratis)');
-  await api.add('product_addons', { name, price, product_id: cat ? null : String($('#a-pid').value), category: cat ? $('#a-cid').value : null, is_available: true });
+  if (!await api.add('product_addons', { name, price, product_id: cat ? null : String($('#a-pid').value), category: cat ? $('#a-cid').value : null, is_available: true })) return;
   $('#ad').close(); toast('Agregado creado'); await refresh();
 };
 
@@ -1189,9 +1194,11 @@ $('#p-save').onclick = async () => {
   if (t === 'nxm' && !(buy > pay && pay >= 1)) return toast('"Lleva" debe ser mayor que "Paga"');
   if ((t === 'percent' || t === 'price') && !(v > 0 && (t === 'price' || v <= 100))) return toast('Revisa el valor');
   if (t === 'info' && !title) return toast('Escribe el aviso');
+  if (FILTRO.malo(title)) return toast(FILTRO.MSG);
   const row = { type: t, product_id: t === 'info' ? null : $('#p-pid').value, buy_qty: t === 'nxm' ? buy : null, pay_qty: t === 'nxm' ? pay : null, value: t === 'percent' || t === 'price' ? v : null, ends_on: $('#p-end').value || null, is_active: true };
   row.title = title || promoDesc(row);
-  await api.add('promotions', row); $('#pd').close(); toast('Promoción creada'); await refresh();
+  if (!await api.add('promotions', row)) return;
+  $('#pd').close(); toast('Promoción creada'); await refresh();
 };
 $('#pl').addEventListener('change', async e => { await api.upd('promotions', e.target.dataset.id, { is_active: e.target.checked }); await refresh(); });
 
@@ -1200,7 +1207,7 @@ const linkOf = t => new URL('carta.html?r=' + R.slug + '&t=' + t.id, location.hr
 function renderTables() {
   $('#tl').innerHTML = data.tables.length ? `<div class="lst">${data.tables.map(t => `<div class="rw2"><div class="nm"><b>${esc(t.name)}</b><small>${esc(linkOf(t))}</small></div><button class="gh" data-cp="${t.id}">Copiar enlace</button><button class="gh" data-qr="${t.id}">QR</button><button class="gh" data-free="${t.id}" title="Deja la mesa lista para un cliente nuevo: al escanear el QR podrá pedir">Liberar mesa</button><button class="gh" data-del="dining_tables" data-id="${t.id}">Borrar</button></div>`).join('')}</div>` : '<p class="empty">Crea tu primera mesa. Cada una genera un enlace único para grabar en NFC o imprimir como QR.</p>';
 }
-$('#tf').onsubmit = async e => { e.preventDefault(); const n = $('#tn').value.trim(); if (!n) return; await api.add('dining_tables', { name: n }); $('#tn').value = ''; toast('Mesa creada'); await refresh(); };
+$('#tf').onsubmit = async e => { e.preventDefault(); const n = $('#tn').value.trim(); if (!n) return; if (FILTRO.malo(n)) return toast(FILTRO.MSG); if (!await api.add('dining_tables', { name: n })) return; $('#tn').value = ''; toast('Mesa creada'); await refresh(); };
 $('#tl').addEventListener('click', async e => {
   const f = e.target.closest('[data-free]');
   if (f) { const t = data.tables.find(x => String(x.id) === f.dataset.free); if (t && confirm(`¿Liberar "${t.name}"?\n\nSe cierran sus pedidos abiertos y la mesa queda lista para un cliente nuevo: al escanear el QR (o recargar la página) podrá pedir, incluso desde un teléfono que ya estuvo en esta mesa.`) && await api.closeTable(t.id, t.name, true)) { toast('Mesa liberada: el próximo que escanee el QR puede pedir'); await refresh(); } return; }
@@ -1228,7 +1235,7 @@ async function start() {
     $('.brand .t').textContent = 'Administrador'; { const m = $('#mode'); m.hidden = false; m.textContent = 'Administrador'; m.className = 'opn'; m.disabled = true; } started = true; go('admin'); return;
   }
   if (!r) {
-    const name = (u.user_metadata && u.user_metadata.restaurant_name) || 'Mi restaurante';
+    let name = (u.user_metadata && u.user_metadata.restaurant_name) || 'Mi restaurante'; if (FILTRO.malo(name)) name = 'Mi restaurante';
     const slug = (name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'resto') + '-' + Math.random().toString(36).slice(2, 6);
     ({ data: r } = await sb.from('restaurants').insert({ name, slug, owner_id: u.id }).select().single());
   }
@@ -1248,6 +1255,7 @@ $('#lf').onsubmit = async e => {
   const email = $('#le').value.trim(), password = $('#lp').value, btn = $('#lsub'); btn.disabled = true;
   try {
     if (signup) {
+      if (FILTRO.malo($('#lr').value)) { err.textContent = FILTRO.MSG; return; }
       const { data: d, error } = await sb.auth.signUp({ email, password, options: { data: { restaurant_name: $('#lr').value.trim() } } });
       if (error) { err.textContent = authMsg(error); return; }
       if (d.user && Array.isArray(d.user.identities) && d.user.identities.length === 0) { err.textContent = 'Este correo ya está registrado. Inicia sesión.'; return; }
