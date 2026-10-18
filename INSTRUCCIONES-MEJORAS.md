@@ -46,3 +46,6 @@
 - **Mesas**: no se puede crear (ni renombrar) una mesa con el mismo nombre que otra del local. Compara sin importar mayúsculas, tildes ni espacios de más ("Mesa 5" = "mesa  5"). Las mesas repetidas que ya existían no se tocan.
 - **Boleta de cocina** (botón de imprimir de cada pedido): nuevo diseño para impresora de 80 mm con el nombre del local, mesa en recuadro grande, fecha/hora y código del pedido, cantidades destacadas, agregados y notas, aviso "PEDIDO MODIFICADO" y total de ítems.Muestra el precio de cada línea, el subtotal, el descuento de promociones (si hubo) y el TOTAL.
 - **Sonidos de alerta**: ahora suenan como campana de cocina. Pedido nuevo = arpegio ascendente; llamada al mesero = "din-don" agudo repetido tres veces; cancelado = tres notas que bajan; modificado = dos toques rápidos. Se ajustan en la función `beep` de `index.html`.
+
+## Boleta que se ajusta sola
+La boleta impresa cambia de tamaño según cuántos productos trae: **1 producto** = letra grande y el total abajo del todo; **2–3** = algo más grande; **4–9** = tamaño normal; **10–16** y **17 o más** = cada vez más compacta para que no salga larguísima. El total siempre queda al final. Los tamaños están en las clases `pk-xl`, `pk-l`, `pk-s` y `pk-xs` del bloque `@media print` de `index.html` (`--min` es el alto mínimo en mm de las boletas cortas).

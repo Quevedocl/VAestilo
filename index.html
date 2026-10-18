@@ -241,21 +241,30 @@ nav button:hover{color:var(--tx)}
   html,body{height:auto!important;overflow:visible!important;display:block!important;background:#fff!important}
   body>*{display:none!important}
   body>#printArea{display:block!important;color:#000;font:13px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-  .pk-biz{text-align:center;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
-  .pk-mesa{margin:6px 0 5px;border:2.5px solid #000;border-radius:10px;padding:6px 8px;text-align:center;font-size:28px;font-weight:800;line-height:1.1;word-break:break-word}
-  .pk-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px;font-weight:600}
+  /* la boleta se ajusta sola según cuántos productos trae (clase pk-xl / pk-l / pk-s / pk-xs; sin clase = normal):
+     1 producto = letra grande y el total abajo del todo · varios = el tamaño de siempre · muchos = más compacta */
+  .pk-sheet{display:flex;flex-direction:column;min-height:var(--min,0)}
+  .pk-xl{--biz:13px;--mesa:36px;--meta:13px;--qf:28px;--qw:46px;--nm:23px;--sm:15px;--pr:23px;--tot:30px;--pad:14px;--min:105mm}
+  .pk-l{--biz:12px;--mesa:31px;--meta:12px;--qf:21px;--qw:38px;--nm:17px;--sm:13px;--pr:16px;--tot:24px;--pad:9px;--min:62mm}
+  .pk-s{--mesa:24px;--qf:14px;--qw:30px;--nm:13px;--sm:11px;--pr:12px;--tot:18px;--pad:3px}
+  .pk-xs{--biz:10px;--mesa:20px;--meta:10px;--qf:12px;--qw:26px;--nm:11.5px;--sm:10px;--pr:11px;--tot:16px;--pad:2px}
+  .pk-biz{text-align:center;font-size:var(--biz,11px);font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .pk-mesa{margin:6px 0 5px;border:2.5px solid #000;border-radius:10px;padding:6px 8px;text-align:center;font-size:var(--mesa,28px);font-weight:800;line-height:1.1;word-break:break-word}
+  .pk-meta{display:flex;justify-content:space-between;gap:8px;font-size:var(--meta,11px);font-weight:600}
   .pk-mod{margin:6px 0 0;border:1.5px dashed #000;padding:2px;text-align:center;font-size:12px;font-weight:800;letter-spacing:.12em}
   .pk-sep{border:0;border-top:1.5px dashed #000;margin:8px 0 4px}
-  .pk-it{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dotted #666;break-inside:avoid}
-  .pk-q{flex:none;min-width:34px;box-sizing:border-box;text-align:center;border:1.5px solid #000;border-radius:6px;padding:0 4px;font-size:17px;font-weight:800;line-height:1.35}
-  .pk-n{flex:1;font-size:15px;font-weight:700;line-height:1.25}
-  .pk-n small{display:block;margin-top:2px;font-size:12px;font-weight:500}
+  .pk-items{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center}   /* con pocos productos quedan centrados y el total se va al fondo */
+  .pk-it{display:flex;align-items:flex-start;gap:8px;padding:var(--pad,6px) 0;border-bottom:1px dotted #666;break-inside:avoid}
+  .pk-q{flex:none;min-width:var(--qw,34px);box-sizing:border-box;text-align:center;border:1.5px solid #000;border-radius:6px;padding:0 4px;font-size:var(--qf,17px);font-weight:800;line-height:1.35}
+  .pk-n{flex:1;font-size:var(--nm,15px);font-weight:700;line-height:1.25}
+  .pk-n small{display:block;margin-top:2px;font-size:var(--sm,12px);font-weight:500}
   .pk-n small.pk-note{font-style:italic;font-weight:600}
-  .pk-p{flex:none;margin-left:auto;padding-left:6px;font-size:14px;font-weight:700;line-height:1.35;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pk-p{flex:none;margin-left:auto;padding-left:6px;font-size:var(--pr,14px);font-weight:700;line-height:1.35;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
   .pk-n small b{float:right;font-weight:600;padding-left:6px;font-variant-numeric:tabular-nums}
   .pk-n small.pk-u{font-weight:500;opacity:.85}
-  .pk-sum{display:flex;justify-content:space-between;gap:8px;margin-top:3px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
-  .pk-tot{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:6px;border-top:2px solid #000;padding-top:5px;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+  .pk-bottom{margin-top:auto}
+  .pk-sum{display:flex;justify-content:space-between;gap:8px;margin-top:3px;font-size:var(--sm,13px);font-weight:600;font-variant-numeric:tabular-nums}
+  .pk-tot{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:6px;border-top:2px solid #000;padding-top:5px;font-size:var(--tot,20px);font-weight:800;font-variant-numeric:tabular-nums}
   .pk-ft{margin-top:8px;text-align:center;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
 }
 }
@@ -816,7 +825,10 @@ function printTicket(o) {                         // boleta del pedido: detalle 
   }).join('');
   const gross = oGross(o), total = oTotal(o), desc = Math.round(gross - total);
   const sums = (desc > 0 ? `<div class="pk-sum"><span>Subtotal</span><span>${clp(gross)}</span></div><div class="pk-sum"><span>Descuento promociones</span><span>−${clp(desc)}</span></div>` : '') + `<div class="pk-tot"><span>TOTAL</span><span>${clp(total)}</span></div>`;
-  $('#printArea').innerHTML = `<div class="pk-biz">${esc(R ? R.name : '')}</div><div class="pk-mesa">${esc(tn(o))}</div><div class="pk-meta"><span>${esc(fecha)} · ${esc(hora)}</span><span>#${esc(String(o.id).slice(-4).toUpperCase())}</span></div>${o.modified_at ? '<div class="pk-mod">PEDIDO MODIFICADO</div>' : ''}<hr class="pk-sep">${items}${sums}<div class="pk-ft">${n} ${n === 1 ? 'ítem' : 'ítems'}</div>`;
+  const lines = (o.items || []).length, rows = (o.items || []).reduce((a, i) => a + 1 + (i.addons || []).length + (i.promo ? 1 : 0) + (i.note ? 1 : 0), 0);
+  let tier = lines <= 1 ? 'pk-xl' : lines <= 3 ? 'pk-l' : lines <= 9 ? '' : lines <= 16 ? 'pk-s' : 'pk-xs';
+  if (tier === 'pk-xl' && rows > 7) tier = 'pk-l';          // un solo producto pero con muchos agregados/notas: no se agranda tanto
+  $('#printArea').innerHTML = `<div class="pk-sheet ${tier}"><div class="pk-biz">${esc(R ? R.name : '')}</div><div class="pk-mesa">${esc(tn(o))}</div><div class="pk-meta"><span>${esc(fecha)} · ${esc(hora)}</span><span>#${esc(String(o.id).slice(-4).toUpperCase())}</span></div>${o.modified_at ? '<div class="pk-mod">PEDIDO MODIFICADO</div>' : ''}<hr class="pk-sep"><div class="pk-items">${items}</div><div class="pk-bottom">${sums}<div class="pk-ft">${n} ${n === 1 ? 'ítem' : 'ítems'}</div></div></div>`;
   window.print();
 }
 $('#grid').addEventListener('click', async e => {
