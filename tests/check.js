@@ -13,6 +13,11 @@ for (const f of ['index.html', 'carta.html', 'cocina.html']) {
   scripts.forEach((code, i) => { try { new vm.Script(code, { filename: f + '#script' + i }); } catch (e) { fail(`${f}: error de sintaxis en <script> #${i}: ${e.message}`); } });
   const js = scripts.join('\n'), ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
   for (const m of js.matchAll(/\$\$?\(\s*'#([A-Za-z][\w-]*)'/g)) if (!ids.has(m[1]) && !js.includes(`id="${m[1]}"`) && !js.includes(`id=\\"${m[1]}\\"`) && !js.includes(`.id = '${m[1]}'`)) fail(`${f}: el código usa #${m[1]} pero no existe en el HTML`);
+  for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {      // una llave de más en el CSS descarta en silencio la regla siguiente (p. ej. la paleta de colores)
+    const c = m[1].replace(/\/\*[\s\S]*?\*\//g, '').replace(/"[^"]*"|'[^']*'/g, ''); let d = 0, neg = false;
+    for (const ch of c) { if (ch === '{') d++; else if (ch === '}' && --d < 0) { neg = true; break; } }
+    if (neg || d) fail(`${f}: llaves del CSS desparejas (${neg ? 'sobra un }' : 'falta cerrar ' + d})`);
+  }
   const markup = html.replace(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/g, '');   // solo el HTML, no las plantillas dentro del JS
   for (const m of markup.matchAll(/(?:src|href)="([^"#?]+)"/g)) { const u = m[1]; if (/^(https?:|data:|mailto:|tel:|\/\/|javascript:)/.test(u) || u.includes('${')) continue; if (!fs.existsSync(path.join(root, u))) fail(`${f}: referencia a un archivo que no existe: ${u}`); }
   if (f === 'carta.html' && /from\('dining_tables'\)/.test(html)) fail('carta.html no debe leer dining_tables (la sesión de mesa es privada: usa join_table)');
