@@ -683,7 +683,7 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
         <div class="fld" id="cfgTipBox" style="margin-top:14px"><label for="cfgTip">Propina sugerida en la cuenta</label><select id="cfgTip"><option value="0">Sin sugerencia</option><option value="5">5%</option><option value="10">10% (habitual en Chile)</option><option value="15">15%</option><option value="20">20%</option></select><p class="hint" style="margin:6px 0 0">Tus clientes la ven al revisar la cuenta de su mesa. Es voluntaria y pueden cambiarla.</p></div>
         <div class="acts"><button class="gh" id="cfgReset" type="button">Descartar</button><button class="pri" id="cfgSave" type="button">Guardar cambios</button></div>
       </div>
-      <div class="card"><h3>Pantalla de cocina y barra</h3><p class="hint">Enlaces solo para el personal: cada pantalla ve únicamente sus productos (lo de <b>cocina</b> o lo de <b>barra</b>, según lo que elijas en cada producto), los marca como preparando o listo, y no ve cobros, ingresos ni la carta. Ábrelos en la tablet de cada estación.</p><div class="fld"><label for="kLink" style="font-size:13px;font-weight:600;color:var(--mu)">Cocina</label><input id="kLink" readonly aria-label="Enlace de cocina"></div><div class="acts"><button class="gh" id="kCopy" type="button">Copiar enlace de cocina</button></div><div class="fld" style="margin-top:14px"><label for="bLink" style="font-size:13px;font-weight:600;color:var(--mu)">Barra</label><input id="bLink" readonly aria-label="Enlace de barra"></div><div class="acts"><button class="gh" id="bCopy" type="button">Copiar enlace de barra</button><button class="gh" id="kNew" type="button">Generar enlaces nuevos</button></div></div>
+      <div class="card"><h3>Pantalla de cocina y barra</h3><p class="hint">Enlaces solo para el personal: cada pantalla ve únicamente sus productos (lo de <b>cocina</b> o lo de <b>barra</b>, se reparten solos según el tipo de producto), los marca como preparando o listo, y no ve cobros, ingresos ni la carta. Ábrelos en la tablet de cada estación.</p><div class="fld"><label for="kLink" style="font-size:13px;font-weight:600;color:var(--mu)">Cocina</label><input id="kLink" readonly aria-label="Enlace de cocina"></div><div class="acts"><button class="gh" id="kCopy" type="button">Copiar enlace de cocina</button></div><div class="fld" style="margin-top:14px"><label for="bLink" style="font-size:13px;font-weight:600;color:var(--mu)">Barra</label><input id="bLink" readonly aria-label="Enlace de barra"></div><div class="acts"><button class="gh" id="bCopy" type="button">Copiar enlace de barra</button><button class="gh" id="kNew" type="button">Generar enlaces nuevos</button></div></div>
       <div class="card"><h3>Vista previa</h3><p class="hint">Así se ve la cabecera de tu carta en el celular del cliente.</p>
         <div class="pv"><div class="pvh"><div class="l"><div class="av" id="pvAv"></div><b id="pvName"></b></div><span class="tg">Mesa 5</span></div></div></div>
       <div class="card"><h3>Cuenta</h3><div class="acc"><span id="accMail"></span><button class="gh" id="logout2" type="button">Cerrar sesión</button></div></div>
@@ -709,7 +709,7 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
     <label for="f-cat">Categoría</label><select id="f-cat" required></select><input id="f-cat2" placeholder="Nombre de la nueva categoría" maxlength="40" hidden>
     <label for="f-price">Precio</label><input id="f-price" type="number" min="0" step="1" inputmode="numeric" required>
     <label for="f-desc">Descripción (opcional)</label><textarea id="f-desc" maxlength="240" placeholder="Ingredientes, tamaño, alérgenos… Se muestra en la vista previa del plato"></textarea>
-    <label for="f-st">Se prepara en</label><select id="f-st"><option value="kitchen">Cocina</option><option value="bar">Barra (bebidas, tragos, café…)</option></select>
+    <p class="hint" style="margin:2px 0 0;font-size:12.5px;color:var(--mu)">Los pedidos se reparten solos: las bebidas llegan a la <b>barra</b> y la comida a <b>cocina</b>.</p>
     <label for="f-rec" style="display:flex;align-items:center;gap:10px;color:var(--tx);font-size:14px;cursor:pointer"><input type="checkbox" id="f-rec"><span>Recomendar al pagar <small style="color:var(--mu);font-weight:500">(la carta le pregunta al cliente “¿Desea agregar …?”)</small></span></label>
     <label for="f-img" id="f-imgl">Foto (opcional)</label><input id="f-img" type="file" accept="image/*">
     <div class="bt"><button type="button" class="gh" id="cancel">Cancelar</button><button class="pri" type="submit">Guardar producto</button></div>
@@ -766,7 +766,7 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clp = n => '$' + Number(n).toLocaleString('es-CL');
 const pid = v => isNaN(v) ? v : Number(v);
-const errMsg = e => /mesa_duplicada/.test((e && e.message) || '') ? 'Ya existe una mesa con ese nombre.' : /texto_no_permitido/.test((e && e.message) || '') ? FILTRO.MSG : 'No se pudo guardar: ' + ((e && e.message) || e);
+const errMsg = e => /column .*(station|recommended)|(station|recommended).*(schema cache|column)/i.test((e && e.message) || '') ? 'Falta ejecutar supabase/migracion-11-reparto-automatico.sql en Supabase (SQL Editor).' : /row-level security|permission denied|JWT|not authenticated/i.test((e && e.message) || '') ? 'Tu sesión venció o no tiene permiso. Cierra sesión, vuelve a entrar e inténtalo de nuevo.' : /mesa_duplicada/.test((e && e.message) || '') ? 'Ya existe una mesa con ese nombre.' : /texto_no_permitido/.test((e && e.message) || '') ? FILTRO.MSG : 'No se pudo guardar: ' + ((e && e.message) || e);
 let tt; const toast = m => { const t = $('#toast'), host = document.querySelector('dialog[open]') || document.body; if (t.parentNode !== host) host.appendChild(t); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1800); };
 
 /* ===== CAPA DE DATOS ===== */
@@ -780,7 +780,7 @@ const api = {
     if (ad.error && !addonsWarned) { addonsWarned = true; toast('Falta ejecutar supabase/migracion-mejoras.sql en Supabase'); }
     return { products: p.data || [], orders: o.data || [], promos: pr.data || [], tables: t.data || [], calls: w.data || [], addons: ad.data || [] };
   },
-  async setProduct(id, patch) { await sb.from('products').update(patch).eq('id', id); },
+  async setProduct(id, patch) { const { error } = await sb.from('products').update(patch).eq('id', id); if (error) { toast(errMsg(error)); return false; } return true; },
   async uploadImg(file) {
     let blob; try { blob = await prepPhoto(file); } catch (e) { toast(e.message || 'No se pudo leer la foto'); return null; }
     const path = R.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.webp';
@@ -806,9 +806,9 @@ const api = {
     return true;
   },
   async add(table, row) { const { error } = await sb.from(table).insert({ ...row, restaurant_id: R.id }); if (error) { toast(errMsg(error)); return false; } return true; },
-  async upd(table, id, patch) { await sb.from(table).update(patch).eq('id', id); },
-  async del(table, id) { await sb.from(table).delete().eq('id', id); },
-  async setStatus(id, status) { await sb.from('orders').update({ status }).eq('id', id).neq('status', 'cancelled'); },
+  async upd(table, id, patch) { const { error } = await sb.from(table).update(patch).eq('id', id); if (error) toast(errMsg(error)); return !error; },
+  async del(table, id) { const { error } = await sb.from(table).delete().eq('id', id); if (error) toast(errMsg(error)); return !error; },
+  async setStatus(id, status) { const { error } = await sb.from('orders').update({ status }).eq('id', id).neq('status', 'cancelled'); if (error) toast(errMsg(error)); return !error; },
   /* cierra la mesa: completa sus pedidos, atiende sus llamadas y cambia su sesión (el cliente anterior ya no puede pedir) */
   async chargeTable(tid, name, upto, callId) { const { error } = await sb.rpc('charge_table', { p_restaurant: R.id, p_table: tid || null, p_table_name: name, p_upto: upto, p_call: callId || null }); if (error) { toast('No se pudo registrar el cobro: ' + error.message); return false; } return true; },
   async closeTable(tid, name, release = false) { const { error } = await sb.rpc('close_table', { p_restaurant: R.id, p_table: tid || null, p_table_name: name, p_release: release }); if (error) { toast('No se pudo cerrar la mesa: ' + error.message); return false; } return true; },
@@ -883,7 +883,7 @@ function alertNew(list) {
 
 /* ===== PEDIDOS ===== */
 const sigOf = o => JSON.stringify(o.items) + '|' + (o.modified_at || '') + '|' + (o.paid_at || '') + '|' + JSON.stringify(o.station_status || {}) + '|' + o.status;
-const stOfItem = i => { const p = (data.products || []).find(x => String(x.id) === String(i.id)); return p && p.station === 'bar' ? 'bar' : 'kitchen'; };
+const stOfItem = i => { if (i.station === 'bar' || i.station === 'kitchen') return i.station; const p = (data.products || []).find(x => String(x.id) === String(i.id)); return p && p.station === 'bar' ? 'bar' : 'kitchen'; };
 const STN = { pending: 'Nuevo', preparing: 'Preparando', ready: 'Listo' };
 function stationChips(o) {                       // si el pedido lleva cocina y barra, muestra cómo va cada una
   const set = [...new Set((o.items || []).map(stOfItem))]; if (set.length < 2 || !STN[o.status]) return '';
@@ -1030,7 +1030,7 @@ function renderMenu(stagger) {
     const rows = data.products.filter(p => p.category === c && (!q || p.name.toLowerCase().includes(q)));
     return rows.length ? `<h3>${esc(c)}</h3><div class="lst">${rows.map(p => `<div class="rw${p.is_available ? '' : ' off'}" style="--i:${i++}">
       <div class="ph" style="${p.image_url ? `background-image:url('${esc(p.image_url)}')` : ''}">${p.image_url ? '' : esc(p.name[0])}</div>
-      <div class="nm"><b>${esc(p.name)}</b><small>${esc(p.category)}${addonCount(p) ? ' · ' + addonCount(p) + (addonCount(p) === 1 ? ' agregado' : ' agregados') : ''}${p.station === 'bar' ? ' · Barra' : ''}${p.recommended ? ' · ★ Recomendado' : ''}</small></div>
+      <div class="nm"><b>${esc(p.name)}</b><small>${esc(p.category)}${addonCount(p) ? ' · ' + addonCount(p) + (addonCount(p) === 1 ? ' agregado' : ' agregados') : ''}${p.station ? (p.station === 'bar' ? ' · Barra' : ' · Cocina') : ''}${p.recommended ? ' · ★ Recomendado' : ''}</small></div>
       <label class="pi">$<input type="number" min="0" step="1" inputmode="numeric" value="${p.price}" data-id="${p.id}" aria-label="Precio de ${esc(p.name)}"></label>
       <span class="st">${p.is_available ? 'Disponible' : 'Agotado'}</span>
       <input class="sw" type="checkbox" role="switch" ${p.is_available ? 'checked' : ''} data-id="${p.id}" aria-label="Disponible: ${esc(p.name)}"><button class="del ed" data-editp="${p.id}" aria-label="Editar ${esc(p.name)}" title="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg></button><button class="del" data-delp="${p.id}" aria-label="Borrar ${esc(p.name)}" title="Borrar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>`).join('')}</div>` : '';
@@ -1038,8 +1038,8 @@ function renderMenu(stagger) {
 }
 $('#pg').addEventListener('change', async e => {
   const el = e.target, id = pid(el.dataset.id), row = el.closest('.rw'); if (id === undefined) return;
-  if (el.type === 'checkbox') { row.classList.toggle('off', !el.checked); row.querySelector('.st').textContent = el.checked ? 'Disponible' : 'Agotado'; await api.setProduct(id, { is_available: el.checked }); toast(el.checked ? 'Plato disponible' : 'Plato marcado como agotado'); }
-  else { const v = Math.max(0, Math.round(Number(el.value) || 0)); el.value = v; await api.setProduct(id, { price: v }); row.classList.remove('saved'); void row.offsetWidth; row.classList.add('saved'); toast('Precio guardado · ' + clp(v)); }
+  if (el.type === 'checkbox') { row.classList.toggle('off', !el.checked); row.querySelector('.st').textContent = el.checked ? 'Disponible' : 'Agotado'; if (await api.setProduct(id, { is_available: el.checked })) toast(el.checked ? 'Plato disponible' : 'Plato marcado como agotado'); }
+  else { const v = Math.max(0, Math.round(Number(el.value) || 0)); el.value = v; if (await api.setProduct(id, { price: v })) { row.classList.remove('saved'); void row.offsetWidth; row.classList.add('saved'); toast('Precio guardado · ' + clp(v)); } }
   data = await api.load(); menuMeta();
 });
 $('#pg').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.type === 'number') e.target.blur(); });
@@ -1050,7 +1050,7 @@ $('#pg').addEventListener('click', async e => {
   if (!confirm(`¿Borrar "${p.name}" de la carta?\n\nSe elimina para siempre. Si solo se acabó por hoy, usa el interruptor de Disponible.`)) return;
   await sb.from('promotions').delete().eq('restaurant_id', R.id).eq('product_id', String(p.id));
   await sb.from('product_addons').delete().eq('restaurant_id', R.id).eq('product_id', String(p.id));
-  await api.del('products', p.id); if (p.image_url) api.dropImg(p.image_url); toast('Producto borrado'); await refresh(); renderMenu();
+  if (!await api.del('products', p.id)) return; if (p.image_url) api.dropImg(p.image_url); toast('Producto borrado'); await refresh(); renderMenu();
 });
 $('#q').oninput = e => { mq = e.target.value; renderMenu(); };
 $('#chips').onclick = e => { const b = e.target.closest('button'); if (!b) return; mcat = b.dataset.c; menuMeta(); renderMenu(true); };
@@ -1068,7 +1068,7 @@ function editProduct(id) {
   const p = data.products.find(x => String(x.id) === String(id)); if (!p) return;
   editPid = p.id; $('#f-title').textContent = 'Editar producto'; $('#f-imgl').textContent = 'Foto nueva (déjala vacía para mantener la actual)';
   $('#frm').reset(); fillCats();
-  $('#f-name').value = p.name; $('#f-price').value = p.price; $('#f-desc').value = p.description || ''; $('#f-st').value = p.station === 'bar' ? 'bar' : 'kitchen'; $('#f-rec').checked = !!p.recommended;
+  $('#f-name').value = p.name; $('#f-price').value = p.price; $('#f-desc').value = p.description || ''; $('#f-rec').checked = !!p.recommended;
   const sel = $('#f-cat');
   if ([...sel.options].some(o => o.value === p.category)) { sel.value = p.category; $('#f-cat2').hidden = true; $('#f-cat2').required = false; }
   else { sel.value = '__new'; $('#f-cat2').hidden = false; $('#f-cat2').required = true; $('#f-cat2').value = p.category; }
@@ -1076,7 +1076,8 @@ function editProduct(id) {
 }
 $('#cancel').onclick = () => $('#dlg').close();
 $('#frm').addEventListener('submit', async e => {
-  const row = { name: $('#f-name').value.trim(), category: ($('#f-cat').value === '__new' ? $('#f-cat2').value : $('#f-cat').value).trim(), price: Number($('#f-price').value), description: $('#f-desc').value.trim() || null, station: $('#f-st').value === 'bar' ? 'bar' : 'kitchen', recommended: $('#f-rec').checked };
+  const row = { name: $('#f-name').value.trim(), category: ($('#f-cat').value === '__new' ? $('#f-cat2').value : $('#f-cat').value).trim(), price: Number($('#f-price').value), description: $('#f-desc').value.trim() || null };
+  if ($('#f-rec').checked || editPid != null) row.recommended = $('#f-rec').checked;   // en productos nuevos solo se manda si se marcó
   if (FILTRO.alguno(row.name, row.category, row.description)) { e.preventDefault(); toast(FILTRO.MSG); return; }   // el formulario queda abierto para corregir
   const file = $('#f-img').files[0];
   if (editPid != null) { if (await api.editProduct(editPid, row, file)) toast('Producto actualizado'); }

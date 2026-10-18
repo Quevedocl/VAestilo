@@ -5,7 +5,7 @@
 Pedidos desde la mesa por QR para restaurantes, vendido como **suscripción mensual**. El cliente escanea el QR, ve la carta y pide; el restaurante ve los pedidos en vivo, llama al mesero y administra su carta. **No procesa pagos ni boletas: el cobro lo hace el mesero** (la app solo deja registrado qué mesa ya pagó).
 
 - `index.html` — panel del restaurante (pedidos, carta, agregados, promos, mesas, ingresos, llamadas, configuración) y panel de administrador de la plataforma.
-- `cocina.html` — pantalla solo para cocina (`cocina.html?k=<llave>`; el enlace se saca de Configuración).
+- `cocina.html` — pantallas de cocina y barra (`cocina.html?k=<llave>` y `...&e=bar`; los enlaces se sacan de Configuración). Cada producto va solo a su pantalla: bebidas → barra, comida → cocina.
 - `carta.html` — carta que ve el cliente (`carta.html?r=<slug>&t=<id de mesa>`).
 - `config.js` — URL y clave pública de Supabase (único lugar donde se cambian).
 - `supabase/` — base de datos (`schema.sql`, migraciones) y plantillas de correo.
@@ -20,6 +20,7 @@ Pedidos desde la mesa por QR para restaurantes, vendido como **suscripción mens
 4. **Authentication > Emails > Templates**: pega `supabase/email-template-confirmar-registro.html` en *Confirm signup* y `supabase/email-template-recuperar-contrasena.html` en *Reset Password*. Ambas deben contener `{{ .Token }}`.
 5. Edita `config.js` con tu **Project URL** y la clave **anon / publishable** (Project Settings > API). Nunca pongas la `service_role`.
 6. Sube todo (excepto `supabase/`, `tests/`, `.github/`) a un hosting estático con HTTPS (Netlify, Vercel, GitHub Pages, Cloudflare Pages…). Los archivos deben quedar en la misma carpeta.
+   Después, en el mismo SQL Editor, ejecuta también `supabase/migracion-mesas-unicas.sql` y `supabase/migracion-filtro-groserias.sql` (no vienen dentro de `schema.sql`).
 7. Abre `index.html`, crea tu cuenta y hazte administrador (SQL Editor): 
    `insert into admins (email) values ('tu-correo@ejemplo.com') on conflict do nothing;`
 
@@ -38,6 +39,8 @@ Ejecuta en **SQL Editor**, en este orden, solo las que te falten (todas son repe
 7. **`migracion-7-seguridad.sql`** — precios calculados en el servidor, tope anti-spam, índices, fotos, historial y el permiso que faltaba para el botón *Abierto/Cerrado*.
 8. **`migracion-8-sesion-segura.sql`** — la sesión de cada mesa pasa a ser privada (el cliente entra por `join_table`), pedidos y llamadas solo con mesa válida, el nombre de la mesa lo fija el servidor, tope anti-spam por mesa y por local, y cupo diario para `scan-menu`. Súbela **antes** del `carta.html` nuevo; los QR actuales siguen sirviendo. (Para una instalación nueva ya viene incluida en `schema.sql`.)
 9. **`migracion-9-cocina.sql`** — pantalla de cocina (`cocina.html`): enlace secreto por local, solo ve pedidos activos sin precios y los marca preparando/listo. El dueño lo copia o lo regenera en *Configuración > Pantalla de cocina*. (Incluida en `schema.sql` para instalaciones nuevas.)
+10. **`migracion-10-barra-y-recomendaciones.sql`** — cocina y barra como pantallas separadas y productos recomendados al pagar. *(Si ya vas a ejecutar la 11, puedes saltarte esta: la 11 la incluye.)*
+11. **`migracion-11-reparto-automatico.sql`** — **ejecútala siempre**. Arregla el error al añadir productos (faltaban las columnas `station`/`recommended`), hace que **las bebidas vayan solas a la barra y la comida a cocina** (sin elegirlo en cada producto; también al importar la carta con IA), guarda el destino en cada pedido y ordena la carta que ya tienes. Avisa claro si te falta alguna migración anterior. (Incluida en `schema.sql`.)
 
 ## Seguridad: qué garantiza la base de datos
 
@@ -54,6 +57,7 @@ Ejecuta en **SQL Editor**, en este orden, solo las que te falten (todas son repe
 
 ## Pruebas
 
+- `supabase/tests/estacion-automatica.sql` — comprueba el reparto cocina/barra.
 - `node tests/check.js` — sintaxis de los HTML/JS, elementos y archivos referenciados, y que no haya claves secretas (también corre en GitHub Actions).
 - `supabase/tests/` — pruebas de seguridad del SQL para una base PostgreSQL de prueba (ver cabecera del archivo).
 
