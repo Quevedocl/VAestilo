@@ -39,3 +39,10 @@
 - **Dos barreras**: el navegador avisa al instante (con el mismo aviso de siempre, la interfaz no cambia) y la base de datos rechaza el texto aunque alguien intente saltarse la página. Lo ya guardado antes no estorba: solo se revisa lo que se escribe o se cambia.
 - **"pico"** se bloquea, pero **"pico de gallo"** está permitido.
 - **Agregar o quitar palabras**: edita las listas de arriba de `filtro.js` (INICIO = bloquea todo lo que empiece así; CONTIENE = bloquea si aparece en cualquier parte; PERMITIDAS = excepciones, como "shitake" o "carajillo"), corre `node tests/generar-filtro-sql.js` y vuelve a ejecutar el SQL generado. Prueba con `node tests/filtro.js`.
+
+## Mesas sin nombre repetido, boleta de cocina y sonidos
+1. **Supabase > SQL Editor**: ejecuta `supabase/migracion-mesas-unicas.sql` (es repetible). Hazlo ANTES de subir `index.html`.
+2. Sube `index.html`.
+- **Mesas**: no se puede crear (ni renombrar) una mesa con el mismo nombre que otra del local. Compara sin importar mayúsculas, tildes ni espacios de más ("Mesa 5" = "mesa  5"). Las mesas repetidas que ya existían no se tocan.
+- **Boleta de cocina** (botón de imprimir de cada pedido): nuevo diseño para impresora de 80 mm con el nombre del local, mesa en recuadro grande, fecha/hora y código del pedido, cantidades destacadas, agregados y notas, aviso "PEDIDO MODIFICADO" y total de ítems. Sigue sin mostrar precios.
+- **Sonidos de alerta**: ahora suenan como campana de cocina. Pedido nuevo = arpegio ascendente; llamada al mesero = "din-don" agudo repetido tres veces; cancelado = tres notas que bajan; modificado = dos toques rápidos. Se ajustan en la función `beep` de `index.html`.
