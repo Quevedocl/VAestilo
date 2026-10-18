@@ -565,7 +565,6 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
 </head>
 <body>
 <header class="top">
-  <a class="al" href="./" aria-label="VAestilo" title="VAestilo"><img src="icons/logo-mark.svg?v=4" alt="VAestilo" width="34" height="34"></a><span class="sep" aria-hidden="true"></span>
   <div class="brand"><span class="mk">V</span><span class="t">VAestilo</span></div>
   <nav>
     <button data-v="orders" class="on">Pedidos<i id="cnt" data-v="0"></i></button>
@@ -1108,8 +1107,8 @@ const avatar = (name, url) => url ? `\x3Cimg src="${esc(url)}" alt="">` : `<span
 let pend = null;                                  // logo elegido sin guardar: {blob, url} | 'remove'
 function setBrand() {
   const mk = $('.brand .mk');
-  if (R && R.logo_url) { mk.innerHTML = `\x3Cimg src="${esc(R.logo_url)}" alt="">`; mk.classList.add('has'); }
-  else { mk.textContent = initials(R ? R.name : 'A'); mk.classList.remove('has'); }
+  if (R && R.logo_url) { mk.innerHTML = `\x3Cimg src="${esc(R.logo_url)}" alt="">`; mk.classList.add('has'); mk.style.display = ''; }
+  else { mk.textContent = ''; mk.classList.remove('has'); mk.style.display = 'none'; }   // sin logo del restaurante no se muestra nada (el de VAestilo queda solo como icono de la pestaña)
   $('.brand .t').textContent = R ? R.name : 'VAestilo'; hello();
   $('#susp').hidden = !(R && R.active === false); renderOpen();
 }
