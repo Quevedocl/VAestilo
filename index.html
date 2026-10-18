@@ -113,7 +113,7 @@ select,.srch{height:38px;border-radius:10px;border:1px solid var(--ln);backgroun
 .tk.leave{animation:out .3s forwards;pointer-events:none}
 /* llamadas al mesero */
 .cl{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;padding:4px 20px 24px;align-content:start;align-items:start;flex:1;min-height:0;overflow-y:auto}
-.cl:empty::after{content:"Nadie está llamando al mesero";grid-column:1/-1;text-align:center;color:var(--mu);padding:80px 0;font-weight:600}
+.cl:empty::after{content:none}
 .cc{background:var(--card);border:1px solid var(--ln);border-left:6px solid var(--red);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,24,40,.06);animation:in .4s both}
 .cc.pay{border-left-color:var(--grn)}.cc.help{border-left-color:var(--amb)}
 .cc .h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.cc .h b{font-size:20px}.cc .h small{color:var(--mu);font-weight:600}
@@ -274,7 +274,7 @@ nav button:hover{color:var(--tx)}
 :root{--bg:#F6F7F4;--card:#fff;--ln:#E8EAE5;--ln2:#D9DDD6;--tx:#2A322D;--mu:#7A857E;--ink:#2F3D35;
   --acc:#4E7162;--acc2:#3F5C50;--accs:#EDF2EE;--accs2:#DCE7E0;--red:#B85450;--amb:#C79A3B;--grn:#4E7162;--blue:#6D93BD;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
-  --sh1:0 1px 2px rgba(42,50,45,.04);--sh2:0 10px 32px rgba(42,50,45,.09);--gx:max(28px,calc((100% - 1120px)/2))}
+  --sh1:0 1px 2px rgba(42,50,45,.04);--sh2:0 10px 32px rgba(42,50,45,.09);--gx:max(28px,calc((100% - 1320px)/2))}
 body{background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
@@ -440,7 +440,7 @@ dialog h3{font:600 22px/1.2 var(--serif)}
 }
 /* pedidos compactos en computador y pantallas grandes: caben más tickets a la vez sin tener que desplazarse (el celular queda igual) */
 @media (min-width:721px){
-  .grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;padding-left:16px;padding-right:16px;padding-bottom:22px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;padding-bottom:22px}
   .tk{border-radius:13px}
   .hd{padding:9px 12px 8px;gap:8px}
   .mn{font-size:16px}.hd small{font-size:12px}
@@ -453,6 +453,99 @@ dialog h3{font:600 22px/1.2 var(--serif)}
   .go{padding:9px;font-size:13px}
 }
 @media (min-width:1600px){.grid{grid-template-columns:repeat(auto-fill,minmax(235px,1fr))}}
+
+/* ===== Escritorio: aprovechar la pantalla (panel lateral, resúmenes, tarjetas de mesa) ===== */
+.ordwrap{flex:1;min-height:0;display:flex;gap:28px;padding:0 var(--gx)}
+.ordmain{flex:1;min-width:0;min-height:0;overflow-y:auto;display:flex;flex-direction:column}
+.ordmain .grid{flex:none;overflow:visible;padding:4px 0 32px;max-width:none}
+.ordmain .grid::after{content:none!important}
+.side{flex:none;width:330px;overflow-y:auto;padding:4px 0 32px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:1100px){.side{display:none}.ordwrap{padding:0}.ordmain .grid{padding:4px var(--gx) 24px}}
+.sd{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:18px 20px}
+.sd h4{margin:0 0 12px;font-size:13px;font-weight:600;color:var(--mu);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sd h4 a,.sd h4 button{border:0;background:none;padding:0;color:var(--acc2);font-weight:600;font-size:12.5px;cursor:pointer}
+.sd h4 a:hover,.sd h4 button:hover{text-decoration:underline}
+.sdk{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
+.sdk div span{display:block;color:var(--mu);font-size:12.5px;font-weight:500}
+.sdk div b{display:block;font:600 22px/1.2 var(--serif);font-variant-numeric:tabular-nums;margin-top:2px}
+.sdk div.w{grid-column:1/-1;padding-bottom:12px;border-bottom:1px solid var(--ln)}.sdk div.w b{font-size:30px}
+.mchips{display:flex;flex-wrap:wrap;gap:7px}
+.mch{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 11px;border-radius:99px;font-size:13px;font-weight:600;background:var(--accs);color:var(--acc2);border:1px solid var(--accs2)}
+.mch::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.55}
+.mch.busy{background:#EAF0F7;color:#3D5A80;border-color:#D5E1EE}.mch.busy::before{opacity:1}
+.mch.call{background:#FBF1DB;color:#6F5217;border-color:#EFDDAE}.mch.call::before{opacity:1;animation:live 2s infinite}
+.mch.pay{background:#F8ECEB;color:#8F3F3B;border-color:#EBCFCD}.mch.pay::before{opacity:1}
+.mch.free{background:#fff;color:var(--mu);border-color:var(--ln2)}
+.sdl{display:flex;flex-direction:column;gap:2px}
+.sdl .it{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln);font-size:14px}.sdl .it:last-child{border:0}
+.sdl .it b{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sdl .it small{color:var(--mu);font-size:12.5px;white-space:nowrap}
+.sdl .it i{font-style:normal;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accs);color:var(--acc2)}
+.sdl .it i.pay{background:#F8ECEB;color:#8F3F3B}.sdl .it i.help,.sdl .it i.complaint{background:#FBF1DB;color:#6F5217}
+.sdl .mut{color:var(--mu);font-size:13.5px;margin:0}
+.sdt{display:flex;flex-direction:column;gap:10px}
+.sdt .r1{display:flex;justify-content:space-between;gap:8px;font-size:14px}.sdt .r1 span{font-weight:600}.sdt .r1 small{color:var(--mu);white-space:nowrap}
+.sdt .bb{height:6px;border-radius:99px;background:var(--accs);overflow:hidden;margin-top:5px}.sdt .bb i{display:block;height:100%;background:var(--acc);border-radius:99px}
+.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.chk li{display:flex;gap:12px;align-items:flex-start;font-size:14px}
+.chk .o{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ln2);display:grid;place-items:center;margin-top:1px;color:#fff}
+.chk li.ok .o{background:var(--acc);border-color:var(--acc)}.chk li.ok .o::after{content:"✓";font-size:12px;font-weight:700}
+.chk li.ok b{color:var(--mu);text-decoration:line-through;font-weight:500}
+.chk b{display:block;font-weight:600}.chk small{color:var(--mu);font-size:12.5px}
+.chk button{margin-top:6px;height:32px;padding:0 12px;border-radius:9px;border:1px solid var(--ln2);background:#fff;font-weight:600;font-size:13px}.chk button:hover{background:var(--bg)}
+.sd.start{background:var(--accs);border-color:var(--accs2)}
+
+/* estados vacíos con ilustración */
+.oempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 20px 60px;min-height:300px;grid-column:1/-1}
+.oempty svg{width:132px;height:132px;stroke:none;margin-bottom:10px}
+.oempty h3{margin:0 0 6px;font:600 22px/1.2 var(--serif)}
+.oempty p{margin:0 0 18px;color:var(--mu);max-width:380px}
+.oempty .pri{padding:0 18px}
+.ordmain .oempty{flex:none}
+
+/* carta: resumen y lista en dos columnas */
+.cstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px var(--gx) 0}
+.cstat div{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:12px 16px}
+.cstat span{display:block;color:var(--mu);font-size:12.5px;font-weight:500}
+.cstat b{display:block;font:600 22px/1.25 var(--serif);font-variant-numeric:tabular-nums}
+.cstat div.alert b{color:var(--red)}
+#menu .cstat+.tbr{padding-top:14px}
+#subnav+main #menu .cstat{padding-top:14px}
+@media (min-width:1100px){
+  #pg .lst{display:grid;grid-template-columns:1fr 1fr}
+  #pg .lst .rw{grid-template-columns:44px 1fr auto 52px 36px 36px;gap:12px;border-bottom:1px solid var(--ln)}
+  #pg .lst .rw:nth-child(odd){border-right:1px solid var(--ln)}
+  #pg .lst .rw:last-child,#pg .lst .rw:nth-last-child(2):nth-child(odd){border-bottom:0}
+  #pg .lst .rw .st{display:none}
+}
+
+/* mesas: tarjetas con estado */
+.mstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 16px}
+.mstat div{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:12px 16px}
+.mstat span{display:block;color:var(--mu);font-size:12.5px;font-weight:500}
+.mstat b{display:block;font:600 22px/1.25 var(--serif);font-variant-numeric:tabular-nums}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
+.mc{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:18px 20px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+.mc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ln2)}
+.mc.busy::before{background:var(--blue)}.mc.call::before{background:var(--amb)}.mc.pay::before{background:var(--red)}.mc.free::before{background:var(--acc);opacity:.45}
+.mc .mh{display:flex;align-items:center;justify-content:space-between;gap:10px}.mc .mh b{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.mbadge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--accs);color:var(--acc2);white-space:nowrap}
+.mc.busy .mbadge{background:#EAF0F7;color:#3D5A80}.mc.call .mbadge{background:#FBF1DB;color:#6F5217}.mc.pay .mbadge{background:#F8ECEB;color:#8F3F3B}
+.mc .mb{color:var(--mu);font-size:14px;min-height:20px}.mc .mb b{color:var(--tx);font-weight:600}
+.mc .ml{color:var(--mu);font-size:11.5px;word-break:break-all;opacity:.8;border-top:1px dashed var(--ln2);padding-top:10px}
+.mc .ma{display:flex;gap:6px;flex-wrap:wrap}.mc .ma .gh{height:34px;padding:0 10px;font-size:13px;border-radius:10px}
+.mc .ma .gh:last-child:hover{color:var(--red);border-color:#EBCFCD;background:#F8ECEB}
+.mc.free .mb{color:var(--acc2)}
+
+/* ingresos: lista y ventas por mesa */
+.rvc2{margin-top:16px}
+.ol{display:grid;grid-template-columns:52px 1fr auto auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln);font-size:14px}.ol:last-child{border:0}
+.ol time{color:var(--mu);font-variant-numeric:tabular-nums;font-size:13px}.ol b{font-weight:600}.ol>span:last-child{font-weight:600;font-variant-numeric:tabular-nums}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:#EAF0F7;color:#3D5A80}
+.pill.preparing{background:#FBF1DB;color:#6F5217}.pill.ready{background:#E3EEE7;color:#2F5240}.pill.completed{background:var(--accs);color:var(--acc2)}.pill.cancelled{background:#F6E9E8;color:#8F3F3B}
+.ol.x>span:last-child{text-decoration:line-through;color:var(--mu)}
+.rvc2 .card{max-height:420px;overflow-y:auto}
+@media (max-width:860px){.rvc2{grid-template-columns:1fr}.cstat{padding-top:12px}}
+@media (max-width:720px){.cstat{display:flex;overflow-x:auto;scrollbar-width:none;padding-top:12px}.cstat div{flex:none;min-width:112px;padding:10px 14px}.mstat{grid-template-columns:repeat(4,1fr);gap:8px}.mstat div{padding:10px 12px}}
 </style>
 <script>
 /* evita el zoom por doble toque en iOS/Android (el touch-action ya lo cubre; esto es un respaldo) */
@@ -502,10 +595,17 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
       <select id="mesa" aria-label="Filtrar por mesa"></select>
       <span class="vt sp" id="vt" title="Ventas de hoy (sin contar pedidos cancelados)">Ventas hoy <b id="vtv" data-v="0">$0</b></span>
     </div>
-    <div class="grid" id="grid" data-loading><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+    <div class="ordwrap">
+      <div class="ordmain">
+        <div class="grid" id="grid" data-loading><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+        <div class="oempty" id="oEmpty" hidden></div>
+      </div>
+      <aside class="side" id="side" aria-label="Resumen del turno"></aside>
+    </div>
   </section>
 
   <section class="view" id="menu" hidden>
+    <div class="cstat" id="cstat"></div>
     <div class="tbr">
       <label class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Buscar producto"></label>
       <div class="seg" id="chips"></div>
@@ -545,6 +645,10 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
       <div class="rvc">
         <div class="card"><h3>Ventas por hora</h3><p class="hint">Cuánto se pidió en cada hora del día.</p><div class="chart" id="rvChart"></div></div>
         <div class="card"><h3>Lo más vendido</h3><p class="hint">Por monto vendido.</p><div id="rvTop"></div></div>
+      </div>
+      <div class="rvc rvc2">
+        <div class="card"><h3>Pedidos del día</h3><p class="hint">Del más reciente al más antiguo.</p><div id="rvList"></div></div>
+        <div class="card"><h3>Ventas por mesa</h3><p class="hint">Dónde se pidió más.</p><div id="rvTbl"></div></div>
       </div>
       <p class="stt" id="rvNote"></p>
     </div>
@@ -790,7 +894,7 @@ function renderOrders() {
     el.style.order = i; el.hidden = (sf && o.status !== sf) || (mf && tn(o) !== mf);
   });
   for (const [id, el] of map) if (!ids.has(id)) { el.classList.add('leave'); setTimeout(() => el.remove(), 300); map.delete(id); }
-  seen = ids; tick(); counts(); mesas();
+  seen = ids; tick(); counts(); mesas(); orderEmpty();
   if (fresh.length) alertNew(fresh);
 }
 function tick() {
@@ -868,7 +972,7 @@ function renderCalls() {
   const cn = $('#ccnt'); cn.textContent = calls.length || ''; cn.dataset.v = calls.length;
   $('#cl').innerHTML = calls.map(c => { const w = WHY[c.reason] || WHY.help, m = mins(c.created_at);
     return `<article class="cc ${esc(c.reason)}"><div class="h"><b>${esc(c.table_name)}</b><small>${m < 1 ? 'Recién' : m + ' min'}</small></div><p class="why">${w[0]}</p>${c.note ? `<p class="nt2">“${esc(c.note)}”</p>` : ''}
-    <div class="ac">${c.reason === 'pay' ? `<button class="pri" data-cclose="${c.id}">Cobrar y cerrar mesa</button><button class="gh" data-cpay="${c.id}">Cobrar y dejar abierta</button>` : ''}<button class="gh" data-cdone="${c.id}">Atendido</button></div></article>`; }).join('');
+    <div class="ac">${c.reason === 'pay' ? `<button class="pri" data-cclose="${c.id}">Cobrar y cerrar mesa</button><button class="gh" data-cpay="${c.id}">Cobrar y dejar abierta</button>` : ''}<button class="gh" data-cdone="${c.id}">Atendido</button></div></article>`; }).join('') || emptyArt('bell', 'Nadie está llamando', 'Cuando un cliente toque “Llamar al mesero” en su carta, el aviso aparece aquí con sonido.');
   if (seenCalls) { const fresh = calls.filter(c => !seenCalls.has(c.id)); if (fresh.length) alertCall(fresh); }
   seenCalls = ids;
 }
@@ -886,14 +990,14 @@ $('#cl').addEventListener('click', async e => {
   else if (!(await closeTableUI(c.table_id, c.table_name))) { x.disabled = false; return; }
   await refresh();
 });
-setInterval(() => { if (data.calls && data.calls.length) renderCalls(); }, 30000);
+setInterval(() => { if (data.calls && data.calls.length) renderCalls(); renderSide(); if (view === 'tables') renderTables(); }, 30000);
 
 /* ===== CARTA ===== */
 function menuMeta() {
   const on = data.products.filter(p => p.is_available).length;
   $('#stt').textContent = `${on} disponibles · ${data.products.length - on} agotados`;
   const cats = [...new Set(data.products.map(p => p.category))];
-  fillCats();
+  fillCats(); menuStats(on, cats);
   $('#chips').innerHTML = ['', ...cats].map(c => `<button data-c="${esc(c)}" class="${c === mcat ? 'on' : ''}">${c ? esc(c) : 'Todo'}</button>`).join('');
 }
 const addonCount = p => (data.addons || []).filter(a => a.product_id ? String(a.product_id) === String(p.id) : a.category === p.category).length;
@@ -1084,7 +1188,7 @@ $('#alist').addEventListener('click', async e => {
 });
 setInterval(() => { if (view === 'admin' && !document.hidden) loadAdmin(); }, 60000);
 async function refresh() {
-  data = await api.load(); renderOrders(); renderCalls(); menuMeta(); renderPromos(); renderTables();
+  data = await api.load(); renderOrders(); renderCalls(); menuMeta(); renderPromos(); renderTables(); renderSide(); scheduleToday();
   if (!(document.activeElement && document.activeElement.closest('#al'))) renderAddons();
   if (view === 'revenue' || revDay === dayStr(new Date())) scheduleRev();
   if (view === 'menu' && !(document.activeElement && document.activeElement.closest('#pg'))) renderMenu();
@@ -1211,6 +1315,11 @@ function renderRevenue() {
   $('#rvChart').innerHTML = bars;
   const tm = Math.max(1, ...s.top.map(t => t.rev));
   $('#rvTop').innerHTML = s.top.length ? s.top.map((t, i) => `<div class="t5" style="--i:${i}"><span><b>${esc(t.name)}</b> <small>×${t.qty}</small></span><b>${clp(Math.round(t.rev))}</b><div class="bb"><i data-w="${Math.round(t.rev / tm * 100)}"></i></div></div>`).join('') : '<p class="empty">Sin ventas este día</p>';
+  const ok = REV.filter(o => o.status !== 'cancelled'), byT = new Map(); ok.forEach(o => { const k = tn(o), m = byT.get(k) || { n: 0, v: 0 }; m.n++; m.v += oTotal(o); byT.set(k, m); });
+  const tl = [...byT.entries()].sort((a, b) => b[1].v - a[1].v).slice(0, 6), tmx = Math.max(1, ...tl.map(x => x[1].v));
+  const SL = { pending: 'Recibido', preparing: 'Preparando', ready: 'Listo', completed: 'Pagado', cancelled: 'Cancelado' };
+  $('#rvList').innerHTML = REV.length ? [...REV].reverse().slice(0, 30).map(o => { const d = new Date(o.created_at); return `<div class="ol${o.status === 'cancelled' ? ' x' : ''}"><time>${pad2(d.getHours())}:${pad2(d.getMinutes())}</time><b>${esc(tn(o))}</b><span class="pill ${esc(o.status)}">${SL[o.status] || esc(o.status)}</span><span>${clp(Math.round(oTotal(o)))}</span></div>`; }).join('') : '<p class="empty">Sin pedidos este día</p>';
+  $('#rvTbl').innerHTML = tl.length ? `<div class="sdt">${tl.map(([n, m]) => `<div><div class="r1"><span>${esc(n)}</span><small>${m.n} ${m.n === 1 ? 'pedido' : 'pedidos'} · ${clp(Math.round(m.v))}</small></div><div class="bb"><i style="width:${Math.round(m.v / tmx * 100)}%"></i></div></div>`).join('')}</div>` : '<p class="empty">Sin ventas este día</p>';
   requestAnimationFrame(() => requestAnimationFrame(() => {
     $$('#rvChart .bar').forEach(b => b.style.height = b.dataset.h + '%'); $$('#rvTop .bb i').forEach(b => b.style.width = b.dataset.w + '%');
   }));
@@ -1259,10 +1368,70 @@ $('#p-save').onclick = async () => {
 };
 $('#pl').addEventListener('change', async e => { await api.upd('promotions', e.target.dataset.id, { is_active: e.target.checked }); await refresh(); });
 
+/* ===== PANEL LATERAL DEL TURNO, ESTADOS VACÍOS Y RESUMEN DE CARTA ===== */
+const ART = {
+  bell: '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#EDF2EE"/><path d="M60 28a20 20 0 00-20 20v14l-6 10h52l-6-10V48a20 20 0 00-20-20z" fill="#fff" stroke="#4E7162" stroke-width="3" stroke-linejoin="round"/><path d="M52 78a8 8 0 0016 0" fill="none" stroke="#4E7162" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="25" r="3" fill="#4E7162"/><circle cx="92" cy="34" r="5" fill="#DCE7E0"/><circle cx="26" cy="86" r="4" fill="#DCE7E0"/></svg>',
+  orders: '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#EDF2EE"/><rect x="34" y="26" width="52" height="68" rx="8" fill="#fff" stroke="#4E7162" stroke-width="3"/><path d="M45 46h30M45 58h30M45 70h18" stroke="#4E7162" stroke-width="3" stroke-linecap="round"/><circle cx="82" cy="82" r="14" fill="#4E7162"/><path d="M75 82l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="96" cy="30" r="5" fill="#DCE7E0"/><circle cx="22" cy="78" r="4" fill="#DCE7E0"/></svg>',
+  table: '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#EDF2EE"/><rect x="28" y="50" width="64" height="9" rx="4.5" fill="#fff" stroke="#4E7162" stroke-width="3"/><path d="M40 59v28M80 59v28" stroke="#4E7162" stroke-width="3" stroke-linecap="round"/><rect x="48" y="26" width="24" height="24" rx="3" fill="#fff" stroke="#4E7162" stroke-width="3"/><path d="M53 31h6v6h-6zM61 31h6v6h-6zM53 39h6v6h-6zM63 41h4v4h-4z" fill="#4E7162"/></svg>'
+};
+const emptyArt = (k, t, p, btn) => `<div class="oempty">${ART[k]}<h3>${esc(t)}</h3><p>${esc(p)}</p>${btn || ''}</div>`;
+function orderEmpty() {
+  const E = $('#oEmpty'); if (!E) return;
+  const vis = [...map.values()].some(el => !el.hidden && !el.classList.contains('leave'));
+  E.hidden = vis; if (vis) return;
+  E.innerHTML = data.orders.length ? `${ART.orders}<h3>No hay pedidos en esta vista</h3><p>Cambia el filtro de arriba para ver el resto de los pedidos activos.</p>`
+    : `${ART.orders}<h3>Todo tranquilo por ahora</h3><p>Cuando un cliente escanee el QR de su mesa y pida, el pedido aparece aquí al instante, con aviso sonoro.</p><button class="pri" type="button" data-go2="tables">${data.tables.length ? 'Ver QR y enlaces de mesas' : 'Crear mi primera mesa'}</button>`;
+}
+$('#oEmpty').addEventListener('click', e => { const b = e.target.closest('[data-go2]'); if (b) go(b.dataset.go2); });
+let TODAY = [], todayT;
+const scheduleToday = () => { clearTimeout(todayT); todayT = setTimeout(loadToday, 500); };
+async function loadToday() {
+  if (!sb || !R) return;
+  const a = new Date(); a.setHours(0, 0, 0, 0); const b = new Date(a); b.setDate(b.getDate() + 1);
+  const { data: rows, error } = await sb.from('orders').select('id,status,total,items,created_at,paid_at,table_name,table_number').eq('restaurant_id', R.id).gte('created_at', a.toISOString()).lt('created_at', b.toISOString()).order('created_at');
+  if (!error) { TODAY = rows || []; renderSide(); }
+}
+function renderSide() {
+  const el = $('#side'); if (!el || !R) return;
+  const s = revStats(TODAY), st = tableStates(), calls = data.calls || [];
+  const steps = [
+    ['Crea tu carta', 'Añade tus platos con foto y precio.', data.products.length > 0, 'menu', 'Ir a Carta'],
+    ['Crea tus mesas', 'Cada mesa tiene su QR o enlace NFC.', data.tables.length > 0, 'tables', 'Ir a Mesas'],
+    ['Sube tu logo', 'Aparece arriba en la carta del cliente.', !!R.logo_url, 'settings', 'Ir a Configuración']
+  ], pend = steps.filter(x => !x[2]);
+  const first = pend[0];
+  let h = '';
+  if (pend.length) h += `<div class="sd start"><h4>Primeros pasos <small>${steps.length - pend.length}/${steps.length}</small></h4><ul class="chk">${steps.map(x => `<li class="${x[2] ? 'ok' : ''}"><span class="o"></span><div><b>${x[0]}</b>${x[2] ? '' : `<small>${x[1]}</small>`}${x === first ? `<br><button type="button" data-go2="${x[3]}">${x[4]}</button>` : ''}</div></li>`).join('')}</ul></div>`;
+  h += `<div class="sd"><h4>Hoy</h4><div class="sdk"><div class="w"><span>Ventas del día</span><b>${clp(s.sales)}</b></div><div><span>Pedidos</span><b>${s.n}</b></div><div><span>Ticket promedio</span><b>${clp(s.avg)}</b></div><div><span>Cobrado</span><b>${clp(s.paid)}</b></div><div><span>Por cobrar</span><b>${clp(s.open)}</b></div></div></div>`;
+  if (st.length) { const busy = st.filter(x => x.st !== 'free').length;
+    h += `<div class="sd"><h4>Mesas · ${busy} de ${st.length} ocupadas <button type="button" data-go2="tables">Ver todas</button></h4><div class="mchips">${st.slice(0, 24).map(x => `<span class="mch ${x.st}" title="${STL[x.st]}">${esc(x.t.name)}</span>`).join('')}${st.length > 24 ? `<span class="mch free">+${st.length - 24}</span>` : ''}</div></div>`; }
+  h += `<div class="sd"><h4>Llamadas al mesero <button type="button" data-go2="calls">Abrir</button></h4>${calls.length ? `<div class="sdl">${calls.slice(0, 4).map(c => { const w = WHY[c.reason] || WHY.help, m = mins(c.created_at); return `<div class="it"><b>${esc(c.table_name)}</b><i class="${esc(c.reason)}">${w[0]}</i><small>${m < 1 ? 'Recién' : m + ' min'}</small></div>`; }).join('')}</div>` : '<p class="mut">Nadie está llamando. Todo en orden ✓</p>'}</div>`;
+  if (s.top.length) { const tm = Math.max(1, ...s.top.map(t => t.qty)); h += `<div class="sd"><h4>Lo más pedido hoy <button type="button" data-go2="revenue">Ingresos</button></h4><div class="sdt">${s.top.slice(0, 4).map(t => `<div><div class="r1"><span>${esc(t.name)}</span><small>×${t.qty}</small></div><div class="bb"><i style="width:${Math.round(t.qty / tm * 100)}%"></i></div></div>`).join('')}</div></div>`; }
+  el.innerHTML = h;
+}
+$('#side').addEventListener('click', e => { const b = e.target.closest('[data-go2]'); if (b) go(b.dataset.go2); });
+function menuStats(on, cats) {
+  const off = data.products.length - on, pr = (data.promos || []).filter(x => x.is_active).length, ad = (data.addons || []).filter(x => x.is_available).length;
+  $('#cstat').innerHTML = `<div><span>Productos</span><b>${data.products.length}</b></div><div><span>Categorías</span><b>${cats.length}</b></div><div class="${off ? 'alert' : ''}"><span>Agotados</span><b>${off}</b></div><div><span>Promociones activas</span><b>${pr}</b></div><div><span>Agregados activos</span><b>${ad}</b></div>`;
+}
 /* ===== MESAS (enlace directo para QR / NFC) ===== */
 const linkOf = t => new URL('carta.html?r=' + R.slug + '&t=' + t.id, location.href).href;
+function tableStates() {
+  const act = new Map(), calls = new Map();
+  data.orders.forEach(o => { const k = mesaKey(tn(o)), e = act.get(k) || { n: 0, unpaid: 0, first: o.created_at }; e.n++; if (!o.paid_at) e.unpaid += oTotal(o); if (new Date(o.created_at) < new Date(e.first)) e.first = o.created_at; act.set(k, e); });
+  (data.calls || []).forEach(c => { const k = mesaKey(c.table_name); if (!calls.has(k) || c.reason === 'pay') calls.set(k, c); });
+  return data.tables.map(t => { const k = mesaKey(t.name), e = act.get(k) || null, c = calls.get(k) || null; return { t, e, c, st: c ? (c.reason === 'pay' ? 'pay' : 'call') : e ? 'busy' : 'free' }; });
+}
+const STL = { free: 'Libre', busy: 'Con pedidos', call: 'Llama al mesero', pay: 'Quiere pagar' };
 function renderTables() {
-  $('#tl').innerHTML = data.tables.length ? `<div class="lst">${data.tables.map(t => `<div class="rw2"><div class="nm"><b>${esc(t.name)}</b><small>${esc(linkOf(t))}</small></div><button class="gh" data-cp="${t.id}">Copiar enlace</button><button class="gh" data-qr="${t.id}">QR</button><button class="gh" data-free="${t.id}" title="Deja la mesa lista para un cliente nuevo: al escanear el QR podrá pedir">Liberar mesa</button><button class="gh" data-del="dining_tables" data-id="${t.id}">Borrar</button></div>`).join('')}</div>` : '<p class="empty">Crea tu primera mesa. Cada una genera un enlace único para grabar en NFC o imprimir como QR.</p>';
+  if (!data.tables.length) { $('#tl').innerHTML = emptyArt('table', 'Crea tu primera mesa', 'Cada mesa genera un enlace único para grabar en NFC o imprimir como QR. Escríbela arriba (Ej. Mesa 1) y presiona “Crear mesa”.'); return; }
+  const st = tableStates(), cnt = k => st.filter(x => x.st === k).length, busy = st.length - cnt('free');
+  const owe = st.reduce((a, x) => a + (x.e ? x.e.unpaid : 0), 0);
+  $('#tl').innerHTML = `<div class="mstat"><div><span>Mesas</span><b>${st.length}</b></div><div><span>Ocupadas</span><b>${busy}</b></div><div><span>Libres</span><b>${cnt('free')}</b></div><div><span>Por cobrar</span><b>${clp(Math.round(owe))}</b></div></div>
+  <div class="mgrid">${st.map(({ t, e, c, st: s }) => { const m = e ? mins(e.first) : 0;
+    const body = c ? `<b>${esc((WHY[c.reason] || WHY.help)[0])}</b>${e ? ' · ' + e.n + (e.n === 1 ? ' pedido' : ' pedidos') : ''}` : e ? `<b>${e.n} ${e.n === 1 ? 'pedido activo' : 'pedidos activos'}</b> · ${e.unpaid ? clp(Math.round(e.unpaid)) + ' por cobrar' : 'todo pagado'}<br>desde hace ${m < 1 ? 'un momento' : m + ' min'}` : 'Sin pedidos activos. Lista para recibir clientes.';
+    return `<article class="mc ${s}"><div class="mh"><b>${esc(t.name)}</b><span class="mbadge">${STL[s]}</span></div><div class="mb">${body}</div><div class="ml">${esc(linkOf(t))}</div>
+    <div class="ma"><button class="gh" data-cp="${t.id}">Copiar enlace</button><button class="gh" data-qr="${t.id}">QR</button><button class="gh" data-free="${t.id}" title="Deja la mesa lista para un cliente nuevo: al escanear el QR podrá pedir">Liberar</button><button class="gh" data-del="dining_tables" data-id="${t.id}">Borrar</button></div></article>`; }).join('')}</div>`;
 }
 const mesaKey = x => String(x || '').toLowerCase().replace(/ñ/g, '\u0001').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0001/g, 'ñ').replace(/\s+/g, ' ').trim();   // "Mesa  5" = "mesa 5" = "MESA 5"
 $('#tf').onsubmit = async e => { e.preventDefault(); const n = $('#tn').value.trim(); if (!n) return; if (FILTRO.malo(n)) return toast(FILTRO.MSG); if (data.tables.some(t => mesaKey(t.name) === mesaKey(n))) return toast('Ya existe una mesa con ese nombre.'); if (!await api.add('dining_tables', { name: n })) return; $('#tn').value = ''; toast('Mesa creada'); await refresh(); };
