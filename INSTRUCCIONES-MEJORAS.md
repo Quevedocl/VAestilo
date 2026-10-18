@@ -44,5 +44,5 @@
 1. **Supabase > SQL Editor**: ejecuta `supabase/migracion-mesas-unicas.sql` (es repetible). Hazlo ANTES de subir `index.html`.
 2. Sube `index.html`.
 - **Mesas**: no se puede crear (ni renombrar) una mesa con el mismo nombre que otra del local. Compara sin importar mayúsculas, tildes ni espacios de más ("Mesa 5" = "mesa  5"). Las mesas repetidas que ya existían no se tocan.
-- **Boleta de cocina** (botón de imprimir de cada pedido): nuevo diseño para impresora de 80 mm con el nombre del local, mesa en recuadro grande, fecha/hora y código del pedido, cantidades destacadas, agregados y notas, aviso "PEDIDO MODIFICADO" y total de ítems. Sigue sin mostrar precios.
+- **Boleta de cocina** (botón de imprimir de cada pedido): nuevo diseño para impresora de 80 mm con el nombre del local, mesa en recuadro grande, fecha/hora y código del pedido, cantidades destacadas, agregados y notas, aviso "PEDIDO MODIFICADO" y total de ítems.Muestra el precio de cada línea, el subtotal, el descuento de promociones (si hubo) y el TOTAL.
 - **Sonidos de alerta**: ahora suenan como campana de cocina. Pedido nuevo = arpegio ascendente; llamada al mesero = "din-don" agudo repetido tres veces; cancelado = tres notas que bajan; modificado = dos toques rápidos. Se ajustan en la función `beep` de `index.html`.

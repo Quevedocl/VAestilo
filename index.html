@@ -251,6 +251,11 @@ nav button:hover{color:var(--tx)}
   .pk-n{flex:1;font-size:15px;font-weight:700;line-height:1.25}
   .pk-n small{display:block;margin-top:2px;font-size:12px;font-weight:500}
   .pk-n small.pk-note{font-style:italic;font-weight:600}
+  .pk-p{flex:none;margin-left:auto;padding-left:6px;font-size:14px;font-weight:700;line-height:1.35;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pk-n small b{float:right;font-weight:600;padding-left:6px;font-variant-numeric:tabular-nums}
+  .pk-n small.pk-u{font-weight:500;opacity:.85}
+  .pk-sum{display:flex;justify-content:space-between;gap:8px;margin-top:3px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pk-tot{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:6px;border-top:2px solid #000;padding-top:5px;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
   .pk-ft{margin-top:8px;text-align:center;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
 }
 }
@@ -800,12 +805,18 @@ function mesas() {
 }
 $('#mesa').onchange = e => { mf = e.target.value; renderOrders(); };
 $('#seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; sf = b.dataset.f; $$('#seg button').forEach(x => x.classList.toggle('on', x === b)); renderOrders(); };
-function printTicket(o) {                         // comanda para cocina: solo lo que hay que preparar (sin precios)
+function printTicket(o) {                         // boleta del pedido: detalle para cocina con precios y total
   const hora = new Date(o.created_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
   const fecha = new Date(o.created_at).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const n = (o.items || []).reduce((a, i) => a + Number(i.qty || 0), 0);
-  const items = (o.items || []).map(i => `<div class="pk-it"><span class="pk-q">${esc(i.qty)}×</span><span class="pk-n">${esc(i.name)}${(i.addons || []).map(a => `<small>+ ${esc(a.name)}</small>`).join('')}${i.promo ? `<small>${esc(i.promo)}</small>` : ''}${i.note ? `<small class="pk-note">» ${esc(i.note)}</small>` : ''}</span></div>`).join('');
-  $('#printArea').innerHTML = `<div class="pk-biz">${esc(R ? R.name : '')}</div><div class="pk-mesa">${esc(tn(o))}</div><div class="pk-meta"><span>${esc(fecha)} · ${esc(hora)}</span><span>#${esc(String(o.id).slice(-4).toUpperCase())}</span></div>${o.modified_at ? '<div class="pk-mod">PEDIDO MODIFICADO</div>' : ''}<hr class="pk-sep">${items}<div class="pk-ft">${n} ${n === 1 ? 'ítem' : 'ítems'} · comanda de cocina</div>`;
+  const items = (o.items || []).map(i => {
+    const q = Number(i.qty || 0), adds = (i.addons || []).map(a => `<small>+ ${esc(a.name)}${Number(a.price) > 0 ? `<b>${clp(a.price)}</b>` : ''}</small>`).join('');
+    const unit = q > 1 ? `<small class="pk-u">${esc(q)} × ${clp(i.price || 0)}</small>` : '';
+    return `<div class="pk-it"><span class="pk-q">${esc(i.qty)}×</span><span class="pk-n">${esc(i.name)}${unit}${adds}${i.promo ? `<small>${esc(i.promo)}</small>` : ''}${i.note ? `<small class="pk-note">» ${esc(i.note)}</small>` : ''}</span><span class="pk-p">${clp(oUnit(i) * q)}</span></div>`;
+  }).join('');
+  const gross = oGross(o), total = oTotal(o), desc = Math.round(gross - total);
+  const sums = (desc > 0 ? `<div class="pk-sum"><span>Subtotal</span><span>${clp(gross)}</span></div><div class="pk-sum"><span>Descuento promociones</span><span>−${clp(desc)}</span></div>` : '') + `<div class="pk-tot"><span>TOTAL</span><span>${clp(total)}</span></div>`;
+  $('#printArea').innerHTML = `<div class="pk-biz">${esc(R ? R.name : '')}</div><div class="pk-mesa">${esc(tn(o))}</div><div class="pk-meta"><span>${esc(fecha)} · ${esc(hora)}</span><span>#${esc(String(o.id).slice(-4).toUpperCase())}</span></div>${o.modified_at ? '<div class="pk-mod">PEDIDO MODIFICADO</div>' : ''}<hr class="pk-sep">${items}${sums}<div class="pk-ft">${n} ${n === 1 ? 'ítem' : 'ítems'}</div>`;
   window.print();
 }
 $('#grid').addEventListener('click', async e => {
