@@ -802,7 +802,7 @@ const errMsg = e => /column .*(station|recommended)|(station|recommended).*(sche
 let tt; const toast = m => { const t = $('#toast'), host = document.querySelector('dialog[open]') || document.body; if (t.parentNode !== host) host.appendChild(t); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1800); };
 
 /* ===== CAPA DE DATOS ===== */
-const sb = CFG.url && window.supabase ? supabase.createClient(CFG.url, CFG.key) : null;
+const sb = CFG.url && window.supabase ? supabase.createClient(CFG.url, CFG.key, { auth: { lock: async (n, t, fn) => await fn() } }) : null;   // sin candado entre pestañas: evita que las llamadas con sesión queden colgadas
 let R = null; // restaurante de la sesión
 const api = {
   async load() {
@@ -1547,7 +1547,7 @@ function renderTables() {
     <div class="ma"><button class="gh" data-cp="${t.id}">Copiar enlace</button><button class="gh" data-qr="${t.id}">QR</button><button class="gh" data-free="${t.id}" title="Deja la mesa lista para un cliente nuevo: al escanear el QR podrá pedir">Liberar</button><button class="gh" data-del="dining_tables" data-id="${t.id}">Borrar</button></div></article>`; }).join('')}</div>`;
 }
 const mesaKey = x => String(x || '').toLowerCase().replace(/ñ/g, '\u0001').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0001/g, 'ñ').replace(/\s+/g, ' ').trim();   // "Mesa  5" = "mesa 5" = "MESA 5"
-$('#tf').onsubmit = async e => { e.preventDefault(); const n = $('#tn').value.trim(); if (!n) return; if (FILTRO.malo(n)) return toast(FILTRO.MSG); if (data.tables.some(t => mesaKey(t.name) === mesaKey(n))) return toast('Ya existe una mesa con ese nombre.'); if (!await api.add('dining_tables', { name: n })) return; $('#tn').value = ''; toast('Mesa creada'); await refresh(); };
+$('#tf').onsubmit = async e => { e.preventDefault(); const n = $('#tn').value.trim(); if (!n) return; if (FILTRO.malo(n)) return toast(FILTRO.MSG); if (data.tables.some(t => mesaKey(t.name) === mesaKey(n))) return toast('Ya existe una mesa con ese nombre.'); try { if (!await api.add('dining_tables', { name: n })) return; } catch (err) { return toast('No se pudo crear la mesa: ' + ((err && err.message) || err)); } $('#tn').value = ''; toast('Mesa creada'); await refresh(); };
 $('#tl').addEventListener('click', async e => {
   const f = e.target.closest('[data-free]');
   if (f) { const t = data.tables.find(x => String(x.id) === f.dataset.free); if (t && confirm(`¿Liberar "${t.name}"?\n\nSe cierran sus pedidos abiertos y la mesa queda lista para un cliente nuevo: al escanear el QR (o recargar la página) podrá pedir, incluso desde un teléfono que ya estuvo en esta mesa.`) && await api.closeTable(t.id, t.name, true)) { toast('Mesa liberada: el próximo que escanee el QR puede pedir'); await refresh(); } return; }
@@ -1668,7 +1668,11 @@ $('#vf').onsubmit = async e => {
   } finally { btn.disabled = false; }
 };
 
-$('#logout').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+$('#logout').onclick = async () => {
+  try { await Promise.race([sb.auth.signOut({ scope: 'local' }), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+  try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) {}   // aunque falle la red, la sesión local se borra
+  location.reload();
+};
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
 start();
 </script>
