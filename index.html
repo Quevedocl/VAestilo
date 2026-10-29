@@ -575,6 +575,52 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
 .imp-row input.ip.zero{border-color:var(--amb)}
 @media(max-width:560px){.imp-row{grid-template-columns:auto 1fr 92px}.imp-row input.ic{grid-column:2/-1}.imp-row input.ip{grid-column:3;grid-row:1}}
 </style>
+<style id="glass-css">
+/* ===== VAestilo · cristal esmerilado sobre un fondo con la identidad de Q&V (verde bosque, ondas de gota y señal NFC, "Q&V" muy tenue) ===== */
+@media screen{
+:root{--mu:#5b6760;--gl:rgba(246,248,247,.56);--gl2:rgba(255,255,255,.78);--gl-ln:rgba(255,255,255,.6);--gl-sh:0 10px 34px rgba(18,50,38,.16),inset 0 1px 0 rgba(255,255,255,.7);--gl-blur:blur(30px) saturate(150%)}
+html{background:#e7ede9}
+body,#login{background:
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 1000%22 preserveAspectRatio=%22xMidYMid slice%22%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%221.6%22 opacity=%22.075%22%3E%0A%3Ccircle cx=%221400%22 cy=%22900%22 r=%22120%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22230%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22350%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22480%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22620%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22770%22/%3E%0A%3C/g%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%227%22 stroke-linecap=%22round%22 opacity=%22.065%22 transform=%22translate%28190 330%29%22%3E%0A%3Cpath d=%22M0 -70 A70 70 0 0 1 0 70%22/%3E%3Cpath d=%22M0 -140 A140 140 0 0 1 0 140%22/%3E%3Cpath d=%22M0 -210 A210 210 0 0 1 0 210%22/%3E%3Cpath d=%22M0 -280 A280 280 0 0 1 0 280%22/%3E%0A%3C/g%3E%0A%3Ctext x=%22800%22 y=%22640%22 text-anchor=%22middle%22 font-family=%22Helvetica Neue,Helvetica,Arial,sans-serif%22 font-weight=%22800%22 font-size=%22330%22 letter-spacing=%22-10%22 fill=%22%231d4a37%22 opacity=%22.035%22%3EQ%26amp%3BV%3C/text%3E%0A%3Cpath d=%22M1180 70 C1120 150 1100 205 1180 230 C1260 205 1240 150 1180 70Z%22 fill=%22%231d4a37%22 opacity=%22.06%22/%3E%0A%3C/svg%3E") center/cover no-repeat fixed,
+  radial-gradient(1000px 700px at 0% 105%,rgba(26,72,52,.62),transparent 62%),
+  radial-gradient(800px 650px at 105% 62%,rgba(34,86,62,.50),transparent 60%),
+  radial-gradient(700px 500px at 100% -8%,rgba(44,100,74,.30),transparent 60%),
+  radial-gradient(900px 600px at 15% -10%,rgba(255,255,255,.75),transparent 60%),
+  #e4ebe6 fixed!important}
+.top{background:var(--gl)!important;border-bottom:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:0 1px 0 rgba(255,255,255,.5),0 8px 26px rgba(18,50,38,.10)!important;position:relative;z-index:5}
+nav button:hover{background:rgba(255,255,255,.4)!important}
+nav button.on{background:var(--gl2)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 2px 8px rgba(18,50,38,.14)}
+.card,.lst,.kp div,.cc,.pv,.rvk div,.cstat div,.mstat div,.mc,.sd,.pvh,#bn,.tk{background:var(--gl)!important;border:1px solid var(--gl-ln)!important;box-shadow:var(--gl-sh)!important;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+.tk{-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+.pv{border-style:solid!important}
+.gh,.ib,.opn,.seg button,.chk button,.del,.mch.free,.subnav button.on{background:rgba(255,255,255,.5)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 1px 3px rgba(18,50,38,.10)}
+.gh:hover,.ib:hover{background:rgba(255,255,255,.75)!important}
+.pri{background-image:linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,0) 55%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px rgba(24,56,42,.28)!important}
+select,.srch,.fld input,.fld select,dialog input,dialog select,dialog textarea,#rvDay,.tf input,.pi,#lf input,#vf input{background:rgba(255,255,255,.62)!important;border:1px solid var(--gl-ln)!important;box-shadow:inset 0 1px 2px rgba(18,50,38,.08)}
+select:focus,.srch:focus,.fld input:focus,dialog input:focus,.tf input:focus,#lf input:focus,#vf input:focus{background:rgba(255,255,255,.88)!important;border-color:var(--acc)!important}
+dialog{background:rgba(246,248,247,.72)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(36px) saturate(160%);backdrop-filter:blur(36px) saturate(160%);box-shadow:0 26px 70px rgba(14,40,30,.36),inset 0 1px 0 rgba(255,255,255,.8)!important}
+dialog::backdrop{background:rgba(16,44,33,.30)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#toast{background:rgba(22,44,34,.70)!important;border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+#lf,#vf{background:rgba(246,248,247,.60)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(34px) saturate(160%);backdrop-filter:blur(34px) saturate(160%);box-shadow:0 26px 70px rgba(14,40,30,.26),inset 0 1px 0 rgba(255,255,255,.8)!important}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .top,.card,.lst,.kp div,.cc,.pv,.rvk div,.cstat div,.mstat div,.mc,.sd,.pvh,#bn,.tk,#lf,#vf{background:rgba(248,250,249,.93)!important}
+  dialog{background:#fff!important}
+}
+}
+</style>
+<style id="vin-css">
+/* ===== cambio de pestaña: una píldora de cristal se desliza hasta la pestaña elegida y la vista aparece con un ascenso suave ===== */
+nav{position:relative}
+nav button{position:relative;z-index:1}
+#navpill{position:absolute;left:0;top:50%;height:36px;margin-top:-18px;width:0;border-radius:10px;pointer-events:none;z-index:0;opacity:0;
+  background:rgba(255,255,255,.82);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 3px 12px rgba(18,50,38,.16)}
+#navpill.ready{opacity:1;transition:transform .5s cubic-bezier(.34,1.3,.5,1),width .5s cubic-bezier(.34,1.3,.5,1),opacity .2s}
+nav.hp button.on{background:transparent!important;box-shadow:none!important}
+.view.vin{animation:vIn .42s cubic-bezier(.22,1,.36,1) both}
+.view.vin>*{animation:vChild .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0)*45ms + 40ms)}
+@keyframes vIn{from{opacity:0;transform:translate3d(0,10px,0) scale(.992)}}
+@keyframes vChild{from{opacity:0;transform:translate3d(0,12px,0)}}
+</style>
 </head>
 <body>
 <header class="top">
@@ -868,26 +914,34 @@ function syncSnd() {
   const t = !soundOn ? 'Sonido desactivado · toca para activar' : need ? 'Toca para activar el sonido de los avisos' : 'Sonido activado · toca para silenciar';
   b.title = t; b.setAttribute('aria-label', t);
 }
-function tones(seq, vol = .6) {                       // seq: [[frecuencia, inicio, duración], …] · cada nota suena como campana (fundamental + armónicos que se apagan antes)
-  const c = audio(); if (!c) return; const t0 = c.currentTime + .02;
-  const PARC = [[1, 1, 1], [2, .42, .6], [3, .2, .4], [4.2, .09, .25]];   // [múltiplo de frecuencia, volumen, fracción de la duración]
+let sndFx = null;
+function sndChain(c) {      // eco suave (como una sala pequeña) para que las notas suenen redondas y no secas
+  if (sndFx && sndFx.c === c) return sndFx.i;
+  const i = c.createGain(), d = c.createDelay(), fb = c.createGain(), lp = c.createBiquadFilter(), w = c.createGain();
+  d.delayTime.value = .19; fb.gain.value = .3; lp.type = 'lowpass'; lp.frequency.value = 2200; w.gain.value = .32;
+  i.connect(c.destination); i.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(w); w.connect(c.destination);
+  sndFx = { c, i }; return i;
+}
+function tones(seq, vol = .7) {                       // seq: [[frecuencia, inicio, duración], …] · notas suaves tipo marimba/cristal: ataque tenue, pocos armónicos y cola con eco
+  const c = audio(); if (!c) return; const t0 = c.currentTime + .02, out = sndChain(c);
+  const PARC = [[1, 1, 1], [2, .2, .55], [3, .06, .3]];   // [múltiplo de frecuencia, volumen, fracción de la duración]
   const total = PARC.reduce((a, p) => a + p[1], 0);
-  seq.forEach(([f, at, d]) => PARC.forEach(([m, v, k]) => {
-    const o = c.createOscillator(), g = c.createGain(), dur = d * k, pk = vol * v / total;
+  seq.forEach(([f, at, d, v2 = 1]) => PARC.forEach(([m, v, k]) => {
+    const o = c.createOscillator(), g = c.createGain(), dur = d * k, pk = vol * v2 * v / total;
     o.type = 'sine'; o.frequency.value = f * m;
-    g.gain.setValueAtTime(0.0001, t0 + at); g.gain.exponentialRampToValueAtTime(pk, t0 + at + .008); g.gain.exponentialRampToValueAtTime(.0005, t0 + at + dur);
-    o.connect(g).connect(c.destination); o.start(t0 + at); o.stop(t0 + at + dur + .05);
+    g.gain.setValueAtTime(0.0001, t0 + at); g.gain.exponentialRampToValueAtTime(pk, t0 + at + .02); g.gain.exponentialRampToValueAtTime(.0005, t0 + at + dur);
+    o.connect(g).connect(out); o.start(t0 + at); o.stop(t0 + at + dur + .05);
   }));
 }
-/* sonidos tipo campana de cocina:
-   pedido nuevo = arpegio ascendente (sol-si-mi) dos veces · llamada al mesero = "din-don" agudo y urgente tres veces
-   pedido cancelado = tres notas que bajan · pedido modificado = dos toques rápidos */
+/* sonidos suaves y agradables (más graves y sin timbres agudos):
+   pedido nuevo = arpegio ascendente do-mi-sol (una vez completo y un eco más bajito) · llamada al mesero = "din-don" amable dos veces
+   pedido cancelado = dos notas que bajan con calma · pedido modificado = dos toques suaves */
 function beep(kind) {
   if (!soundOn) return;
-  if (kind === 'call') tones([[1568, 0, .5], [1175, .32, .7], [1568, 1.0, .5], [1175, 1.32, .7], [1568, 2.0, .5], [1175, 2.32, .9]]);
-  else if (kind === 'cancel') tones([[784, 0, .45], [659, .3, .45], [523, .6, .8]]);
-  else if (kind === 'mod') tones([[1319, 0, .35], [1319, .22, .35], [1760, .5, .6]]);
-  else tones([[784, 0, .5], [988, .18, .5], [1319, .36, .9], [784, 1.3, .5], [988, 1.48, .5], [1319, 1.66, 1.1]]);
+  if (kind === 'call') tones([[784, 0, .9], [587, .38, 1.1], [784, 1.5, .9, .8], [587, 1.88, 1.2, .8]]);
+  else if (kind === 'cancel') tones([[659, 0, .8], [523, .3, 1.2]]);
+  else if (kind === 'mod') tones([[880, 0, .6], [1047, .2, .9]]);
+  else tones([[523, 0, .9], [659, .16, .9], [784, .32, 1.3], [523, 1.6, .9, .55], [659, 1.76, .9, .55], [784, 1.92, 1.3, .55]]);
   setTimeout(syncSnd, 300);
 }
 try { soundOn = localStorage.getItem('cmd-sound') !== '0'; } catch (e) { soundOn = true; }   // activado por defecto; se recuerda la elección
@@ -1118,12 +1172,29 @@ $('#frm').addEventListener('submit', async e => {
 });
 
 /* ===== NAVEGACIÓN Y ARRANQUE ===== */
+const VORDER = ['orders', 'calls', 'menu', 'promos', 'addons', 'tables', 'revenue', 'settings', 'admin']; let lastView = 'orders';
+function animateView(v, prev) {      // animación suave al cambiar de pestaña (se omite si el sistema pide menos movimiento)
+  const el = document.getElementById(v); if (!el || reduced) return;
+  [...el.children].forEach((c, i) => c.style.setProperty('--i', Math.min(i, 7)));
+  $$('main > .view.vin').forEach(x => x.classList.remove('vin')); void el.offsetWidth; el.classList.add('vin');   // la clase se queda hasta el próximo cambio para que no se repita la animación antigua
+}
+const navEl = document.querySelector('header nav'), pill = document.createElement('i'); pill.id = 'navpill'; navEl.prepend(pill);
+function placePill() {      // coloca la píldora bajo la pestaña activa (si no hay ninguna activa, se oculta)
+  const on = navEl.querySelector('button.on:not([hidden])');
+  if (!on || !on.offsetWidth) { pill.classList.remove('ready'); navEl.classList.remove('hp'); return; }
+  pill.style.width = on.offsetWidth + 'px'; pill.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+  navEl.classList.add('hp'); if (!pill.classList.contains('ready')) requestAnimationFrame(() => requestAnimationFrame(() => pill.classList.add('ready')));
+}
+addEventListener('resize', placePill); addEventListener('load', placePill); if (window.ResizeObserver) new ResizeObserver(placePill).observe(navEl);
 function go(v) {
+  const prevView = lastView; lastView = v;
   view = v;
   const nv = (v === 'addons' || v === 'promos') ? 'menu' : v;
   $$('nav button').forEach(x => x.classList.toggle('on', x.dataset.v === nv)); $('#cfg').classList.toggle('on', v === 'settings');
   $('#subnav').hidden = nv !== 'menu'; $$('#subnav [data-go]').forEach(x => { const on = x.dataset.go === v; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
   $$('main > .view').forEach(x => x.hidden = x.id !== v);
+  if (prevView && prevView !== v) animateView(v, prevView);
+  placePill();
   if (v === 'menu') { menuMeta(); renderMenu(true); }
   if (v === 'settings') cfgFill();
   if (v === 'admin') loadAdmin();
@@ -1565,8 +1636,10 @@ let started = false, signup = false;
 async function start() {
   if (started) return;
   if (!sb) { toast('Sin conexión'); return; }
-  const { data: d } = await sb.auth.getSession();
-  if (!d.session) { $('#login').hidden = false; return; }
+  $('#logout').hidden = false;                           // el botón de salir siempre disponible, aunque la sesión tarde en cargar
+  let d; try { ({ data: d } = await Promise.race([sb.auth.getSession(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))])); }
+  catch (e) { try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e2) {} d = { session: null }; }   // sesión trabada: se descarta y se pide entrar de nuevo
+  if (!d.session) { $('#logout').hidden = true; $('#login').hidden = false; return; }
   const u = d.session.user; mail = u.email || '';
   try { const { data: a } = await sb.rpc('is_admin'); isAdmin = a === true; } catch (e) {}
   let { data: r } = await sb.from('restaurants').select('*').eq('owner_id', u.id).maybeSingle();
