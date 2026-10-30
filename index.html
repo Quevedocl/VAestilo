@@ -190,6 +190,8 @@ dialog textarea{min-height:70px;padding:10px 12px;resize:vertical;border-radius:
 .rvk div.big{background:var(--ink);color:#fff;border-color:var(--ink)}.rvk div.big span{color:rgba(255,255,255,.7)}
 .rvk b{display:block;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .rvk span{color:var(--mu);font-size:13px;font-weight:600}
+.rvk small{display:block;margin-top:6px;font-size:12.5px;font-weight:500;color:var(--mu)}.rvk small i{font-style:normal;font-weight:700;color:var(--tx);font-variant-numeric:tabular-nums}
+.rvk div.big small,.rvk div.big small i{color:inherit}
 .rvc{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start}
 @media (max-width:860px){.rvc{grid-template-columns:1fr}}
 .chart{display:flex;align-items:flex-end;gap:5px;padding-top:22px;overflow-x:auto}
@@ -462,6 +464,13 @@ dialog h3{font:600 22px/1.2 var(--serif)}
 .ordmain .grid::after{content:none!important}
 .side{flex:none;width:330px;overflow-y:auto;padding:4px 0 32px;display:flex;flex-direction:column;gap:14px}
 @media (max-width:1100px){.side{display:none}.ordwrap{padding:0}.ordmain .grid{padding:4px var(--gx) 24px}}
+/* Pedidos: la columna "Hoy / Mesas / Llamadas" arranca a la altura de los botones de filtro */
+.ordwrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;grid-template-rows:auto minmax(0,1fr);column-gap:28px;row-gap:0}
+.ordwrap>.tbr{grid-column:1;grid-row:1;padding-left:0;padding-right:0}
+.ordwrap>.ordmain{grid-column:1;grid-row:2}
+.ordwrap>.side{grid-column:2;grid-row:1/3;padding-top:18px}
+@media (min-width:1101px){#vt{display:none}}   /* "Ventas hoy" ya está en la tarjeta "Hoy" de la columna lateral */
+@media (max-width:1100px){.ordwrap{grid-template-columns:minmax(0,1fr)}.ordwrap>.tbr{padding-left:var(--gx);padding-right:var(--gx)}}
 .sd{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:18px 20px}
 .sd h4{margin:0 0 12px;font-size:13px;font-weight:600;color:var(--mu);display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sd h4 a,.sd h4 button{border:0;background:none;padding:0;color:var(--acc2);font-weight:600;font-size:12.5px;cursor:pointer}
@@ -581,7 +590,8 @@ document.addEventListener('gesturestart',function(e){e.preventDefault();});})();
 :root{--mu:#5b6760;--gl:rgba(246,248,247,.56);--gl2:rgba(255,255,255,.78);--gl-ln:rgba(255,255,255,.6);--gl-sh:0 10px 34px rgba(18,50,38,.16),inset 0 1px 0 rgba(255,255,255,.7);--gl-blur:blur(30px) saturate(150%)}
 html{background:#e7ede9}
 body,#login{background:
-  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 1000%22 preserveAspectRatio=%22xMidYMid slice%22%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%221.6%22 opacity=%22.075%22%3E%0A%3Ccircle cx=%221400%22 cy=%22900%22 r=%22120%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22230%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22350%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22480%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22620%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22770%22/%3E%0A%3C/g%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%227%22 stroke-linecap=%22round%22 opacity=%22.065%22 transform=%22translate%28190 330%29%22%3E%0A%3Cpath d=%22M0 -70 A70 70 0 0 1 0 70%22/%3E%3Cpath d=%22M0 -140 A140 140 0 0 1 0 140%22/%3E%3Cpath d=%22M0 -210 A210 210 0 0 1 0 210%22/%3E%3Cpath d=%22M0 -280 A280 280 0 0 1 0 280%22/%3E%0A%3C/g%3E%0A%3Ctext x=%22800%22 y=%22640%22 text-anchor=%22middle%22 font-family=%22Helvetica Neue,Helvetica,Arial,sans-serif%22 font-weight=%22800%22 font-size=%22330%22 letter-spacing=%22-10%22 fill=%22%231d4a37%22 opacity=%22.035%22%3EQ%26amp%3BV%3C/text%3E%0A%3Cpath d=%22M1180 70 C1120 150 1100 205 1180 230 C1260 205 1240 150 1180 70Z%22 fill=%22%231d4a37%22 opacity=%22.06%22/%3E%0A%3C/svg%3E") center/cover no-repeat fixed,
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 600%22%3E%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%227%22 stroke-linecap=%22round%22 opacity=%22.065%22 transform=%22translate%280 300%29%22%3E%3Cpath d=%22M0 -70 A70 70 0 0 1 0 70%22/%3E%3Cpath d=%22M0 -140 A140 140 0 0 1 0 140%22/%3E%3Cpath d=%22M0 -210 A210 210 0 0 1 0 210%22/%3E%3Cpath d=%22M0 -280 A280 280 0 0 1 0 280%22/%3E%3C/g%3E%3C/svg%3E") 0 3vh/auto 60vh no-repeat fixed,
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 1000%22 preserveAspectRatio=%22xMidYMid slice%22%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%221.6%22 opacity=%22.075%22%3E%0A%3Ccircle cx=%221400%22 cy=%22900%22 r=%22120%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22230%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22350%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22480%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22620%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22770%22/%3E%0A%3C/g%3E%0A%3Ctext x=%22800%22 y=%22640%22 text-anchor=%22middle%22 font-family=%22Helvetica Neue,Helvetica,Arial,sans-serif%22 font-weight=%22800%22 font-size=%22330%22 letter-spacing=%22-10%22 fill=%22%231d4a37%22 opacity=%22.035%22%3EQ%26amp%3BV%3C/text%3E%0A%3Cpath d=%22M1180 70 C1120 150 1100 205 1180 230 C1260 205 1240 150 1180 70Z%22 fill=%22%231d4a37%22 opacity=%22.06%22/%3E%0A%3C/svg%3E") center/cover no-repeat fixed,
   radial-gradient(1000px 700px at 0% 105%,rgba(26,72,52,.62),transparent 62%),
   radial-gradient(800px 650px at 105% 62%,rgba(34,86,62,.50),transparent 60%),
   radial-gradient(700px 500px at 100% -8%,rgba(44,100,74,.30),transparent 60%),
@@ -653,6 +663,7 @@ nav.hp button.on{background:transparent!important;box-shadow:none!important}
 <main>
   <section class="view" id="orders">
     <div class="hello"><div><small id="hDay"></small><h2 id="hName"></h2></div></div>
+    <div class="ordwrap">
     <div class="tbr">
       <div class="seg" id="seg">
         <button data-f="" class="on">Todos <b>0</b></button>
@@ -663,7 +674,6 @@ nav.hp button.on{background:transparent!important;box-shadow:none!important}
       <select id="mesa" aria-label="Filtrar por mesa"></select>
       <span class="vt sp" id="vt" title="Ventas de hoy (sin contar pedidos cancelados)">Ventas hoy <b id="vtv" data-v="0">$0</b></span>
     </div>
-    <div class="ordwrap">
       <div class="ordmain">
         <div class="grid" id="grid" data-loading><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
         <div class="oempty" id="oEmpty" hidden></div>
@@ -704,12 +714,10 @@ nav.hp button.on{background:transparent!important;box-shadow:none!important}
     </div>
     <div class="rv">
       <div class="rvk">
-        <div class="big" style="--i:0"><span>Ventas del día</span><b id="rvSales" data-v="0">$0</b></div>
-        <div style="--i:1"><span>Cobrado</span><b id="rvPaid" data-v="0">$0</b></div>
-        <div style="--i:2"><span>Por cobrar</span><b id="rvOpen" data-v="0">$0</b></div>
-        <div style="--i:3"><span>Pedidos</span><b id="rvN" data-v="0">0</b></div>
-        <div style="--i:4"><span>Ticket promedio</span><b id="rvAvg" data-v="0">$0</b></div>
-        <div style="--i:5"><span>En agregados</span><b id="rvAdd" data-v="0">$0</b></div>
+        <div class="big" style="--i:0"><span>Ventas del día</span><b id="rvSales" data-v="0">$0</b><small>Cobrado <i id="rvPaid" data-v="0">$0</i> · Por cobrar <i id="rvOpen" data-v="0">$0</i></small></div>
+        <div style="--i:1"><span>Pedidos</span><b id="rvN" data-v="0">0</b></div>
+        <div style="--i:2"><span>Ticket promedio</span><b id="rvAvg" data-v="0">$0</b></div>
+        <div style="--i:3"><span>En agregados</span><b id="rvAdd" data-v="0">$0</b></div>
       </div>
       <div class="rvc">
         <div class="card"><h3>Ventas por hora</h3><p class="hint">Cuánto se pidió en cada hora del día.</p><div class="chart" id="rvChart"></div></div>
