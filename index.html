@@ -1783,7 +1783,7 @@ start();
    Lee un PDF o fotos de la carta, las manda a la función scan-menu (Supabase) y muestra los productos para revisarlos
    antes de guardarlos. Solo AÑADE productos nuevos; no toca los existentes. */
 (() => {
-  const MAX_PAGES = 40, PER_CALL = 4, PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+  const MAX_PAGES = 40, PER_CALL = 4, PARALLEL = 3, PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const $d = $('#impdlg');
   const key = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
   let rows = [], token = 0, busy = false;
@@ -1869,11 +1869,20 @@ start();
       say('#imp-st', 'Preparando las páginas…');
       const { pages, cut } = await pagesFrom(files); if (my !== token) return;
       if (!pages.length) throw new Error('No se encontraron páginas para leer.');
-      const found = [], calls = Math.ceil(pages.length / PER_CALL);
-      for (let i = 0; i < pages.length; i += PER_CALL) {
-        say('#imp-st', `Leyendo la carta con IA${calls > 1 ? ` (${i / PER_CALL + 1} de ${calls})` : ''}… puede tardar un momento.`);
-        found.push(...await scan(pages.slice(i, i + PER_CALL))); if (my !== token) return;
-      }
+      // Los lotes de páginas se leen en paralelo (hasta PARALLEL a la vez) en vez de uno tras otro.
+      const chunks = []; for (let i = 0; i < pages.length; i += PER_CALL) chunks.push(pages.slice(i, i + PER_CALL));
+      const results = new Array(chunks.length), calls = chunks.length; let next = 0, done = 0, failed = false;
+      const progress = () => say('#imp-st', `Leyendo la carta con IA${calls > 1 ? ` (${done} de ${calls})` : ''}… puede tardar un momento.`);
+      progress();
+      await Promise.all(Array.from({ length: Math.min(PARALLEL, calls) }, async () => {
+        while (!failed && my === token && next < calls) {
+          const n = next++;
+          try { results[n] = await scan(chunks[n]); } catch (e) { failed = true; throw e; }
+          done++; if (my === token) progress();
+        }
+      }));
+      if (my !== token) return;
+      const found = results.flat();
       const seen = new Set(), have = new Set(data.products.map(p => key(p.category) + '|' + key(p.name)));
       rows = [];
       for (const it of found) {
