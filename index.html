@@ -790,7 +790,7 @@ nav.hp button.on{background:transparent!important;box-shadow:none!important}
     <h3>Importar carta con IA</h3>
     <p class="hint">Sube tu carta digital (PDF o fotos) y la IA añade los productos con su categoría y precio. Antes de guardar podrás revisarlos y corregirlos. Lo que ya tienes en la carta no se modifica.</p>
     <label for="imp-file">Carta (PDF, JPG, PNG o WebP)</label><input id="imp-file" type="file" accept="application/pdf,image/*" multiple>
-    <p class="hint">Hasta 40 páginas o fotos (se leen de a 4 por vez, así que las cartas largas tardan un poco más). Las bebidas llegan solas a la barra y la comida a cocina.</p>
+    <p class="hint">Hasta 40 páginas o fotos. Los PDF con texto se leen mucho más rápido que las fotos. Las bebidas llegan solas a la barra y la comida a cocina.</p>
     <p class="imp-st" id="imp-st" role="status" aria-live="polite"></p>
     <div class="bt"><button type="button" class="gh" id="imp-cancel">Cancelar</button><button type="button" class="pri" id="imp-go">Leer carta con IA</button></div>
   </div>
@@ -1783,7 +1783,7 @@ start();
    Lee un PDF o fotos de la carta, las manda a la función scan-menu (Supabase) y muestra los productos para revisarlos
    antes de guardarlos. Solo AÑADE productos nuevos; no toca los existentes. */
 (() => {
-  const MAX_PAGES = 40, PER_CALL = 4, PARALLEL = 3, PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+  const MAX_PAGES = 40, PER_CALL = 4, PER_TXT = 6, PARALLEL = 3, PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const $d = $('#impdlg');
   const key = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
   let rows = [], token = 0, busy = false;
@@ -1809,6 +1809,29 @@ start();
     }
     throw new Error('Una de las páginas pesa demasiado. Prueba con una foto más liviana.');
   }
+  // Texto de una página de PDF, ordenado por líneas; las columnas de una misma línea se separan con " | ".
+  async function pageText(pg) {
+    const tc = await pg.getTextContent(), rows = [];
+    for (const it of tc.items) {
+      if (!it.str || !it.str.trim()) continue;
+      const x = it.transform[4], y = it.transform[5];
+      let row = rows.find(r => Math.abs(r.y - y) < 3); if (!row) rows.push(row = { y, it: [] });
+      row.it.push({ x, w: it.width || 0, s: it.str });
+    }
+    rows.sort((a, b) => b.y - a.y);
+    return rows.map(r => {
+      r.it.sort((a, b) => a.x - b.x);
+      let line = '', end = null;
+      for (const t of r.it) { if (end !== null) line += t.x - end > 14 ? '  |  ' : t.x - end > 1 ? ' ' : ''; line += t.s; end = t.x + t.w; }
+      return line.replace(/[ \t]{2,}/g, ' ').trim();
+    }).filter(Boolean).join('\n');
+  }
+  // ¿El texto sirve para leer la carta? (si es una foto/escaneo, o el texto viene roto, se usa la imagen como antes)
+  function usableText(s) {
+    if (s.length < 80 || (s.match(/\d+/g) || []).length < 2) return false;
+    const good = (s.match(/[\p{L}\p{N}\s.,$:;()\-–—&'"%/+|*¡!¿?€#@]/gu) || []).length;
+    return good / s.length >= .92;
+  }
   async function pagesFrom(files) {
     const out = []; let cut = false;
     for (const f of files) {
@@ -1818,23 +1841,26 @@ start();
         const lib = await pdfLib(), pdf = await lib.getDocument({ data: await f.arrayBuffer() }).promise;
         for (let i = 1; i <= pdf.numPages; i++) {
           if (out.length >= MAX_PAGES) { cut = true; break; }
-          const pg = await pdf.getPage(i), v0 = pg.getViewport({ scale: 1 });
+          const pg = await pdf.getPage(i);
+          let tx = ''; try { tx = await pageText(pg); } catch (e) {}
+          if (usableText(tx)) { out.push({ t: 'text', v: tx.slice(0, 30000) }); continue; }     // PDF con texto: no hace falta dibujar la página
+          const v0 = pg.getViewport({ scale: 1 });
           const v = pg.getViewport({ scale: Math.min(3, Math.max(.5, 1800 / Math.max(v0.width, v0.height))) });
           const c = document.createElement('canvas'); c.width = Math.round(v.width); c.height = Math.round(v.height);
           const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
           await pg.render({ canvasContext: x, viewport: v }).promise;
-          out.push(toB64(c, c.width, c.height));
+          out.push({ t: 'img', v: toB64(c, c.width, c.height) });
         }
       } else if (/^image\//.test(f.type)) {
         if (f.size > 25 * 1024 * 1024) throw new Error('Una foto es demasiado pesada.');
-        const b = await createImageBitmap(f); out.push(toB64(b, b.width, b.height));
+        const b = await createImageBitmap(f); out.push({ t: 'img', v: toB64(b, b.width, b.height) });
       } else throw new Error('Formato no válido: usa PDF, JPG, PNG o WebP.');
     }
     return { pages: out, cut };
   }
 
-  async function scan(images) {
-    const { data: d, error } = await sb.functions.invoke('scan-menu', { body: { images } });
+  async function scan(ch) {
+    const { data: d, error } = await sb.functions.invoke('scan-menu', { body: ch.t === 'text' ? { texts: ch.v } : { images: ch.v } });
     if (error) {
       let m = ''; try { m = (await error.context.json()).error || ''; } catch (e) {}
       if (/cupo/i.test(m)) throw new Error('Llegaste al límite diario de lecturas con IA (o tu cuenta no es de dueño). Inténtalo mañana.');
@@ -1870,7 +1896,8 @@ start();
       const { pages, cut } = await pagesFrom(files); if (my !== token) return;
       if (!pages.length) throw new Error('No se encontraron páginas para leer.');
       // Los lotes de páginas se leen en paralelo (hasta PARALLEL a la vez) en vez de uno tras otro.
-      const chunks = []; for (let i = 0; i < pages.length; i += PER_CALL) chunks.push(pages.slice(i, i + PER_CALL));
+      const chunks = [];                                  // páginas seguidas del mismo tipo (texto o imagen) van juntas
+      for (const p of pages) { const last = chunks[chunks.length - 1]; if (last && last.t === p.t && last.v.length < (p.t === 'text' ? PER_TXT : PER_CALL)) last.v.push(p.v); else chunks.push({ t: p.t, v: [p.v] }); }
       const results = new Array(chunks.length), calls = chunks.length; let next = 0, done = 0, failed = false;
       const progress = () => say('#imp-st', `Leyendo la carta con IA${calls > 1 ? ` (${done} de ${calls})` : ''}… puede tardar un momento.`);
       progress();
