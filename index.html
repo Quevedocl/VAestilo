@@ -1786,7 +1786,7 @@ start();
   const MAX_PAGES = 40, PER_CALL = 4, PER_TXT = 6, PARALLEL = 3, PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
   const $d = $('#impdlg');
   const key = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-  let rows = [], token = 0, busy = false;
+  let rows = [], token = 0, busy = false, skipped = 0;
   const say = (id, m, err) => { const el = $(id); el.textContent = m || ''; el.classList.toggle('err', !!err); };
   const show = n => { $('#imp-s1').hidden = n !== 1; $('#imp-s2').hidden = n !== 2; };
 
@@ -1877,7 +1877,7 @@ start();
   }
   function paint(cut) {
     const zero = rows.filter(r => !r.price).length, dups = rows.filter(r => r.dup).length;
-    $('#imp-sum').textContent = `La IA encontró ${rows.length} ${rows.length === 1 ? 'producto' : 'productos'}.` + (zero ? ` ${zero} sin precio (marcados en ámbar): revísalos.` : '') + (dups ? ` ${dups} ya están en tu carta y quedan sin marcar.` : '') + (cut ? ` Solo se leyeron las primeras ${MAX_PAGES} páginas.` : '');
+    $('#imp-sum').textContent = `La IA encontró ${rows.length} ${rows.length === 1 ? 'producto' : 'productos'}.` + (zero ? ` ${zero} sin precio (marcados en ámbar): revísalos.` : '') + (dups ? ` ${dups} ya están en tu carta y quedan sin marcar.` : '') + (cut ? ` Solo se leyeron las primeras ${MAX_PAGES} páginas.` : '') + (skipped ? ` ${skipped === 1 ? 'Un grupo de páginas no se pudo leer' : skipped + ' grupos de páginas no se pudieron leer'} (la IA estaba saturada): vuelve a intentarlo luego y se añadirán solo los productos que falten.` : '');
     $('#imp-cats').innerHTML = [...new Set([...data.products.map(p => p.category), ...rows.map(r => r.category)])].map(c => `<option value="${esc(c)}">`).join('');
     $('#imp-list').innerHTML = rows.map((r, i) => `<div class="imp-row${r.dup ? ' dup' : ''}" data-i="${i}">
       <input type="checkbox" class="ik" ${r.dup ? '' : 'checked'} aria-label="Incluir ${esc(r.name)}">
@@ -1898,18 +1898,26 @@ start();
       // Los lotes de páginas se leen en paralelo (hasta PARALLEL a la vez) en vez de uno tras otro.
       const chunks = [];                                  // páginas seguidas del mismo tipo (texto o imagen) van juntas
       for (const p of pages) { const last = chunks[chunks.length - 1]; if (last && last.t === p.t && last.v.length < (p.t === 'text' ? PER_TXT : PER_CALL)) last.v.push(p.v); else chunks.push({ t: p.t, v: [p.v] }); }
-      const results = new Array(chunks.length), calls = chunks.length; let next = 0, done = 0, failed = false;
+      const results = new Array(chunks.length).fill(null), calls = chunks.length; let next = 0, done = 0, failed = false, firstErr = null; skipped = 0;
       const progress = () => say('#imp-st', `Leyendo la carta con IA${calls > 1 ? ` (${done} de ${calls})` : ''}… puede tardar un momento.`);
+      const fatal = m => /límite diario|no autoriza|sesión venció|lector de PDF/i.test(m);
       progress();
       await Promise.all(Array.from({ length: Math.min(PARALLEL, calls) }, async () => {
         while (!failed && my === token && next < calls) {
           const n = next++;
-          try { results[n] = await scan(chunks[n]); } catch (e) { failed = true; throw e; }
+          try {
+            try { results[n] = await scan(chunks[n]); }
+            catch (e) { if (fatal(e.message) || !/ia no disponible/i.test(e.message)) throw e; await new Promise(r => setTimeout(r, 2500)); results[n] = await scan(chunks[n]); }   // la IA estaba saturada: un reintento
+          } catch (e) {
+            if (fatal(e.message)) { failed = true; throw e; }
+            skipped++; firstErr = firstErr || e;                 // un grupo falló: se siguen leyendo los demás
+          }
           done++; if (my === token) progress();
         }
       }));
       if (my !== token) return;
-      const found = results.flat();
+      if (skipped === calls) throw firstErr;                     // no se pudo leer nada
+      const found = results.filter(Boolean).flat();
       const seen = new Set(), have = new Set(data.products.map(p => key(p.category) + '|' + key(p.name)));
       rows = [];
       for (const it of found) {
