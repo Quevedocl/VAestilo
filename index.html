@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="imagenes/apple-touch-icon.png?v=4"><link rel="manifest" href="manifest.webmanifest">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="js/compartido/config.js"></script>
-<script src="js/compartido/qr.js"></script>
+<script src="js/compartido/qr.js?v=5"></script>
 <script src="js/compartido/filtro-groserias.js"></script>
 <script src="js/compartido/generador-xlsx.js"></script>
 <!-- ===== ESTILOS (el orden importa: lo que va después gana sobre lo anterior) =====
@@ -252,7 +252,7 @@
   <label>Válida hasta (opcional)</label><input id="p-end" type="date">
   <div class="bt"><button type="button" class="gh" id="p-cancel">Cancelar</button><button type="button" class="pri" id="p-save">Crear promoción</button></div>
 </div></dialog>
-<dialog id="qrd"><div style="text-align:center"><h3 id="qrt"></h3><div id="qrb"></div><div class="bt" style="justify-content:center"><button class="gh" id="qrdl">Descargar PNG</button><button class="gh" id="qrx">Cerrar</button></div></div></dialog>
+<dialog id="qrd"><div style="text-align:center"><h3 id="qrt"></h3><div id="qrb"></div><p id="qrl" style="margin:0 0 8px;font-size:11px;color:var(--mu);word-break:break-all;max-width:360px;margin-inline:auto;user-select:text"></p><p id="qrw" hidden style="margin:0 0 10px;font-size:12.5px;font-weight:600;color:#8F3F3B;background:#F8ECEB;border-radius:10px;padding:8px 10px;max-width:360px;margin-inline:auto">Este enlace es de tu computador (archivo o localhost): el celular no puede abrirlo, por eso el QR no sirve. Abre el panel desde la dirección publicada en internet.</p><div class="bt" style="justify-content:center"><button class="gh" id="qrdl">Descargar PNG</button><button class="gh" id="qrx">Cerrar</button></div></div></dialog>
 <div id="login" hidden>
   <form id="lf">
     <span class="mk has"><img src="imagenes/logo-mark.svg?v=4" alt=""></span>
@@ -296,7 +296,7 @@
 <script src="js/panel/categorias-sugeridas.js"></script>
 <script src="js/panel/promociones.js"></script>
 <script src="js/panel/panel-lateral-y-resumen.js"></script>
-<script src="js/panel/mesas.js"></script>
+<script src="js/panel/mesas.js?v=5"></script>
 <script src="js/panel/sesion.js"></script>
 <script src="js/panel/verificacion-de-correo.js"></script>
 <script src="js/panel/cerrar-sesion-y-arranque.js"></script>
