@@ -1,8 +1,8 @@
 -- VAestilo · filtro de groserías en la base de datos
 -- Ejecutar UNA vez en Supabase > SQL Editor (es seguro repetirla). Hazlo ANTES de subir los HTML nuevos.
--- ARCHIVO GENERADO por tests/generar-filtro-sql.js desde filtro.js: no lo edites a mano.
+-- ARCHIVO GENERADO por tests/generar-filtro-sql.js desde js/compartido/filtro-groserias.js: no lo edites a mano.
 --
--- Por qué existe: el filtro del navegador (filtro.js) se puede saltar llamando a la API directamente.
+-- Por qué existe: el filtro del navegador (js/compartido/filtro-groserias.js) se puede saltar llamando a la API directamente.
 -- Esta es la barrera real: rechaza con el error "texto_no_permitido" cualquier nombre de plato, categoría,
 -- agregado, promoción, mesa o negocio, y las notas/mesa de pedidos y llamadas, que tengan groserías.
 -- Solo revisa lo que se escribe o cambia: lo que ya existía no impide seguir usando el panel

@@ -7,10 +7,38 @@ Pedidos desde la mesa por QR para restaurantes, vendido como **suscripción mens
 - `index.html` — panel del restaurante (pedidos, carta, agregados, promos, mesas, ingresos, llamadas, configuración) y panel de administrador de la plataforma.
 - `cocina.html` — pantallas de cocina y barra (`cocina.html?k=<llave>` y `...&e=bar`; los enlaces se sacan de Configuración). Cada producto va solo a su pantalla: bebidas → barra, comida → cocina.
 - `carta.html` — carta que ve el cliente (`carta.html?r=<slug>&t=<id de mesa>`).
-- `config.js` — URL y clave pública de Supabase (único lugar donde se cambian).
+- `js/compartido/config.js` — URL y clave pública de Supabase (único lugar donde se cambian).
 - `supabase/` — base de datos (`schema.sql`, migraciones) y plantillas de correo.
-- `icons/` — logo (`logo-mark.svg`, `logo-full.svg` para fondo claro y `logo-full-light.svg` para fondo oscuro) e íconos de la app.
+- `imagenes/` — logo (`logo-mark.svg`, `logo-full.svg` para fondo claro y `logo-full-light.svg` para fondo oscuro) e íconos de la app.
 - `manifest.webmanifest`, `sw.js` — el panel se puede instalar como app y abre aunque se corte el internet (los pedidos igual requieren conexión).
+
+## Estructura de carpetas (para aprender el proyecto)
+
+Cada página (`index.html`, `carta.html`, `cocina.html`) solo tiene el HTML; sus estilos y su código viven en archivos separados y se cargan con `<link>` y `<script src>`.
+
+```
+index.html · carta.html · cocina.html   las 3 páginas (se quedan en la raíz porque son las direcciones web)
+manifest.webmanifest · sw.js            app instalable y modo sin internet (sw.js debe estar en la raíz)
+css/
+  panel/             estilos de index.html
+    colores.css        colores, tipografías y sombras (aquí se cambia la paleta)
+    base/              diseño original (un archivo por sección: cabecera, pedidos, carta, ...)
+    impresion-comanda.css   boleta de 80 mm
+    minimalista/       rediseño actual, se aplica ENCIMA de base/ (por eso se carga después)
+    importar-carta-ia.css · vidrio-esmerilado.css · transicion-pestanas.css
+  carta-cliente/     estilos de carta.html (misma idea: colores.css, base/, minimalista/)
+  cocina/            estilos de cocina.html
+js/
+  compartido/        lo que usan varias páginas: config.js, filtro-groserias.js, generador-xlsx.js, evitar-zoom-tactil.js
+  panel/             código de index.html, un archivo por función (pedidos.js, carta.js, mesas.js, ...)
+  carta-cliente/     código de carta.html (carrito.js, enviar-pedido.js, cuenta-compartida.js, ...)
+  cocina/            código de cocina.html
+imagenes/            logos e íconos
+supabase/            base de datos (SQL) y plantillas de correo
+tests/ · docs/       pruebas y documentación extra
+```
+
+**Importante:** el orden en que se cargan los archivos está escrito en cada HTML y sí importa. En CSS, lo que se carga después gana sobre lo anterior; en JS, los archivos de abajo usan funciones definidas en los de arriba (el que arranca todo va siempre al final).
 
 ## Instalación desde cero
 
@@ -18,7 +46,7 @@ Pedidos desde la mesa por QR para restaurantes, vendido como **suscripción mens
 2. **SQL Editor**: pega y ejecuta `supabase/schema.sql` (una sola vez, proyecto vacío).
 3. **Authentication > Sign In / Providers > Email**: activa *Confirm email* (el registro y la recuperación usan un código de 6 dígitos).
 4. **Authentication > Emails > Templates**: pega `supabase/email-template-confirmar-registro.html` en *Confirm signup* y `supabase/email-template-recuperar-contrasena.html` en *Reset Password*. Ambas deben contener `{{ .Token }}`.
-5. Edita `config.js` con tu **Project URL** y la clave **anon / publishable** (Project Settings > API). Nunca pongas la `service_role`.
+5. Edita `js/compartido/config.js` con tu **Project URL** y la clave **anon / publishable** (Project Settings > API). Nunca pongas la `service_role`.
 6. Sube todo (excepto `supabase/`, `tests/`, `.github/`) a un hosting estático con HTTPS (Netlify, Vercel, GitHub Pages, Cloudflare Pages…). Los archivos deben quedar en la misma carpeta.
    Después, en el mismo SQL Editor, ejecuta también `supabase/migracion-mesas-unicas.sql` y `supabase/migracion-filtro-groserias.sql` (no vienen dentro de `schema.sql`).
 7. Abre `index.html`, crea tu cuenta y hazte administrador (SQL Editor): 
@@ -41,6 +69,9 @@ Ejecuta en **SQL Editor**, en este orden, solo las que te falten (todas son repe
 9. **`migracion-9-cocina.sql`** — pantalla de cocina (`cocina.html`): enlace secreto por local, solo ve pedidos activos sin precios y los marca preparando/listo. El dueño lo copia o lo regenera en *Configuración > Pantalla de cocina*. (Incluida en `schema.sql` para instalaciones nuevas.)
 10. **`migracion-10-barra-y-recomendaciones.sql`** — cocina y barra como pantallas separadas y productos recomendados al pagar. *(Si ya vas a ejecutar la 11, puedes saltarte esta: la 11 la incluye.)*
 11. **`migracion-11-reparto-automatico.sql`** — **ejecútala siempre**. Arregla el error al añadir productos (faltaban las columnas `station`/`recommended`), hace que **las bebidas vayan solas a la barra y la comida a cocina** (sin elegirlo en cada producto; también al importar la carta con IA), guarda el destino en cada pedido y ordena la carta que ya tienes. Avisa claro si te falta alguna migración anterior. (Incluida en `schema.sql`.)
+12. **`migracion-12-reparto-completo.sql`** — reparto cocina/barra más completo: reconoce categorías en inglés y tragos (cocktails, gin, ron, vodka, whiskey, tequila, pisco, sour, spritz, mojitos, sangría…) y reordena la carta que ya tienes. Repetible. (Ya incluida en `schema.sql` para instalaciones nuevas.)
+
+`supabase/ejemplo-extras-casa-chueca.sql` es solo un ejemplo: convierte los "agregados extra" de un local en opciones que aparecen al pedir un plato; cambia categorías, nombres y precios antes de usarlo.
 
 ## Seguridad: qué garantiza la base de datos
 
@@ -64,7 +95,7 @@ Ejecuta en **SQL Editor**, en este orden, solo las que te falten (todas son repe
 ## Identidad visual
 
 - Paleta "salvia": fondo `#F6F7F4`, tarjetas blancas, acento verde grisáceo `#4E7162` (hover `#3F5C50`), tinte suave `#EDF2EE`. En los tickets: azul = nuevo, ámbar = en preparación, verde = listo.
-- Para cambiar el color de acento, edita `--acc`, `--acc2` y `--accs` en el bloque `VAestilo · diseño minimalista` de `index.html` y en el de `carta.html`.
+- Para cambiar el color de acento, edita `--acc`, `--acc2` y `--accs` en `css/panel/colores.css` (panel) y en `css/carta-cliente/colores.css` (carta del cliente).
 - Cada restaurante ve su propio nombre y logo en el panel y en la carta; VAestilo aparece como marca de la plataforma (logo en la barra superior y "Pedidos con VAestilo" al pie de la carta).
 
 ## Notas de seguridad
