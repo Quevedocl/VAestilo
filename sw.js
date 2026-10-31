@@ -82,6 +82,7 @@ const SHELL = [
   'css/panel/base/reset-y-tactil.css',
   'css/panel/base/vistas-filtros-y-botones.css',
   'js/compartido/config.js',
+  'js/compartido/qr.js',
   'js/compartido/evitar-zoom-tactil.js',
   'js/compartido/filtro-groserias.js',
   'js/compartido/generador-xlsx.js',

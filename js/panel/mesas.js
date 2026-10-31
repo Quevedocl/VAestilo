@@ -31,9 +31,8 @@ $('#tl').addEventListener('click', async e => {
   const b = e.target.closest('[data-cp],[data-qr]'); if (!b) return;
   const t = data.tables.find(x => String(x.id) === (b.dataset.cp || b.dataset.qr));
   if (b.dataset.cp) { try { await navigator.clipboard.writeText(linkOf(t)); toast('Enlace copiado'); } catch (_) { prompt('Copia el enlace:', linkOf(t)); } }
-  else { $('#qrt').textContent = t.name; $('#qrb').innerHTML = ''; new QRCode($('#qrb'), { text: linkOf(t), width: 300, height: 300, correctLevel: QRCode.CorrectLevel.L }); $('#qrd').showModal(); }
+  else { $('#qrt').textContent = t.name; $('#qrb').innerHTML = ''; $('#qrb').appendChild(qrCanvas(linkOf(t), 360, 'Q&V')); $('#qrd').showModal(); }
 });
 $('#qrx').onclick = () => $('#qrd').close();
-$('#qrdl').onclick = () => { const src = $('#qrb canvas'), m = 40, c = document.createElement('canvas'); c.width = src.width + m * 2; c.height = src.height + m * 2; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(src, m, m);   // borde blanco: sin él muchos lectores no detectan el QR
-  const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'qr-' + $('#qrt').textContent + '.png'; a.click(); };
+$('#qrdl').onclick = () => { const a = document.createElement('a'); a.href = $('#qrb canvas').toDataURL('image/png'); a.download = 'qr-' + $('#qrt').textContent + '.png'; a.click(); };
 $('main').addEventListener('click', async e => { const b = e.target.closest('[data-del]'); if (!b || !confirm('¿Borrar? Esta acción no se puede deshacer.')) return; await api.del(b.dataset.del, b.dataset.id); await refresh(); });
