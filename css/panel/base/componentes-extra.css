@@ -1,0 +1,14 @@
+/* ==============================================================
+   componentes-extra.css
+   Piezas sueltas: fila de agregados, estado vacío, selects de diálogo, QR y botón borrar.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+.rw2{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--ln);flex-wrap:wrap}.rw2:last-child{border:0}.rw2 .nm{flex:1;min-width:160px}.rw2 .nm small{color:var(--mu);word-break:break-all;font-size:12px}
+.empty{text-align:center;color:var(--mu);padding:50px 0;font-weight:600}
+dialog select{width:100%;height:42px;padding:0 10px;border:1px solid var(--ln);border-radius:9px;background:#fff}
+dialog input[type=checkbox]{width:auto;height:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}[hidden]{display:none!important}
+.tf{display:flex;gap:10px;padding:0 20px 14px;max-width:980px}.tf input{flex:1;height:38px;border:1px solid var(--ln);border-radius:10px;padding:0 12px;background:#fff}
+#qrb{display:grid;place-items:center;margin:16px 0}
+.del{width:36px;height:36px;border:1px solid var(--ln);border-radius:9px;background:#fff;color:var(--mu);display:grid;place-items:center;transition:all .2s}.del:hover{color:var(--red);border-color:var(--red)}

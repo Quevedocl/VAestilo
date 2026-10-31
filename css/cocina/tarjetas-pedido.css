@@ -1,0 +1,26 @@
+/* ==============================================================
+   tarjetas-pedido.css
+   Tarjeta de pedido: encabezado, productos, notas, tiempo transcurrido y botones.
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 20px 14px;background:var(--c);color:var(--ct)}
+.mn{display:block;font-size:22px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
+.hd small{opacity:.8;font-weight:500}
+.modb{display:inline-block;margin-left:8px;background:#EAF0F7;color:#3D5A80;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
+.canb{display:inline-block;margin-left:8px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
+.rt{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.ago{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:3px 12px 3px 10px;background:rgba(255,255,255,.65)}
+.ago::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dl,transparent)}
+.d-g .ago{background:#E3F1E8;color:#25613B}.d-y .ago{background:#FBEFC9;color:#7A5A00}.d-r .ago{background:#F6DAD8;color:#8F2F2B}
+.d-g .ago::before{background:var(--ok)}.d-y .ago::before{background:var(--warn)}.d-r .ago::before{background:var(--bad)}
+.lt{display:none;font-size:11px;font-weight:700;background:#F6E1DF;color:#8F3F3B;border-radius:6px;padding:1px 7px}.d-r .lt{display:block}
+.tk ul{list-style:none;margin:0;padding:8px 20px}
+.tk li{display:flex;flex-wrap:wrap;gap:0 12px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:18px}
+.tk li:last-child{border:0}.tk li b{min-width:30px}
+.nt{flex-basis:100%;padding-left:42px;font-size:14.5px;font-weight:600;color:#8A6A1F}.nt.ad{color:var(--acc2)}
+.go{border:0;border-top:1px solid var(--ln);padding:16px;font-weight:700;font-size:16px;background:var(--bg);transition:background .2s,filter .2s}
+.go:active{filter:brightness(.92)}.go:disabled{opacity:.5}
+.pending .go{background:#FBF1DB;color:#6F5217}.preparing .go{background:#E3EEE7;color:#2F5240}.ready .go{background:var(--bg);color:var(--ink)}.cancelled .go{background:#F6E1DF;color:#8F3F3B}
+.pending .go:hover{background:#F6E6BF}.preparing .go:hover{background:#D5E6DB}.ready .go:hover{background:#ECEEE9}
+.back{border:0;border-top:1px solid var(--ln);padding:11px;font-size:14px;font-weight:600;background:#fff;color:var(--mu)}.back:hover{background:#ECEEE9}

@@ -1,0 +1,8 @@
+/* ==============================================================
+   promociones-y-etiquetas.css
+   Etiquetas de los platos y bloque de promociones.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+.tag{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;color:#92400e;background:#fef3c7;border-radius:6px;padding:2px 8px}
+.promos{margin:16px 0 0}.pm{padding:10px 14px;font-weight:600;border-bottom:1px solid var(--ln);background:#fffbeb}.pm:last-child{border:0}

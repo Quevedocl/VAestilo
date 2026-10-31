@@ -1,0 +1,23 @@
+/* ==============================================================
+   mesas.css
+   Pestaña Mesas: tarjetas con estado (libre, ocupada, llamando, por pagar).
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* mesas: tarjetas con estado */
+.mstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 16px}
+.mstat div{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:12px 16px}
+.mstat span{display:block;color:var(--mu);font-size:12.5px;font-weight:500}
+.mstat b{display:block;font:600 22px/1.25 var(--serif);font-variant-numeric:tabular-nums}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
+.mc{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:18px 20px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+.mc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ln2)}
+.mc.busy::before{background:var(--blue)}.mc.call::before{background:var(--amb)}.mc.pay::before{background:var(--red)}.mc.free::before{background:var(--acc);opacity:.45}
+.mc .mh{display:flex;align-items:center;justify-content:space-between;gap:10px}.mc .mh b{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.mbadge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--accs);color:var(--acc2);white-space:nowrap}
+.mc.busy .mbadge{background:#EAF0F7;color:#3D5A80}.mc.call .mbadge{background:#FBF1DB;color:#6F5217}.mc.pay .mbadge{background:#F8ECEB;color:#8F3F3B}
+.mc .mb{color:var(--mu);font-size:14px;min-height:20px}.mc .mb b{color:var(--tx);font-weight:600}
+.mc .ml{color:var(--mu);font-size:11.5px;word-break:break-all;opacity:.8;border-top:1px dashed var(--ln2);padding-top:10px}
+.mc .ma{display:flex;gap:6px;flex-wrap:wrap}.mc .ma .gh{height:34px;padding:0 10px;font-size:13px;border-radius:10px}
+.mc .ma .gh:last-child:hover{color:var(--red);border-color:#EBCFCD;background:#F8ECEB}
+.mc.free .mb{color:var(--acc2)}

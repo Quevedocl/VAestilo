@@ -1,0 +1,28 @@
+/* ==============================================================
+   vista-previa-comida.css
+   Vista previa de la comida (detalle del plato) y agregados con precio.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* ===== vista previa de la comida ===== */
+.it .nm{cursor:pointer}
+.it .ph{cursor:pointer;background-size:cover}
+.ds{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;color:var(--mu);margin:1px 0 2px}
+.add{position:relative}
+.cnt{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;animation:pop .3s cubic-bezier(.2,1.3,.3,1)}
+#prod{overflow:hidden}
+.hero{position:relative;flex:none;height:min(38vh,250px);background:var(--bg) center/cover no-repeat;display:grid;place-items:center;font-size:72px;font-weight:700;color:#c3c8cf}
+.hero .x{position:absolute;top:12px;right:12px;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.pb{overflow-y:auto;flex:1;min-height:90px;padding:16px 20px 8px}
+.pb h3{margin:0 0 2px;font-size:23px;letter-spacing:-.01em}
+.pb .pp{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.pb .dsc{margin:10px 0 0;color:var(--mu);white-space:pre-line}
+.pb h4{margin:20px 0 8px;font-size:14px;color:var(--mu)}
+.adr{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--ln);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .2s,background .2s}
+.adr input{width:22px;height:22px;accent-color:var(--ink);flex:none;margin:0}
+.adr span{flex:1;font-weight:600}.adr b{font-variant-numeric:tabular-nums;color:var(--mu)}
+.adr:has(input:checked){border-color:var(--ink);background:#f6f7f8}
+.pf{flex:none;display:flex;align-items:center;gap:12px;padding:12px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln)}
+.pf .pri{flex:1}.pf .stp{flex:none}
+.pf .stp button{width:42px;height:42px}
+.pf .na{flex:1;text-align:center;font-weight:600;color:var(--mu)}

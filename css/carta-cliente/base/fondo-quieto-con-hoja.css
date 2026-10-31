@@ -1,0 +1,10 @@
+/* ==============================================================
+   fondo-quieto-con-hoja.css
+   El fondo no se mueve mientras hay una hoja abierta.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* fondo quieto mientras hay una hoja abierta (vista previa, pedido, cuenta…) */
+html.lk,html.lk body{overflow:hidden;overscroll-behavior:none}
+dialog,.pb,.sc,#lines{overscroll-behavior:contain}
+.hero{touch-action:none}

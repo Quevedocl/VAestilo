@@ -1,0 +1,17 @@
+/* ==============================================================
+   cuenta.css
+   Cuenta compartida con el estilo nuevo.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* cuenta */
+.bl{border:1px solid var(--ln);border-radius:16px}
+.bl .tt{background:var(--accs)}.bl .ds2{color:var(--acc)}
+.pnl{background:var(--bg);border-radius:14px}
+.seg2 button,.tips button{border:1px solid var(--ln2);font-weight:600}
+.seg2 button.on,.tips button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.tips button.on small{color:rgba(255,255,255,.8)}
+.res{background:var(--accs);color:var(--tx);border:1px solid var(--accs2);border-radius:16px}
+.res .rr{color:var(--mu)}.res .big{border-top:1px solid var(--accs2)}
+.res .big b{font:600 30px var(--serif);letter-spacing:0}.res small{color:var(--mu)}
+#cart .sm{color:var(--acc)}

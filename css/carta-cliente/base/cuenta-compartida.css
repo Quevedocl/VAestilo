@@ -1,0 +1,39 @@
+/* ==============================================================
+   cuenta-compartida.css
+   Cuenta compartida / dividida y propina sugerida.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* ===== cuenta compartida / dividida ===== */
+.bl{border:1px solid var(--ln);border-radius:14px;overflow:hidden}
+.bl div{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--ln);font-variant-numeric:tabular-nums}
+.bl div:last-child{border:0}
+.bl small{display:block;color:var(--mu)}
+.bl .ds2{color:var(--grn);font-weight:600}
+.bl .tt{font-weight:700;background:#f6f7f8}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg2 button{height:46px;border-radius:12px;border:1.5px solid var(--ln);background:#fff;font-weight:700;color:var(--mu);transition:all .2s}
+.seg2 button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pnl{margin-top:12px;padding:12px 14px;border-radius:14px;background:#f6f7f8}
+.pnl .rw{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pnl p{margin:0;font-size:13px;color:var(--mu)}
+.clr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.clr:last-child{border:0}.clr .nm{flex:1;min-width:0}.clr small{display:block;color:var(--mu)}
+.clr .stp b{min-width:36px}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.tips button{min-height:46px;padding:4px 6px;border-radius:12px;border:1.5px solid var(--ln);background:#fff;font-weight:700;line-height:1.15;transition:all .2s}
+.tips button small{display:block;font-size:11px;font-weight:600;color:var(--mu)}
+.tips button.on{background:var(--ink);border-color:var(--ink);color:#fff}.tips button.on small{color:#d1d5db}
+#tipRow{display:flex;align-items:center;gap:8px;margin-top:10px}#tipRow[hidden]{display:none}
+#tipRow input{width:90px;height:44px;border:1px solid var(--ln);border-radius:10px;padding:0 12px;font-size:18px;font-weight:700;outline:0}
+#tipRow input:focus{border-color:#2563eb}
+.res{margin-top:16px;padding:14px 16px;border-radius:16px;background:var(--ink);color:#fff;animation:pop .3s}
+.res .rr{display:flex;justify-content:space-between;padding:3px 0;color:#d1d5db;font-variant-numeric:tabular-nums}
+.res .big{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2);font-size:15px;font-weight:600}
+.res .big b{font-size:30px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.res small{display:block;margin-top:6px;color:#9ca3af}
+#cart .sm{margin:0 0 8px;font-size:14px;color:var(--grn);font-weight:600}
+#cart .sm div{display:flex;justify-content:space-between}
+.ads{color:var(--mu)}
+.wide{width:100%;margin-top:10px}
+#done .pri{margin-bottom:0}

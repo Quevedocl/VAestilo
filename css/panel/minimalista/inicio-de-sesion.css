@@ -1,0 +1,21 @@
+/* ==============================================================
+   inicio-de-sesion.css
+   Pantalla de inicio de sesión / registro y verificación de correo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* inicio de sesión */
+#login{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}
+#login[hidden]{display:none}
+#lf,#vf{width:min(400px,100%);background:#fff;border:1px solid var(--ln);border-radius:22px;padding:36px 32px;box-shadow:0 12px 44px rgba(42,50,45,.08);animation:pop .3s}
+#lf .mk,#vf .mk{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;overflow:hidden;background:#fff;border:1px solid var(--ln)}
+#lf .mk img,#vf .mk img{width:100%;height:100%}
+#lf h2,#vf h2{margin:18px 0 4px;font:600 28px/1.15 var(--serif)}
+#lf p,#vf p{margin:0;color:var(--mu)}
+#lf label,#vf label{display:block;margin:18px 0 6px;font-size:13px;font-weight:500;color:var(--mu)}
+#lf input,#vf input{width:100%;height:46px;padding:0 14px;outline:0}
+#lf .pri,#vf .pri{width:100%;height:48px;border-radius:12px;justify-content:center;margin-top:20px}
+#lf .gh,#vf .gh{width:100%;height:46px;margin-top:10px}
+#lerr,#verr{color:var(--red)!important;font-size:13.5px;font-weight:500;min-height:20px;margin-top:10px!important}
+#lf .lnk,#vf .lnk{display:block;margin:16px auto 0;border:0;background:none;padding:0;color:var(--mu);font-weight:600;font-size:13px;cursor:pointer}
+#lf .lnk:hover,#vf .lnk:hover{color:var(--tx);text-decoration:underline}.lnk:disabled{opacity:.5;cursor:default;text-decoration:none}

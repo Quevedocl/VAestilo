@@ -1,0 +1,25 @@
+/* ==============================================================
+   tarjetas-y-listas.css
+   Tarjetas y listas con el estilo nuevo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* tarjetas y listas */
+.card,.lst,.kp div,.cc,.pv,.rvk div{background:#fff;border:1px solid var(--ln);border-radius:18px;box-shadow:none}
+.card{padding:24px}
+.card h3{font-size:16px;font-weight:600}
+.pvh{border:1px solid var(--ln);box-shadow:none}
+.pvh .tg{background:var(--accs);color:var(--acc2);font-weight:600}
+.pv{background:var(--bg)}
+.pg h3{margin:28px 0 10px;font:600 19px/1.2 var(--serif);color:var(--tx)}
+.pg h3:first-child{margin-top:8px}
+.rw,.rw2,.rw3{padding-top:12px;padding-bottom:12px;border-bottom:1px solid var(--ln)}
+.rw:hover,.rw2:hover,.rw3:hover{background:#FBFBF9}
+.ph{background-color:var(--accs);color:var(--acc);font-family:var(--serif);font-weight:600}
+.av{background:var(--accs);color:var(--acc2);border:1px solid var(--accs2)}
+.nm b{font-weight:600}
+.st{color:var(--acc)}.rw.off .st{color:var(--red)}
+.bd{background:var(--accs2);color:var(--acc2);font-weight:600}.bd.off{background:#F6E9E8;color:#8F3F3B}
+.kp b{font:600 26px var(--serif);letter-spacing:0;color:var(--tx)}
+.vt{background:var(--accs);color:var(--acc2);border:1px solid var(--accs2);font-weight:600}
+.rw.saved{animation:savedsoft 1s}@keyframes savedsoft{30%{background:var(--accs)}}

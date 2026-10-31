@@ -1,0 +1,8 @@
+/* ==============================================================
+   pantalla-de-inicio.css
+   Pantalla de "Iniciar turno" (activa el sonido).
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+#gate{position:fixed;inset:0;z-index:5;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}#gate h1{margin:0;font:600 34px var(--serif)}#gate p{max-width:420px;color:var(--mu);margin:0}
+#go{padding:16px 32px;font-size:17px;font-weight:600;border:0;border-radius:14px;background:var(--acc);color:#fff}#go:hover{background:var(--acc2)}

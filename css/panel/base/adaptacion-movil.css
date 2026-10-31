@@ -1,0 +1,12 @@
+/* ==============================================================
+   adaptacion-movil.css
+   Ajustes para pantallas pequeñas (hasta 720 px).
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+@media (max-width:720px){
+ .top{gap:8px;padding:0 12px}.brand span.t,.live,#clk{display:none}.r{gap:8px}nav button{padding:0 12px}
+ .tbr{padding:12px}.grid{padding:4px 12px 20px;grid-template-columns:1fr}.pg{padding:0 12px 24px}
+ .sp{margin-left:0}.gh span{display:none}
+ .rw{grid-template-columns:44px 1fr auto 48px 36px 36px;gap:10px;padding:10px 12px}.st{display:none}.pi input{width:68px}
+}

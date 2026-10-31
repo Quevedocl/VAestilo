@@ -1,64 +1,17 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
-<title>VAestilo · Cocina</title><link rel="icon" href="icons/favicon.svg"><script src="config.js"></script>
-<style>
-/* Mismo estilo que el apartado Pedidos del panel: azul = nuevo, ámbar = preparando, salvia = listo. El borde izquierdo marca la demora: verde < 10 min, amarillo 10-19, rojo 20 o más. */
-html{touch-action:manipulation;-webkit-text-size-adjust:100%}
-*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
-:root{color-scheme:light;--bg:#F6F7F4;--card:#fff;--ln:#E8EAE5;--tx:#2A322D;--mu:#7A857E;--ink:#2F3D35;--acc:#4E7162;--acc2:#3F5C50;--accs:#EDF2EE;--accs2:#DCE7E0;--red:#B85450;--amb:#C79A3B;--grn:#4E7162;--blue:#6D93BD;--ok:#4E9A6B;--warn:#E0A526;--bad:#C9544F;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
-[hidden]{display:none!important}
-html,body{margin:0;height:100%}
-body{display:flex;flex-direction:column;height:100dvh;background:var(--bg);color:var(--tx);font:15px/1.4 var(--f);overflow:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);-webkit-font-smoothing:antialiased}
-button,select{font:inherit;color:inherit}button{cursor:pointer}
-:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
-header{flex:none;display:flex;align-items:center;gap:12px;padding:12px 24px;background:#fff;border-bottom:1px solid var(--ln)}
-header b{font:600 20px var(--serif)}header .sp{flex:1}
-.est{font-size:13px;font-weight:700;padding:4px 12px;border-radius:99px;background:var(--accs2);color:var(--acc2);letter-spacing:.02em;text-transform:uppercase}
-.pill{font-size:13px;font-weight:600;padding:5px 12px;border-radius:99px;background:#ECEEE9;color:var(--mu)}.pill.ok{background:var(--accs2);color:var(--acc2)}
-#warn{flex:none;background:#F8ECEB;color:#8F3F3B;text-align:center;padding:10px;font-weight:600;border-bottom:1px solid #EBCFCD}
-.tbr{flex:none;display:flex;align-items:center;gap:12px;padding:18px 24px 14px;flex-wrap:wrap}
-.seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.seg button{flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:99px;border:0;background:transparent;font-weight:600;color:var(--mu);transition:all .2s}
-.seg button:hover{color:var(--tx);background:#ECEEE9}.seg button.on{background:var(--accs2);color:var(--acc2)}
-.seg b{font-variant-numeric:tabular-nums;font-size:13px;opacity:.7}
-#mesa{height:38px;border:1px solid var(--ln);border-radius:12px;background:#fff;padding:0 12px;font-weight:600}
-.lg{display:flex;gap:14px;margin-left:auto;font-size:13px;color:var(--mu);font-weight:600}
-.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
-.grid{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;padding:6px 24px 32px;align-content:start;align-items:start;grid-auto-rows:max-content;overscroll-behavior:contain}
-.empty{grid-column:1/-1;text-align:center;color:var(--mu);padding:80px 0;font-weight:600}
-.tk{--c:#E8EFF7;--ct:#2F4C70;--dl:transparent;position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--ln);border-left:6px solid var(--dl);border-radius:18px;overflow:hidden;transition:border-color .3s}
-.tk.preparing{--c:#FBF1DB;--ct:#6F5217}.tk.ready{--c:#E3EEE7;--ct:#2F5240}.tk.cancelled{--c:#F6E1DF;--ct:#8F3F3B;background:#FBF3F2}
-.tk.d-g{--dl:var(--ok)}.tk.d-y{--dl:var(--warn)}.tk.d-r{--dl:var(--bad)}
-.tk.enter{animation:in .4s cubic-bezier(.2,1.2,.3,1) both}
-.tk.fresh{animation:in .4s both,ping 1s .4s 6}
-@keyframes in{from{opacity:0;transform:translateY(12px) scale(.97)}}
-@keyframes ping{50%{box-shadow:0 0 0 3px rgba(109,147,189,.4)}}
-@media(prefers-reduced-motion:reduce){.tk.enter,.tk.fresh{animation:none}.tk.fresh{box-shadow:0 0 0 3px rgba(109,147,189,.4)}}
-.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 20px 14px;background:var(--c);color:var(--ct)}
-.mn{display:block;font-size:22px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
-.hd small{opacity:.8;font-weight:500}
-.modb{display:inline-block;margin-left:8px;background:#EAF0F7;color:#3D5A80;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
-.canb{display:inline-block;margin-left:8px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
-.rt{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
-.ago{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:3px 12px 3px 10px;background:rgba(255,255,255,.65)}
-.ago::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dl,transparent)}
-.d-g .ago{background:#E3F1E8;color:#25613B}.d-y .ago{background:#FBEFC9;color:#7A5A00}.d-r .ago{background:#F6DAD8;color:#8F2F2B}
-.d-g .ago::before{background:var(--ok)}.d-y .ago::before{background:var(--warn)}.d-r .ago::before{background:var(--bad)}
-.lt{display:none;font-size:11px;font-weight:700;background:#F6E1DF;color:#8F3F3B;border-radius:6px;padding:1px 7px}.d-r .lt{display:block}
-.tk ul{list-style:none;margin:0;padding:8px 20px}
-.tk li{display:flex;flex-wrap:wrap;gap:0 12px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:18px}
-.tk li:last-child{border:0}.tk li b{min-width:30px}
-.nt{flex-basis:100%;padding-left:42px;font-size:14.5px;font-weight:600;color:#8A6A1F}.nt.ad{color:var(--acc2)}
-.go{border:0;border-top:1px solid var(--ln);padding:16px;font-weight:700;font-size:16px;background:var(--bg);transition:background .2s,filter .2s}
-.go:active{filter:brightness(.92)}.go:disabled{opacity:.5}
-.pending .go{background:#FBF1DB;color:#6F5217}.preparing .go{background:#E3EEE7;color:#2F5240}.ready .go{background:var(--bg);color:var(--ink)}.cancelled .go{background:#F6E1DF;color:#8F3F3B}
-.pending .go:hover{background:#F6E6BF}.preparing .go:hover{background:#D5E6DB}.ready .go:hover{background:#ECEEE9}
-.back{border:0;border-top:1px solid var(--ln);padding:11px;font-size:14px;font-weight:600;background:#fff;color:var(--mu)}.back:hover{background:#ECEEE9}
-#gate{position:fixed;inset:0;z-index:5;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}#gate h1{margin:0;font:600 34px var(--serif)}#gate p{max-width:420px;color:var(--mu);margin:0}
-#go{padding:16px 32px;font-size:17px;font-weight:600;border:0;border-radius:14px;background:var(--acc);color:#fff}#go:hover{background:var(--acc2)}
-@media(max-width:760px){header,.tbr{padding-left:14px;padding-right:14px}.grid{padding-left:14px;padding-right:14px}.lg{display:none}}
-</style></head><body>
+<title>VAestilo · Cocina</title><link rel="icon" href="imagenes/favicon.svg"><script src="js/compartido/config.js"></script>
+<link rel="stylesheet" href="css/cocina/colores.css">
+<link rel="stylesheet" href="css/cocina/base.css">
+<link rel="stylesheet" href="css/cocina/cabecera-y-avisos.css">
+<link rel="stylesheet" href="css/cocina/barra-filtros-y-lista.css">
+<link rel="stylesheet" href="css/cocina/tarjetas-pedido-estados.css">
+<link rel="stylesheet" href="css/cocina/animaciones.css">
+<link rel="stylesheet" href="css/cocina/tarjetas-pedido.css">
+<link rel="stylesheet" href="css/cocina/pantalla-de-inicio.css">
+<link rel="stylesheet" href="css/cocina/adaptacion-movil.css">
+</head><body>
 <div id="gate"><h1 id="gh">Cocina</h1><p id="gname">Verificando enlace…</p><p id="gmsg"></p><button id="go" hidden>Iniciar turno</button></div>
 <header><b id="rn">VAestilo</b><span class="est" id="est">Cocina</span><span class="sp"></span><span class="pill" id="pw">Pantalla</span><span class="pill" id="ps">Sonido</span></header>
 <div id="warn" hidden>Sin conexión con el servidor · reintentando… Si dura, avisa al encargado.</div>
@@ -68,84 +21,12 @@ header b{font:600 20px var(--serif)}header .sp{flex:1}
   <div class="lg"><span><i style="background:var(--ok)"></i>menos de 10 min</span><span><i style="background:var(--warn)"></i>10–19 min</span><span><i style="background:var(--bad)"></i>20 min o más</span></div>
 </div>
 <main class="grid" id="grid"></main>
-<script>
-const CFG = window.FOGON || {}, $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const QS = new URLSearchParams(location.search);
-// ?k=<llave>&e=bar → pantalla de barra · ?k=<llave> → cocina.
-// La estación se queda en la URL (?e=bar) y la llave se guarda POR ESTACIÓN, así cocina y barra no se pisan aunque estén en el mismo equipo.
-const ST = QS.get('e') === 'bar' ? 'bar' : 'kitchen', SK = 'kepasa-cocina-' + ST;
-let K = (QS.get('k') || '').trim();
-if (K) { try { localStorage.setItem(SK, K); } catch (e) {} }
-else { try { K = localStorage.getItem(SK) || (ST === 'kitchen' ? localStorage.getItem('kepasa-cocina') || '' : ''); } catch (e) {} }
-if (QS.get('k')) history.replaceState(null, '', location.pathname + (ST === 'bar' ? '?e=bar' : ''));   // la llave no queda en la barra ni en el historial; la estación sí
-const NAME = ST === 'bar' ? 'Barra' : 'Cocina';
-async function rpc(fn, args) {
-  const r = await fetch(CFG.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: { apikey: CFG.key, Authorization: 'Bearer ' + CFG.key, 'content-type': 'application/json' }, body: JSON.stringify(args) });
-  if (!r.ok) throw new Error(r.status); return r.json();
-}
-let started = false, ac = null, wl = null, rows = [], seen = null, fresh = new Set(), dismissed = new Set(), shown = new Set(), fails = 0, busy = false, sf = '', mf = '', lastHtml = '';
-function beep() {
-  if (!ac) return; const notes = ST === 'bar' ? [660, 988, 1320] : [880, 1175, 880];
-  try { notes.forEach((f, i) => { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f; o.connect(g); g.connect(ac.destination); const t = ac.currentTime + i * .22; g.gain.setValueAtTime(.35, t); g.gain.exponentialRampToValueAtTime(.001, t + .2); o.start(t); o.stop(t + .21); }); } catch (e) {}
-}
-async function keepAwake() { try { if (navigator.wakeLock && !document.hidden) { wl = await navigator.wakeLock.request('screen'); wl.onrelease = () => { $('#pw').className = 'pill'; $('#pw').textContent = 'Pantalla: se puede apagar'; }; $('#pw').className = 'pill ok'; $('#pw').textContent = 'Pantalla activa'; return; } } catch (e) {} $('#pw').textContent = 'Mantén la pantalla encendida'; }
-const mins = c => Math.max(0, Math.floor((Date.now() - new Date(c)) / 60000));
-const dClass = o => o.status === 'cancelled' || o.status === 'ready' ? '' : (m => m >= 20 ? ' d-r' : m >= 10 ? ' d-y' : ' d-g')(mins(o.created_at));
-const agoTxt = m => m < 1 ? 'Recién' : m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + m % 60 + ' min';
-function ticket(o) {
-  const n = (o.items || []).reduce((a, i) => a + Number(i.qty || 0), 0), cx = o.status === 'cancelled';
-  const li = (o.items || []).map(i => `<li><b>${esc(i.qty)}×</b><span>${esc(i.name)}</span>${(i.addons || []).map(a => `<span class="nt ad">+ ${esc(a)}</span>`).join('')}${i.promo ? `<span class="nt">${esc(i.promo)}</span>` : ''}${i.note ? `<span class="nt">${esc(i.note)}</span>` : ''}</li>`).join('');
-  const act = { pending: `<button class="go" data-id="${o.id}" data-to="preparing">Marcar en preparación</button>`, preparing: `<button class="go" data-id="${o.id}" data-to="ready">Pedido listo</button><button class="back" data-id="${o.id}" data-to="pending">↩ Volver a nuevos</button>`, ready: `<button class="back" data-id="${o.id}" data-to="preparing">↩ Volver a preparando</button>`, cancelled: `<button class="go" data-x="${o.id}">Entendido</button>` }[o.status] || '';
-  const cls = `tk ${o.status}${dClass(o)}${fresh.has(o.id) ? ' fresh' : !shown.has(o.id) ? ' enter' : ''}`;
-  return `<article class="${cls}" data-id="${o.id}"><div class="hd"><div><b class="mn">${esc(o.table_name)}</b><small>${n} ${n === 1 ? 'ítem' : 'ítems'}${cx ? '<span class="canb">CANCELADO · no preparar</span>' : o.modified_at ? '<span class="modb">Modificado</span>' : ''}</small></div>${cx ? '' : `<div class="rt"><span class="lt">Atrasado</span><span class="ago">${agoTxt(mins(o.created_at))}</span></div>`}</div><ul>${li}</ul>${act}</article>`;
-}
-function visible() { return rows.filter(o => !(o.status === 'cancelled' && dismissed.has(o.id))); }
-function render() {
-  const all = visible(), c = { '': all.length, pending: 0, preparing: 0, ready: 0 }; all.forEach(o => { if (c[o.status] !== undefined) c[o.status]++; });
-  document.querySelectorAll('#seg button').forEach(b => b.querySelector('b').textContent = c[b.dataset.f]);
-  const nums = [...new Set(all.map(o => o.table_name))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })); if (mf && !nums.includes(mf)) mf = '';
-  const opts = '<option value="">Todas las mesas</option>' + nums.map(n => `<option value="${esc(n)}"${n === mf ? ' selected' : ''}>${esc(n)}</option>`).join('');
-  if ($('#mesa').innerHTML !== opts) $('#mesa').innerHTML = opts;
-  const list = all.filter(o => (!sf || o.status === sf || (sf === 'pending' && o.status === 'cancelled')) && (!mf || o.table_name === mf));
-  const html = list.length ? list.map(ticket).join('') : `<p class="empty">${all.length ? 'No hay pedidos en esta vista' : 'Todo tranquilo por ahora · ' + NAME}</p>`;
-  if (html !== lastHtml) { $('#grid').innerHTML = html; lastHtml = html; }
-  list.forEach(o => shown.add(o.id));
-}
-async function poll() {
-  if (busy) return; busy = true;
-  try {
-    rows = await rpc('kitchen_orders', { p_key: K, p_station: ST });
-    if (!rows.length && (await rpc('kitchen_info', { p_key: K })) == null) { location.reload(); return; }   // enlace desactivado
-    fails = 0; $('#warn').hidden = true;
-    const sig = new Map(rows.map(o => [o.id, o.status + '|' + o.modified_at + '|' + o.cancelled_at])); let ring = false;
-    if (seen) rows.forEach(o => { const s = seen.get(o.id); if ((o.status === 'pending' && s === undefined) || (s !== undefined && s.split('|')[1] !== String(o.modified_at)) || (o.status === 'cancelled' && s !== undefined && !s.startsWith('cancelled'))) { ring = true; fresh.add(o.id); } });
-    seen = sig; fresh.forEach(id => { const o = rows.find(x => x.id === id); if (!o || o.status !== 'pending' && o.status !== 'cancelled') fresh.delete(id); });
-    render(); if (ring) beep();
-  } catch (e) { if (++fails >= 2) $('#warn').hidden = false; } finally { busy = false; }
-}
-$('#seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; sf = b.dataset.f; document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b)); render(); };
-$('#mesa').onchange = e => { mf = e.target.value; render(); };
-$('#grid').addEventListener('click', async e => {
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.x) { dismissed.add(b.dataset.x); render(); return; }
-  b.disabled = true;
-  try { const r = await rpc('kitchen_set_status', { p_key: K, p_order: b.dataset.id, p_status: b.dataset.to, p_station: ST }); if (r !== 'ok') alert(r === 'closed' ? 'Ese pedido ya se cerró o se canceló.' : 'No se pudo cambiar el estado.'); } catch (x) { alert('Sin conexión: no se guardó el cambio.'); }
-  busy = false; poll();
-});
-async function init() {
-  $('#gh').textContent = NAME; $('#est').textContent = NAME;
-  if (!CFG.url || !UUID.test(K)) { $('#gname').textContent = 'Enlace de ' + NAME.toLowerCase() + ' inválido'; $('#gmsg').textContent = 'Pide al encargado el enlace desde Configuración > Pantalla de cocina y barra.'; return; }
-  let name = null; try { name = await rpc('kitchen_info', { p_key: K }); } catch (e) { $('#gname').textContent = 'Sin conexión'; $('#gmsg').textContent = 'Revisa el internet y recarga.'; return; }
-  if (!name) { $('#gname').textContent = 'Enlace desactivado'; $('#gmsg').textContent = 'Este enlace ya no sirve. Pide uno nuevo al encargado.'; return; }
-  $('#rn').textContent = name; document.title = name + ' · ' + NAME; $('#gname').textContent = name; $('#gmsg').textContent = 'Al iniciar se activa el sonido de pedidos nuevos y se mantiene la pantalla encendida.'; $('#go').hidden = false;
-}
-$('#go').onclick = () => {
-  try { ac = new (window.AudioContext || window.webkitAudioContext)(); ac.resume(); } catch (e) {}
-  $('#ps').className = ac ? 'pill ok' : 'pill'; $('#ps').textContent = ac ? 'Sonido activo' : 'Sin sonido';
-  started = true; keepAwake(); $('#gate').hidden = true; poll(); setInterval(poll, 4000); setInterval(render, 20000);
-};
-document.addEventListener('visibilitychange', () => { if (!document.hidden && started) { keepAwake(); if (ac) ac.resume(); poll(); } });
-init();
-</script></body></html>
+<script src="js/cocina/estacion-y-llave.js"></script>
+<script src="js/cocina/servidor-y-estado.js"></script>
+<script src="js/cocina/sonido-y-pantalla-activa.js"></script>
+<script src="js/cocina/tiempos.js"></script>
+<script src="js/cocina/dibujar-pedidos.js"></script>
+<script src="js/cocina/actualizar-pedidos.js"></script>
+<script src="js/cocina/eventos.js"></script>
+<script src="js/cocina/inicio.js"></script>
+</body></html>

@@ -1,0 +1,13 @@
+/* ==============================================================
+   base.css
+   Rediseño minimalista (capa ENCIMA del diseño original): fondo, texto y foco con la paleta nueva.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* ===== VAestilo · diseño minimalista (carta del cliente) =====
+   Paleta "salvia": fondo piedra muy pálido, superficies blancas, un solo acento verde grisáceo.
+   Tipografía: serif elegante para títulos (nombre del local, categorías) y sans del sistema para el resto. */
+body{background:var(--bg);color:var(--tx);line-height:1.45;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+[hidden]{display:none!important}
+.mz input:focus,#callBody textarea:focus,#tipRow input:focus,.note:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(78,113,98,.14)}

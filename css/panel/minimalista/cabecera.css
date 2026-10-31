@@ -1,0 +1,36 @@
+/* ==============================================================
+   cabecera.css
+   Rediseño de la barra superior, menú y botones de ícono.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* cabecera */
+.top{gap:16px;padding:0 28px;height:calc(64px + env(safe-area-inset-top,0px));background:#fff;border-bottom:1px solid var(--ln);box-shadow:none}
+.al img{width:28px;height:28px}
+.sep{height:22px}
+.brand{font-weight:600;font-size:15px;letter-spacing:0;gap:10px}
+.brand .t{max-width:220px}
+.brand .mk{width:32px;height:32px;border-radius:50%;background:var(--accs2);color:var(--acc2);font-size:12px;font-weight:700}
+.brand .mk.has{background:#fff;border:1px solid var(--ln)}
+nav{align-items:center;gap:2px;margin-left:8px}
+nav button{height:36px;padding:0 14px;border-radius:10px;font-weight:600;font-size:14px;color:var(--mu);transition:background .2s,color .2s}
+nav button::after{content:none}
+nav button:hover{color:var(--tx);background:var(--bg)}
+nav button.on{color:var(--acc2);background:var(--accs)}
+#cnt,#ccnt{background:var(--acc);color:#fff;min-width:20px;height:20px;font:600 11.5px/20px var(--f)}
+#ccnt{background:var(--red)}
+.r{gap:10px}
+.ib{border:1px solid var(--ln);background:#fff;color:var(--mu);border-radius:10px;box-shadow:none}
+.ib:hover{background:var(--bg);color:var(--tx)}
+.ib.on{background:var(--accs2);border-color:var(--accs2);color:var(--acc2)}
+.ib[aria-pressed=true]{color:var(--acc);border-color:var(--ln);background:#fff}
+#snd.need{color:#7A5A1A;border-color:#E6CF98;background:#FBF1DB}
+.opn{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--ln);border-radius:99px;background:#fff;font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;transition:background .2s,border-color .2s}
+.opn:not(:disabled):hover{background:var(--bg)}
+.opn::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--mu)}
+.opn.on::before{background:var(--acc);animation:live 2s infinite}
+.opn:disabled{cursor:default}.opn[hidden]{display:none}
+@keyframes live{0%{box-shadow:0 0 0 0 rgba(78,113,98,.45)}100%{box-shadow:0 0 0 8px rgba(78,113,98,0)}}
+.opn.off{color:#8F3F3B;border-color:#EBCFCD;background:#F8ECEB}.opn.off::before{background:var(--red)}
+#clk{font-weight:600;color:var(--mu)}
+#susp{background:#F8ECEB;color:#8F3F3B;border-bottom:1px solid #EBCFCD;font-weight:500}

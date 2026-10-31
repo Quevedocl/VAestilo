@@ -1,0 +1,15 @@
+/* ==============================================================
+   colores.css
+   Colores, tipografías y sombras de la carta del cliente (variables CSS). Es el lugar donde se cambia la paleta.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* --- Paleta ORIGINAL. La paleta "salvia" de más abajo la reemplaza, pero aquí se define --f (tipografía) y color-scheme. --- */
+:root{color-scheme:light;--bg:#f2f3f5;--card:#fff;--ln:#e3e5e8;--tx:#1f2328;--mu:#6b7280;--red:#e5484d;--grn:#1f9d55;--ink:#1f2328;--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+
+/* --- Paleta "SALVIA" (diseño minimalista actual). Para cambiar el color de acento edita --acc, --acc2 y --accs. ---
+   Tipografía: serif elegante para títulos (nombre del local, categorías) y sans del sistema para el resto. */
+:root{--bg:#F6F7F4;--card:#fff;--ln:#E8EAE5;--ln2:#D9DDD6;--tx:#2A322D;--mu:#7A857E;--ink:#2F3D35;
+  --acc:#4E7162;--acc2:#3F5C50;--accs:#EDF2EE;--accs2:#DCE7E0;--red:#B85450;--grn:#4E7162;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sh1:0 1px 2px rgba(42,50,45,.04);--sh2:0 10px 32px rgba(42,50,45,.09)}

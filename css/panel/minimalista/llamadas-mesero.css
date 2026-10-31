@@ -1,0 +1,11 @@
+/* ==============================================================
+   llamadas-mesero.css
+   Llamadas al mesero con el estilo nuevo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* llamadas al mesero */
+.cl{gap:18px;padding-top:6px}
+.cc{border-left:0;position:relative;overflow:hidden;padding:18px 20px}
+.cc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--red)}.cc.pay::before{background:var(--acc)}.cc.help::before{background:var(--amb)}
+.cc .nt2{color:#8A6A1F}

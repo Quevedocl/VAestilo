@@ -1,0 +1,13 @@
+/* ==============================================================
+   dialogos-y-avisos.css
+   Diálogos y avisos con el estilo nuevo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* diálogos y avisos */
+dialog{border-radius:22px;padding:28px;background:#fff;box-shadow:0 24px 70px rgba(42,50,45,.22)}
+dialog::backdrop{background:rgba(42,50,45,.32);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+dialog h3{font:600 22px/1.2 var(--serif)}
+#bn{background:#fff;color:var(--tx);border:1px solid var(--ln);box-shadow:var(--sh2);border-radius:14px}
+#bn::before{background:var(--acc)}
+#toast{background:var(--ink);border-radius:12px;font-weight:500}

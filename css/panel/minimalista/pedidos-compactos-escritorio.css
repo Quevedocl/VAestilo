@@ -1,0 +1,21 @@
+/* ==============================================================
+   pedidos-compactos-escritorio.css
+   Pedidos más compactos en computador, para que quepan más tickets.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* pedidos compactos en computador y pantallas grandes: caben más tickets a la vez sin tener que desplazarse (el celular queda igual) */
+@media (min-width:721px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;padding-bottom:22px}
+  .tk{border-radius:13px}
+  .hd{padding:9px 12px 8px;gap:8px}
+  .mn{font-size:16px}.hd small{font-size:12px}
+  .rt{font-size:14px}.lt{font-size:10px;padding:0 6px;margin-bottom:1px}
+  .prn{width:26px;height:26px;border-radius:7px}.prn svg{width:14px;height:14px}
+  .paidb,.modb{font-size:10px;padding:0 6px;margin-left:6px}
+  .tk ul{padding:3px 12px}
+  .tk li{gap:0 7px;padding:5px 0;font-size:13.5px;line-height:1.25}.tk li b{min-width:22px}
+  .nt{padding-left:29px;font-size:12px}
+  .go{padding:9px;font-size:13px}
+}
+@media (min-width:1600px){.grid{grid-template-columns:repeat(auto-fill,minmax(235px,1fr))}}

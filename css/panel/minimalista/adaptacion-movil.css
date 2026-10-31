@@ -1,0 +1,22 @@
+/* ==============================================================
+   adaptacion-movil.css
+   Ajustes por tamaño de pantalla (celular y pantallas medianas).
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+@media (max-width:1380px){#clk{display:none}}
+@media (max-width:1180px){nav button{padding:0 11px}}
+/* los pedidos y llamadas ocupan solo lo que miden (evita que se monten unos sobre otros) */
+.grid,.cl{grid-auto-rows:max-content}
+@media (max-width:720px){
+  :root{--gx:14px}
+  /* en el celular la cabecera pasa a dos filas: arriba el local y los controles, abajo el menú deslizable */
+  .top{flex-wrap:wrap;height:auto;padding:10px 12px 0;padding-top:calc(10px + env(safe-area-inset-top,0px));gap:8px 10px;row-gap:6px}
+  .brand .t{display:block;max-width:150px}.brand span.t{display:block}.sep{display:none}
+  .r{margin-left:auto;gap:8px}
+  nav{order:3;flex:0 0 100%;height:46px;margin:0 -12px;padding:0 8px;border-top:1px solid var(--ln);align-items:center}
+  nav button{height:34px}
+  .hello{padding-top:20px}
+  .rw{gap:8px;padding-left:12px;padding-right:12px}.rw .pi{padding:0 8px}.rw .pi input{width:56px;font-size:15px}.rw .nm b{font-size:14px}
+  .card{padding:20px}dialog{padding:22px}
+}

@@ -1,0 +1,11 @@
+/* ==============================================================
+   cabecera-y-avisos.css
+   Cabecera (nombre del local, estación, estado del sonido) y aviso de falta de conexión.
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+header{flex:none;display:flex;align-items:center;gap:12px;padding:12px 24px;background:#fff;border-bottom:1px solid var(--ln)}
+header b{font:600 20px var(--serif)}header .sp{flex:1}
+.est{font-size:13px;font-weight:700;padding:4px 12px;border-radius:99px;background:var(--accs2);color:var(--acc2);letter-spacing:.02em;text-transform:uppercase}
+.pill{font-size:13px;font-weight:600;padding:5px 12px;border-radius:99px;background:#ECEEE9;color:var(--mu)}.pill.ok{background:var(--accs2);color:var(--acc2)}
+#warn{flex:none;background:#F8ECEB;color:#8F3F3B;text-align:center;padding:10px;font-weight:600;border-bottom:1px solid #EBCFCD}

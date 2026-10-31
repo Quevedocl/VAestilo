@@ -1,0 +1,10 @@
+/* ==============================================================
+   categorias.css
+   Categorías.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* categorías */
+.chips{padding:2px 18px 12px;gap:6px}
+.chips button{height:34px;padding:0 14px;border:0;background:transparent;color:var(--mu);font-weight:600;font-size:14px}
+.chips button.on{background:var(--accs2);color:var(--acc2)}

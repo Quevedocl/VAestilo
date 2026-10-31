@@ -1,0 +1,16 @@
+/* ==============================================================
+   colores.css
+   Colores, tipografías y sombras del panel (variables CSS). Es el lugar donde se cambia la paleta.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* --- Paleta ORIGINAL (diseño inicial). La paleta "salvia" de más abajo la reemplaza, pero se deja aquí porque
+       --f (tipografía) y color-scheme solo se definen en esta línea. --- */
+:root{color-scheme:light;--bg:#f2f3f5;--card:#fff;--ln:#e3e5e8;--tx:#1f2328;--mu:#6b7280;--red:#e5484d;--amb:#f5a524;--grn:#1f9d55;--ink:#1f2328;--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+
+/* --- Paleta "SALVIA" (diseño minimalista actual): fondo piedra muy pálido, superficies blancas, un solo acento verde grisáceo.
+       Para cambiar el color de acento edita --acc, --acc2 y --accs. Estados de pedido: nuevo = azul, preparando = ámbar, listo = salvia. --- */
+:root{--bg:#F6F7F4;--card:#fff;--ln:#E8EAE5;--ln2:#D9DDD6;--tx:#2A322D;--mu:#7A857E;--ink:#2F3D35;
+  --acc:#4E7162;--acc2:#3F5C50;--accs:#EDF2EE;--accs2:#DCE7E0;--red:#B85450;--amb:#C79A3B;--grn:#4E7162;--blue:#6D93BD;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sh1:0 1px 2px rgba(42,50,45,.04);--sh2:0 10px 32px rgba(42,50,45,.09);--gx:max(28px,calc((100% - 1320px)/2))}

@@ -1,0 +1,9 @@
+/* ==============================================================
+   tarjetas-pedido-estados.css
+   Tarjeta de pedido: colores por estado (nuevo, preparando, listo, cancelado) y por demora.
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+.tk{--c:#E8EFF7;--ct:#2F4C70;--dl:transparent;position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--ln);border-left:6px solid var(--dl);border-radius:18px;overflow:hidden;transition:border-color .3s}
+.tk.preparing{--c:#FBF1DB;--ct:#6F5217}.tk.ready{--c:#E3EEE7;--ct:#2F5240}.tk.cancelled{--c:#F6E1DF;--ct:#8F3F3B;background:#FBF3F2}
+.tk.d-g{--dl:var(--ok)}.tk.d-y{--dl:var(--warn)}.tk.d-r{--dl:var(--bad)}

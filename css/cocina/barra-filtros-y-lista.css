@@ -1,0 +1,16 @@
+/* ==============================================================
+   barra-filtros-y-lista.css
+   Filtros por estado, selector de mesa, leyenda de colores y la cuadrícula de pedidos.
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+.tbr{flex:none;display:flex;align-items:center;gap:12px;padding:18px 24px 14px;flex-wrap:wrap}
+.seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.seg button{flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:99px;border:0;background:transparent;font-weight:600;color:var(--mu);transition:all .2s}
+.seg button:hover{color:var(--tx);background:#ECEEE9}.seg button.on{background:var(--accs2);color:var(--acc2)}
+.seg b{font-variant-numeric:tabular-nums;font-size:13px;opacity:.7}
+#mesa{height:38px;border:1px solid var(--ln);border-radius:12px;background:#fff;padding:0 12px;font-weight:600}
+.lg{display:flex;gap:14px;margin-left:auto;font-size:13px;color:var(--mu);font-weight:600}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.grid{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;padding:6px 24px 32px;align-content:start;align-items:start;grid-auto-rows:max-content;overscroll-behavior:contain}
+.empty{grid-column:1/-1;text-align:center;color:var(--mu);padding:80px 0;font-weight:600}

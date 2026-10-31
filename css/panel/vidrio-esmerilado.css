@@ -1,0 +1,38 @@
+/* ==============================================================
+   vidrio-esmerilado.css
+   Cristal esmerilado sobre un fondo con la identidad de Q&V (verde bosque, ondas de gota y señal NFC). Solo en pantalla.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* ===== VAestilo · cristal esmerilado sobre un fondo con la identidad de Q&V (verde bosque, ondas de gota y señal NFC, "Q&V" muy tenue) ===== */
+@media screen{
+:root{--mu:#5b6760;--gl:rgba(246,248,247,.56);--gl2:rgba(255,255,255,.78);--gl-ln:rgba(255,255,255,.6);--gl-sh:0 10px 34px rgba(18,50,38,.16),inset 0 1px 0 rgba(255,255,255,.7);--gl-blur:blur(30px) saturate(150%)}
+html{background:#e7ede9}
+body,#login{background:
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 600%22%3E%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%227%22 stroke-linecap=%22round%22 opacity=%22.065%22 transform=%22translate%280 300%29%22%3E%3Cpath d=%22M0 -70 A70 70 0 0 1 0 70%22/%3E%3Cpath d=%22M0 -140 A140 140 0 0 1 0 140%22/%3E%3Cpath d=%22M0 -210 A210 210 0 0 1 0 210%22/%3E%3Cpath d=%22M0 -280 A280 280 0 0 1 0 280%22/%3E%3C/g%3E%3C/svg%3E") 0 3vh/auto 60vh no-repeat fixed,
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 1000%22 preserveAspectRatio=%22xMidYMid slice%22%3E%0A%3Cg fill=%22none%22 stroke=%22%231d4a37%22 stroke-width=%221.6%22 opacity=%22.075%22%3E%0A%3Ccircle cx=%221400%22 cy=%22900%22 r=%22120%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22230%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22350%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22480%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22620%22/%3E%3Ccircle cx=%221400%22 cy=%22900%22 r=%22770%22/%3E%0A%3C/g%3E%0A%3Ctext x=%22800%22 y=%22640%22 text-anchor=%22middle%22 font-family=%22Helvetica Neue,Helvetica,Arial,sans-serif%22 font-weight=%22800%22 font-size=%22330%22 letter-spacing=%22-10%22 fill=%22%231d4a37%22 opacity=%22.035%22%3EQ%26amp%3BV%3C/text%3E%0A%3Cpath d=%22M1180 70 C1120 150 1100 205 1180 230 C1260 205 1240 150 1180 70Z%22 fill=%22%231d4a37%22 opacity=%22.06%22/%3E%0A%3C/svg%3E") center/cover no-repeat fixed,
+  radial-gradient(1000px 700px at 0% 105%,rgba(26,72,52,.62),transparent 62%),
+  radial-gradient(800px 650px at 105% 62%,rgba(34,86,62,.50),transparent 60%),
+  radial-gradient(700px 500px at 100% -8%,rgba(44,100,74,.30),transparent 60%),
+  radial-gradient(900px 600px at 15% -10%,rgba(255,255,255,.75),transparent 60%),
+  #e4ebe6 fixed!important}
+.top{background:var(--gl)!important;border-bottom:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:0 1px 0 rgba(255,255,255,.5),0 8px 26px rgba(18,50,38,.10)!important;position:relative;z-index:5}
+nav button:hover{background:rgba(255,255,255,.4)!important}
+nav button.on{background:var(--gl2)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 2px 8px rgba(18,50,38,.14)}
+.card,.lst,.kp div,.cc,.pv,.rvk div,.cstat div,.mstat div,.mc,.sd,.pvh,#bn,.tk{background:var(--gl)!important;border:1px solid var(--gl-ln)!important;box-shadow:var(--gl-sh)!important;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+.tk{-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+.pv{border-style:solid!important}
+.gh,.ib,.opn,.seg button,.chk button,.del,.mch.free,.subnav button.on{background:rgba(255,255,255,.5)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 1px 3px rgba(18,50,38,.10)}
+.gh:hover,.ib:hover{background:rgba(255,255,255,.75)!important}
+.pri{background-image:linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,0) 55%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px rgba(24,56,42,.28)!important}
+select,.srch,.fld input,.fld select,dialog input,dialog select,dialog textarea,#rvDay,.tf input,.pi,#lf input,#vf input{background:rgba(255,255,255,.62)!important;border:1px solid var(--gl-ln)!important;box-shadow:inset 0 1px 2px rgba(18,50,38,.08)}
+select:focus,.srch:focus,.fld input:focus,dialog input:focus,.tf input:focus,#lf input:focus,#vf input:focus{background:rgba(255,255,255,.88)!important;border-color:var(--acc)!important}
+dialog{background:rgba(246,248,247,.72)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(36px) saturate(160%);backdrop-filter:blur(36px) saturate(160%);box-shadow:0 26px 70px rgba(14,40,30,.36),inset 0 1px 0 rgba(255,255,255,.8)!important}
+dialog::backdrop{background:rgba(16,44,33,.30)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#toast{background:rgba(22,44,34,.70)!important;border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+#lf,#vf{background:rgba(246,248,247,.60)!important;border:1px solid var(--gl-ln)!important;-webkit-backdrop-filter:blur(34px) saturate(160%);backdrop-filter:blur(34px) saturate(160%);box-shadow:0 26px 70px rgba(14,40,30,.26),inset 0 1px 0 rgba(255,255,255,.8)!important}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .top,.card,.lst,.kp div,.cc,.pv,.rvk div,.cstat div,.mstat div,.mc,.sd,.pvh,#bn,.tk,#lf,#vf{background:rgba(248,250,249,.93)!important}
+  dialog{background:#fff!important}
+}
+}

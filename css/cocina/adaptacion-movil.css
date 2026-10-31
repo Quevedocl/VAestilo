@@ -1,0 +1,7 @@
+/* ==============================================================
+   adaptacion-movil.css
+   Ajustes para pantallas pequeñas.
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+@media(max-width:760px){header,.tbr{padding-left:14px;padding-right:14px}.grid{padding-left:14px;padding-right:14px}.lg{display:none}}

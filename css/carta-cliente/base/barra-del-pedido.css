@@ -1,0 +1,14 @@
+/* ==============================================================
+   barra-del-pedido.css
+   Barra inferior con el resumen del pedido.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* barra del pedido */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:12;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 60%,rgba(242,243,245,0))}
+#bar[hidden]{display:none}
+#open{display:flex;align-items:center;gap:12px;width:100%;max-width:616px;margin:0 auto;height:56px;padding:0 18px;border:0;border-radius:16px;background:var(--ink);color:#fff;font-weight:700;box-shadow:0 8px 24px rgba(16,24,40,.25)}
+#open span:nth-child(2){flex:1;text-align:left}
+#bn{min-width:26px;height:26px;border-radius:99px;background:#fff;color:var(--ink);font-size:14px;line-height:26px;text-align:center;padding:0 7px}
+#bar.bump #open{animation:bump .3s}
+@keyframes bump{50%{transform:scale(1.03)}}

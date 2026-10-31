@@ -1,0 +1,21 @@
+/* ==============================================================
+   resumen-de-carta.css
+   Carta: resumen arriba y lista en dos columnas.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* carta: resumen y lista en dos columnas */
+.cstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px var(--gx) 0}
+.cstat div{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:12px 16px}
+.cstat span{display:block;color:var(--mu);font-size:12.5px;font-weight:500}
+.cstat b{display:block;font:600 22px/1.25 var(--serif);font-variant-numeric:tabular-nums}
+.cstat div.alert b{color:var(--red)}
+#menu .cstat+.tbr{padding-top:14px}
+#subnav+main #menu .cstat{padding-top:14px}
+@media (min-width:1100px){
+  #pg .lst{display:grid;grid-template-columns:1fr 1fr}
+  #pg .lst .rw{grid-template-columns:44px 1fr auto 52px 36px 36px;gap:12px;border-bottom:1px solid var(--ln)}
+  #pg .lst .rw:nth-child(odd){border-right:1px solid var(--ln)}
+  #pg .lst .rw:last-child,#pg .lst .rw:nth-last-child(2):nth-child(odd){border-bottom:0}
+  #pg .lst .rw .st{display:none}
+}

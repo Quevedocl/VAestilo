@@ -1,0 +1,20 @@
+/* ==============================================================
+   botones-y-campos.css
+   Botones y campos de texto con el estilo nuevo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* botones y campos */
+.pri{background:var(--acc);box-shadow:none;font-weight:600;height:40px;border-radius:11px}
+.pri:hover{background:var(--acc2)}
+.gh{background:#fff;border:1px solid var(--ln2);font-weight:600;height:40px;border-radius:11px}
+.gh:hover{background:var(--bg)}
+.seg button{background:transparent;border:0;color:var(--mu);font-weight:600;height:36px}
+.seg button:hover{color:var(--tx);background:#ECEEE9}
+.seg button.on{background:var(--accs2);color:var(--acc2)}
+.seg b{opacity:.7}
+select,.srch,.fld input,.fld select,dialog input,dialog select,dialog textarea,#rvDay,.tf input,.pi,#lf input,#vf input{background:#fff;border:1px solid var(--ln2);box-shadow:none;border-radius:11px}
+.fld input:focus,.fld select:focus,.pi:focus-within,.srch:focus-within,dialog input:focus,dialog textarea:focus,dialog select:focus,#lf input:focus,#vf input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(78,113,98,.14);outline:0}
+.sw{background:#CDD3CC}.sw:checked{background:var(--acc)}
+.del{border:1px solid var(--ln);border-radius:10px}
+.del:hover{color:var(--red);border-color:#EBCFCD;background:#F8ECEB}.del.ed:hover{color:var(--acc2);border-color:var(--accs2);background:var(--accs)}

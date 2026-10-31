@@ -1,0 +1,11 @@
+/* ==============================================================
+   base.css
+   Rediseño minimalista (capa que se aplica ENCIMA del diseño original): fondo, texto y foco con la paleta nueva.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* ===== VAestilo · diseño minimalista (panel del restaurante) =====
+   Paleta "salvia": fondo piedra muy pálido, superficies blancas, un solo acento verde grisáceo.
+   Estados de pedido en tonos suaves: nuevo = azul, preparando = ámbar, listo = salvia. */
+body{background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}

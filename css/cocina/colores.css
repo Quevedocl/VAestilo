@@ -1,0 +1,7 @@
+/* ==============================================================
+   colores.css
+   Colores, tipografías y sombras de la pantalla de cocina (variables CSS).
+   Se usa en: cocina.html (pantalla de cocina y barra)
+   ============================================================== */
+
+:root{color-scheme:light;--bg:#F6F7F4;--card:#fff;--ln:#E8EAE5;--tx:#2A322D;--mu:#7A857E;--ink:#2F3D35;--acc:#4E7162;--acc2:#3F5C50;--accs:#EDF2EE;--accs2:#DCE7E0;--red:#B85450;--amb:#C79A3B;--grn:#4E7162;--blue:#6D93BD;--ok:#4E9A6B;--warn:#E0A526;--bad:#C9544F;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}

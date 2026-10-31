@@ -1,0 +1,12 @@
+/* ==============================================================
+   cabecera.css
+   Barra superior: marca (logo y nombre), aviso de cuenta suspendida.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+.top{display:flex;align-items:center;gap:24px;padding:0 20px;padding-top:env(safe-area-inset-top,0px);height:calc(60px + env(safe-area-inset-top,0px));background:#fff;border-bottom:1px solid var(--ln);flex:none}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.mk{width:28px;height:28px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff}
+.mk svg{width:16px;height:16px}
+.brand .mk{width:32px;height:32px;overflow:hidden}.mk.has{background:#fff;border:1px solid var(--ln)}.mk img{width:100%;height:100%;object-fit:cover}
+#susp{background:#fef2f2;color:#991b1b;border-bottom:1px solid #fecaca;padding:10px 20px;font-weight:600;text-align:center;font-size:14px}

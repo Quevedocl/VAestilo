@@ -1,0 +1,33 @@
+/* ==============================================================
+   efectos-visuales.css
+   Efectos: ondas al tocar, elevación al pasar el mouse, barra de progreso del pedido, carga (skeleton), confeti.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* ===== animaciones y efectos visuales ===== */
+@keyframes viewin{from{opacity:0;transform:translateY(10px)}}
+.view{animation:viewin .35s cubic-bezier(.2,.8,.3,1)}
+nav button:hover{color:var(--tx)}
+.pri,.gh,.go,.seg button{position:relative;overflow:hidden}
+.rip{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;animation:rip .6s ease-out forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+.tk,.cc,.rw,.rw2,.rw3{transition:transform .25s,box-shadow .25s,background .3s}
+.tk:hover,.cc:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,24,40,.12)}
+.rw:hover,.rw2:hover,.rw3:hover{background:#fafbfc}
+.tk{position:relative}
+.tk::before{content:"";position:absolute;left:0;top:0;height:4px;width:33%;background:rgba(255,255,255,.75);z-index:1;transition:width .7s cubic-bezier(.2,1,.3,1)}
+.tk.preparing::before{width:66%}.tk.ready::before{width:100%}
+.tk.flash{animation:flash 1.4s}
+@keyframes flash{0%,100%{box-shadow:0 1px 2px rgba(16,24,40,.06)}25%{box-shadow:0 0 0 4px rgba(37,99,235,.5)}}
+.paidb{display:inline-block;margin-left:8px;background:#16a34a;color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;animation:pop .4s}
+.modb{display:inline-block;margin-left:8px;background:#2563eb;color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;animation:pop .4s}
+.nt.ad{color:#15703e}
+.late .lt{animation:latep 1.2s infinite}
+@keyframes latep{50%{background:rgba(0,0,0,.45)}}
+.grid[data-loading]::after{content:none!important}
+.sk{height:200px;border-radius:12px;background:linear-gradient(100deg,#eceef1 30%,#f7f8fa 50%,#eceef1 70%) 0 0/200% 100%;animation:shim 1.2s infinite linear}
+@keyframes shim{to{background-position:-200% 0}}
+@keyframes badge{40%{transform:scale(1.4)}}
+.bump{animation:badge .45s}
+.cf{position:fixed;width:9px;height:14px;z-index:40;pointer-events:none;border-radius:2px;animation:cf 1.3s cubic-bezier(.2,.7,.4,1) forwards}
+@keyframes cf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}

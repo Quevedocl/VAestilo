@@ -1,0 +1,11 @@
+/* ==============================================================
+   portada.css
+   Portada: solo texto, sin cajas.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* portada: solo texto, sin cajas */
+.hero0{margin:26px 18px 4px;padding:0;border-radius:0;background:none;color:var(--tx);overflow:visible;animation:none}
+.hero0 h2{margin:0 0 6px;font:600 33px/1.1 var(--serif);letter-spacing:-.01em;overflow-wrap:anywhere}
+.hero0 p{margin:0;max-width:none;opacity:1;color:var(--mu);font-size:15px}
+body.locked .hero0{display:none}

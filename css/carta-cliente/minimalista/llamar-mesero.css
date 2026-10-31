@@ -1,0 +1,13 @@
+/* ==============================================================
+   llamar-mesero.css
+   Ventana para llamar al mesero.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* llamar al mesero */
+.opt{border:1px solid var(--ln);border-radius:16px;font-weight:600}
+.opt.on{border-color:var(--acc);background:var(--accs);color:var(--tx)}
+.opt .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--accs);color:var(--acc2);font-size:0}
+.opt.on .ic{background:#fff}
+.ic svg,.ok svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.opt .ic svg,.tkm .ic svg{width:20px;height:20px;stroke-width:1.8}

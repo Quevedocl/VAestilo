@@ -1,0 +1,35 @@
+/* ==============================================================
+   cabecera.css
+   Cabecera fija: logo, mesa, mesero y categorías.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* cabecera fija */
+.sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--ln);padding-top:env(safe-area-inset-top,0px)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 8px}
+.bk{display:flex;align-items:center;gap:10px;min-width:0}.bk img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--ln);flex:none;background:#fff}.bk img[hidden]{display:none}
+.top h1{margin:0;font-size:22px;letter-spacing:-.01em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mesa{white-space:nowrap;max-width:42vw;overflow:hidden;text-overflow:ellipsis;font-weight:700;font-size:14px;background:var(--ink);color:#fff;border-radius:99px;padding:5px 12px}
+.mesa:empty{display:none}
+.tr{display:flex;align-items:center;gap:8px;flex:none}
+.callb{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:99px;border:1.5px solid var(--ink);background:#fff;font-weight:700;font-size:14px}
+.callb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lockbar{margin:12px 12px 0;padding:14px 16px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:600;text-align:center}
+.lockbar[hidden]{display:none}
+body.locked #bar,body.locked .callb{display:none!important}
+.opts{display:grid;gap:8px;padding:4px 20px 0}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border:1.5px solid var(--ln);border-radius:14px;background:#fff;font-weight:700}
+.opt small{display:block;font-weight:500;color:var(--mu)}
+.opt .ic{font-size:22px;width:30px;text-align:center}
+.opt.on{border-color:var(--ink);background:#f6f7f8}
+#callBody{padding:12px 20px calc(18px + env(safe-area-inset-bottom,0px))}
+#callBody textarea{width:100%;min-height:70px;padding:10px 12px;border:1px solid var(--ln);border-radius:10px;outline:0;resize:vertical;font:inherit;margin-bottom:12px}
+#callBody textarea:focus{border-color:#2563eb}
+#callOk{text-align:center;padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px))}
+#callOk[hidden],#callForm[hidden]{display:none}
+#callOk .ok{margin-bottom:14px}
+#callOk h3{margin:0 0 6px;font-size:22px}#callOk p{margin:0 0 18px;color:var(--mu)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;height:36px;padding:0 14px;border-radius:99px;border:1px solid var(--ln);background:#fff;font-weight:600;color:var(--mu);transition:background .2s,color .2s,border-color .2s}
+.chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}

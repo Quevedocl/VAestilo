@@ -1,0 +1,17 @@
+/* ==============================================================
+   confirmacion-y-avisos.css
+   Pantalla de confirmación y mensaje temporal (toast).
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* pantalla de confirmación */
+#done{position:fixed;inset:0;z-index:30;background:#fff;display:grid;place-items:center;padding:24px;text-align:center}
+#done[hidden]{display:none}
+#done>div{max-width:340px;animation:pop .35s cubic-bezier(.2,1.3,.3,1)}
+.ok{width:76px;height:76px;margin:0 auto 18px;border-radius:50%;background:var(--grn);display:grid;place-items:center}
+.ok svg{width:38px;height:38px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+#done h2{margin:0 0 6px;font-size:26px}
+#done p{margin:0 0 24px;color:var(--mu)}
+@keyframes pop{from{opacity:0;transform:scale(.92)}}
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;max-width:90vw;opacity:0;transform:translate(-50%,10px);pointer-events:none;transition:all .25s}
+#toast.on{opacity:1;transform:translate(-50%,0)}

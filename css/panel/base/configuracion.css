@@ -1,0 +1,23 @@
+/* ==============================================================
+   configuracion.css
+   Pestaña Configuración: nombre del negocio, logo, vista previa y cuenta.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* configuración */
+.cfg{padding:20px;max-width:720px;width:100%;margin:0 auto;overflow-y:auto;flex:1;min-height:0}
+.cfg h2{margin:0;font-size:24px;letter-spacing:-.01em}.cfg .sub{margin:4px 0 20px;color:var(--mu)}
+.card{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card h3{margin:0 0 4px;font-size:16px}.card .hint{margin:0 0 16px;color:var(--mu);font-size:13.5px}
+.idrow{display:flex;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+.av{width:84px;height:84px;border-radius:50%;background:var(--bg);border:1px solid var(--ln);display:grid;place-items:center;overflow:hidden;flex:none;font-weight:700;font-size:26px;color:var(--mu)}
+.av img{width:100%;height:100%;object-fit:cover}
+.avb{display:flex;flex-direction:column;gap:8px;align-items:flex-start}.avb .row{display:flex;gap:8px;flex-wrap:wrap}.avb small{color:var(--mu)}
+.fld label{display:block;margin:0 0 6px;font-size:13px;font-weight:600;color:var(--mu)}
+.fld input{width:100%;height:44px;padding:0 12px;border:1px solid var(--ln);border-radius:10px;outline:0;font-size:15px;background:#fff}.fld input:focus{border-color:#2563eb}
+.acts{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.pv{background:var(--bg);border-radius:12px;padding:14px;border:1px dashed var(--ln)}
+.pvh{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-radius:12px;padding:12px 14px;border:1px solid var(--ln)}
+.pvh .l{display:flex;align-items:center;gap:10px;min-width:0}.pvh .l .av{width:36px;height:36px;font-size:14px}.pvh .l b{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pvh .tg{background:var(--ink);color:#fff;border-radius:99px;padding:4px 12px;font-weight:700;font-size:13px;white-space:nowrap}
+.acc{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.acc span{color:var(--mu);word-break:break-all}

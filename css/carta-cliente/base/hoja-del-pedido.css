@@ -1,0 +1,34 @@
+/* ==============================================================
+   hoja-del-pedido.css
+   Hoja (ventana deslizante) del pedido.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* hoja del pedido */
+dialog{border:0;padding:0;width:100%;max-width:640px;max-height:92dvh;margin:auto auto 0;border-radius:20px 20px 0 0;color:var(--tx);background:#fff}
+dialog[open]{display:flex;flex-direction:column;animation:sheet .28s cubic-bezier(.2,1,.3,1)}
+dialog::backdrop{background:rgba(20,24,30,.5)}
+@keyframes sheet{from{transform:translateY(40px);opacity:0}}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 8px}
+.sh h3{margin:0;font-size:20px}
+.x{width:36px;height:36px;border-radius:50%;border:1px solid var(--ln);background:#fff;font-size:20px;line-height:1;color:var(--mu)}
+#lines{list-style:none;margin:0;padding:0 20px;overflow-y:auto;flex:1;min-height:80px}
+#lines li{padding:14px 0;border-bottom:1px solid var(--ln)}
+#lines li:last-child{border:0}
+.l1{display:flex;align-items:center;gap:12px}
+.l1 .nm{flex:1}
+.l1 small{display:block;color:var(--mu);font-weight:600}
+.note{width:100%;height:40px;margin-top:10px;padding:0 12px;border:1px solid var(--ln);border-radius:10px;outline:0;background:var(--bg);font-size:15px}
+.note:focus{border-color:#2563eb;background:#fff}
+.ft{padding:14px 20px calc(18px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln)}
+.tot{display:flex;justify-content:space-between;font-size:18px;font-weight:700;margin-bottom:12px;font-variant-numeric:tabular-nums}
+.mz label{display:block;font-size:13px;font-weight:600;color:var(--mu);margin-bottom:6px}
+.mz input{width:100%;height:46px;padding:0 14px;border:1px solid var(--ln);border-radius:10px;outline:0;font-size:18px;font-weight:700}
+.mz input:focus{border-color:#2563eb}
+.mz{margin-bottom:12px}.mz[hidden]{display:none}
+#err{color:var(--red);font-size:14px;font-weight:600;margin:0 0 10px;min-height:0}
+#err:empty{display:none}
+.pri{display:block;width:100%;height:54px;border:0;border-radius:14px;background:var(--grn);color:#fff;font-weight:700;font-size:17px;transition:filter .2s,transform .15s}
+.pri:active{transform:scale(.98)}.pri:disabled{opacity:.6}
+.gh{height:44px;padding:0 18px;border:1px solid var(--ln);border-radius:12px;background:#fff;font-weight:600}
+.pri.dk{background:var(--ink)}

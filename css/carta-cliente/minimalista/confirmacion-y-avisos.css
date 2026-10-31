@@ -1,0 +1,14 @@
+/* ==============================================================
+   confirmacion-y-avisos.css
+   Confirmación, avisos, pie de página y carta cerrada.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* confirmación y avisos */
+#done{background:var(--bg)}
+.ok{background:var(--accs2);color:var(--acc2)}.ok svg{stroke:var(--acc2);stroke-width:2.4}
+#done h2{font:600 28px var(--serif)}
+#toast{background:var(--ink);border-radius:12px;font-weight:500}
+.pw{padding:18px 16px calc(110px + env(safe-area-inset-bottom,0px));text-align:center;color:#A3ABA5;font-size:12.5px}
+.pw a{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;font-weight:500}.pw img{width:16px;height:16px;border-radius:4px}.pw b{color:var(--mu);font-weight:600}
+body.closed .add,body.closed .it .stp,body.closed #bar,body.closed #prodFoot{display:none!important}

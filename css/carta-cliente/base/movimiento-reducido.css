@@ -1,0 +1,7 @@
+/* ==============================================================
+   movimiento-reducido.css
+   Desactiva animaciones si la persona lo pidió en su dispositivo.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}

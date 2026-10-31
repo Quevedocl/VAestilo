@@ -1,0 +1,14 @@
+/* ==============================================================
+   llamadas-mesero.css
+   Tarjetas de las llamadas al mesero (cobrar, ayuda, queja).
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* llamadas al mesero */
+.cl{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;padding:4px 20px 24px;align-content:start;align-items:start;flex:1;min-height:0;overflow-y:auto}
+.cl:empty::after{content:none}
+.cc{background:var(--card);border:1px solid var(--ln);border-left:6px solid var(--red);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,24,40,.06);animation:in .4s both}
+.cc.pay{border-left-color:var(--grn)}.cc.help{border-left-color:var(--amb)}
+.cc .h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.cc .h b{font-size:20px}.cc .h small{color:var(--mu);font-weight:600}
+.cc .why{margin:6px 0 0;font-weight:700}.cc .nt2{margin:6px 0 0;color:#b45309;font-weight:600;word-break:break-word}
+.cc .ac{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.cc .ac button{flex:1 1 0;min-width:0;height:auto;min-height:42px;padding:9px 12px;line-height:1.2;text-align:center;white-space:normal;justify-content:center}.cc .ac .pri{flex-basis:100%}

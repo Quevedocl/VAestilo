@@ -1,0 +1,16 @@
+/* ==============================================================
+   ventas-por-mesa.css
+   Ingresos: lista de pedidos y ventas por mesa.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* ingresos: lista y ventas por mesa */
+.rvc2{margin-top:16px}
+.ol{display:grid;grid-template-columns:52px 1fr auto auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln);font-size:14px}.ol:last-child{border:0}
+.ol time{color:var(--mu);font-variant-numeric:tabular-nums;font-size:13px}.ol b{font-weight:600}.ol>span:last-child{font-weight:600;font-variant-numeric:tabular-nums}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:#EAF0F7;color:#3D5A80}
+.pill.preparing{background:#FBF1DB;color:#6F5217}.pill.ready{background:#E3EEE7;color:#2F5240}.pill.completed{background:var(--accs);color:var(--acc2)}.pill.cancelled{background:#F6E9E8;color:#8F3F3B}
+.ol.x>span:last-child{text-decoration:line-through;color:var(--mu)}
+.rvc2 .card{max-height:420px;overflow-y:auto}
+@media (max-width:860px){.rvc2{grid-template-columns:1fr}.cstat{padding-top:12px}}
+@media (max-width:720px){.cstat{display:flex;overflow-x:auto;scrollbar-width:none;padding-top:12px}.cstat div{flex:none;min-width:112px;padding:10px 14px}.mstat{grid-template-columns:repeat(4,1fr);gap:8px}.mstat div{padding:10px 12px}}

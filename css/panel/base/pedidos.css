@@ -1,0 +1,27 @@
+/* ==============================================================
+   pedidos.css
+   Tarjetas de pedido (tickets): colores por estado, productos, botón de avanzar estado.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* pedidos */
+.grid{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;padding:4px 20px 24px;align-content:start;align-items:start}
+.grid:not(:has(.tk:not([hidden]):not(.leave)))::after{content:"No hay pedidos en esta vista";grid-column:1/-1;text-align:center;color:var(--mu);padding:80px 0;font-weight:600}
+.tk{--c:var(--red);--ct:#fff;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--ln);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.06);animation:in .4s cubic-bezier(.2,1.2,.3,1) both}
+.tk[hidden]{display:none}
+.tk.preparing{--c:var(--amb);--ct:#2b1d00}.tk.ready{--c:var(--grn)}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--c);color:var(--ct);transition:background .35s}
+.mn{display:block;font-size:22px;line-height:1.1}.hd small{opacity:.85;font-weight:600}
+.rt{text-align:right;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;align-items:flex-end}
+.lt{display:none;font-size:11px;font-weight:700;background:rgba(0,0,0,.22);color:#fff;border-radius:6px;padding:1px 7px;margin-bottom:2px}
+.late .lt{display:block}
+.tk ul{list-style:none;margin:0;padding:6px 16px}
+.tk li{display:flex;flex-wrap:wrap;gap:0 12px;padding:9px 0;border-bottom:1px solid var(--ln);font-size:16px}
+.tk li:last-child{border:0}.tk li b{min-width:26px}
+.nt{flex-basis:100%;padding-left:38px;font-size:13.5px;font-weight:600;color:#b45309}
+.go{border:0;border-top:1px solid var(--ln);padding:15px;font-weight:700;font-size:15px;background:var(--bg);transition:background .2s,color .2s,filter .2s}
+.go:hover{filter:brightness(.96)}.go:active{filter:brightness(.9)}.go:disabled{opacity:.5}
+.pending .go{background:var(--amb);color:#2b1d00}.preparing .go{background:var(--grn);color:#fff}.ready .go{background:var(--ink);color:#fff}
+.tk.nuevo{animation:in .4s both,ping 1s .4s 3}
+.tk.moved{animation:move .5s}
+.tk.leave{animation:out .3s forwards;pointer-events:none}

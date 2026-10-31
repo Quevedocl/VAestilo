@@ -1,0 +1,12 @@
+/* ==============================================================
+   ingresos.css
+   Pestaña Ingresos con el estilo nuevo.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* ingresos */
+.rvk{gap:14px}
+.rvk div.big{background:var(--accs);color:var(--tx);border-color:var(--accs2)}.rvk div.big span{color:var(--acc2)}
+.rvk b{font:600 26px var(--serif);letter-spacing:0}
+.chart .bar{background:#B5CBBE;border-radius:6px 6px 0 0}.chart .c:hover .bar{background:var(--acc);filter:none}
+.t5 .bb{background:var(--accs)}.t5 .bb i{background:var(--acc)}

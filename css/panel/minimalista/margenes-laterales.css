@@ -1,0 +1,15 @@
+/* ==============================================================
+   margenes-laterales.css
+   Márgenes laterales unificados y centrados en todas las vistas.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* márgenes laterales unificados y centrados */
+.tbr,.hello,.tf{padding-left:var(--gx);padding-right:var(--gx);max-width:none}
+.grid,.cl,.pg,.rv,.adm{padding-left:var(--gx);padding-right:var(--gx);max-width:none;width:100%}
+.tbr{padding-top:18px;padding-bottom:14px}
+.hello{padding-top:30px;padding-bottom:0}
+.hello small{display:block;color:var(--mu);font-weight:500;text-transform:none}.hello small::first-letter{text-transform:uppercase}
+.hello h2{margin:2px 0 0;font:600 clamp(26px,3.2vw,34px)/1.12 var(--serif);letter-spacing:-.01em}
+.hello h2 em{font-style:normal;color:inherit}
+.stt{color:var(--mu);font-weight:500}

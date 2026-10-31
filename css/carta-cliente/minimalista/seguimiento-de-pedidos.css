@@ -1,0 +1,27 @@
+/* ==============================================================
+   seguimiento-de-pedidos.css
+   "Cómo va mi pedido" con el estilo nuevo.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* cómo va mi pedido */
+.tkm{border:1px solid var(--ln);border-radius:16px;background:#fff}
+.tkm .ic{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--accs);color:var(--acc2);font-size:0}
+.tkm.ready{background:var(--accs);border-color:var(--accs2)}
+.tkm.ready .ic{background:#fff}
+.tkm b{font-weight:600}
+.dots i{background:var(--ln2)}.dots i.on{background:var(--acc)}
+.tkb{border-radius:16px;background:var(--accs2);color:var(--acc2);font-weight:600}
+.oc{border:1px solid var(--ln);border-radius:16px}
+.oc.mine{border-color:#B7CABD}
+.chip{background:#F0F2EE;color:var(--mu)}
+.chip.me{background:var(--acc);color:#fff}.chip.md{background:#EEF2F6;color:#43607F}.chip.cx{background:#F6E9E8;color:#8F3F3B}.chip.pd{background:var(--accs2);color:var(--acc2)}
+.steps i{background:var(--ln)}.steps div::before{background:var(--ln)}
+.steps .done i,.steps .done::before{background:var(--acc)}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(78,113,98,.4)}100%{box-shadow:0 0 0 9px rgba(78,113,98,0)}}
+.oi .nn{color:#8A6A1F}
+.oa button{border:1px solid var(--ln2);font-weight:600}
+.oa .dg{border-color:#EBCFCD;color:#9C4743}
+.oa .go2{background:var(--acc);border-color:var(--acc)}
+.cfm{background:#F8ECEB;color:#8F3F3B}.cfm .y{background:var(--red)}
+.hint button{color:var(--acc2)}

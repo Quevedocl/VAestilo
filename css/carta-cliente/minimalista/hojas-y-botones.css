@@ -1,0 +1,27 @@
+/* ==============================================================
+   hojas-y-botones.css
+   Hojas (ventanas deslizantes) y botones.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* hojas y botones */
+dialog{background:var(--card);border-radius:24px 24px 0 0}
+dialog::backdrop{background:rgba(42,50,45,.34);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.sh{padding:20px 22px 8px}.sh h3{font:600 22px/1.2 var(--serif)}
+.x{border:0;background:var(--bg);color:var(--mu)}
+.ft{border-top:1px solid var(--ln)}
+.tot{font-weight:600}
+.pri{height:52px;background:var(--acc);box-shadow:none;border-radius:14px;font-weight:600;font-size:16px}
+.pri:disabled{opacity:.55}
+.pri.dk{background:var(--accs2);color:var(--acc2)}
+.gh{border:1px solid var(--ln2);border-radius:14px;font-weight:600}
+.note{background:var(--bg);border:1px solid var(--ln)}
+.mz input,#callBody textarea,#tipRow input{border:1px solid var(--ln2)}
+#err{color:var(--red)}
+.hero{background-color:var(--accs);color:var(--acc)}
+.hero .x{background:#fff;box-shadow:0 2px 12px rgba(42,50,45,.18)}
+.pb h3{font:600 26px/1.2 var(--serif);letter-spacing:0}
+.pb .pp{font-weight:600}
+.adr{border:1px solid var(--ln);border-radius:14px}
+.adr input{accent-color:var(--acc)}
+.adr:has(input:checked){border-color:var(--acc);background:var(--accs)}

@@ -1,0 +1,14 @@
+/* ==============================================================
+   demora-del-pedido.css
+   Demora del pedido: verde (menos de 10 min), amarillo (10-19) y rojo (20 o más), y avance por estación.
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+/* demora del pedido: verde (< 10 min), amarillo (10-19) y rojo (20 o más) · y avance por estación (cocina / barra) */
+.tk{--dl:var(--ln);border-left:6px solid var(--dl);transition:border-color .3s}
+.tk.d-g{--dl:#4E9A6B}.tk.d-y{--dl:#E0A526}.tk.d-r{--dl:#C9544F}
+.tk.d-g .ago,.tk.d-y .ago,.tk.d-r .ago{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:3px 12px 3px 10px;font-size:15px}
+.tk .ago::before{content:none}.tk.d-g .ago::before,.tk.d-y .ago::before,.tk.d-r .ago::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dl)}
+.d-g .ago{background:#E3F1E8;color:#25613B}.d-y .ago{background:#FBEFC9;color:#7A5A00}.d-r .ago{background:#F6DAD8;color:#8F2F2B}
+.stc{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px 0}.stc span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;background:#EAF0F7;color:#3D5A80}
+.stc i{width:8px;height:8px;border-radius:50%;background:currentColor}.stc .sc-preparing{background:#FBF1DB;color:#6F5217}.stc .sc-ready{background:#E3EEE7;color:#2F5240}

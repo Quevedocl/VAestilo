@@ -1,0 +1,18 @@
+/* ==============================================================
+   importar-carta-ia.css
+   Ventana "Importar carta con IA" (Carta > Importar con IA).
+   Se usa en: index.html (panel del restaurante)
+   ============================================================== */
+
+#delAll[hidden]{display:none}#delAll{color:#8F3F3B}#delAll:hover{color:#8F3F3B;background:#F8ECEB!important;border-color:#EBCFCD!important}#delAll:disabled{opacity:.5}
+#impdlg{width:min(680px,94vw);max-height:90dvh;overflow:auto}
+#impdlg .hint{margin:6px 0 0;font-size:13px;color:var(--mu)}
+#impdlg .bt{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.imp-st{min-height:18px;margin:12px 0 0;font-size:13px;color:var(--mu)}.imp-st.err{color:var(--red);font-weight:600}
+.imp-bar{margin:12px 0 4px}.imp-bar .gh{height:34px;font-size:13px;padding:0 12px}
+.imp-row{display:grid;grid-template-columns:auto 1fr 150px 92px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--ln)}
+.imp-row input[type=text],.imp-row input[type=number]{height:38px;font-size:14px}
+.imp-row.dup{opacity:.6}.imp-row.dup small{grid-column:2/-1;color:var(--mu);font-size:12px}
+.imp-row.bad input.in,.imp-row.bad input.ic{border-color:var(--red)}
+.imp-row input.ip.zero{border-color:var(--amb)}
+@media(max-width:560px){.imp-row{grid-template-columns:auto 1fr 92px}.imp-row input.ic{grid-column:2/-1}.imp-row input.ip{grid-column:3;grid-row:1}}

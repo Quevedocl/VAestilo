@@ -1,0 +1,27 @@
+/* ==============================================================
+   platos.css
+   Platos con el estilo nuevo.
+   Se usa en: carta.html (carta que ve el cliente)
+   ============================================================== */
+
+/* platos */
+main{padding:4px 12px 24px}
+section h2,.ph2{margin:32px 6px 12px;display:block;font:600 21px/1.2 var(--serif);letter-spacing:0;color:var(--tx)}
+section h2::before{content:none}
+.lst{background:var(--card);border:1px solid var(--ln);border-radius:18px;box-shadow:none}
+.it{grid-template-columns:72px 1fr auto;gap:14px;padding:14px 16px;border-bottom:1px solid var(--ln)}
+.it:last-child{border:0}
+.ph{width:72px;height:72px;border-radius:14px;background-color:var(--accs);color:var(--acc);font:600 22px var(--serif)}
+.nm b{font-weight:600;font-size:16px;letter-spacing:0}
+.ds{-webkit-line-clamp:2;font-size:13.5px;line-height:1.35;margin:2px 0 4px}
+.pr{font-weight:600;font-size:15px;color:var(--tx)}
+.ag{color:var(--red);font-weight:600}
+.add,.stp button:not(:first-child){width:36px;height:36px;background:var(--accs2);color:var(--acc2);box-shadow:none;font-size:21px}
+.stp button:first-child{width:36px;height:36px;border:1px solid var(--ln2);color:var(--mu)}
+.stp b{font-weight:600}
+@media (hover:hover){.add:hover,.stp button:not(:first-child):hover{background:var(--acc);color:#fff}}
+.cnt{background:var(--acc);color:#fff}
+.it.off .nm b,.it.off .pr{color:var(--mu)}
+.tag{margin-top:4px;background:var(--accs);color:var(--acc2);font-weight:600;font-size:12px;border-radius:99px;padding:2px 10px}
+.tag.ex{margin-left:6px;background:#EEF2F6;color:#43607F}
+.promos{margin:18px 0 0}.pm{background:var(--accs);color:var(--acc2);font-weight:500;border-bottom:1px solid var(--accs2)}
