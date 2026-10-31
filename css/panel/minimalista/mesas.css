@@ -22,7 +22,5 @@
 .mc .ma .gh:last-child:hover{color:var(--red);border-color:#EBCFCD;background:#F8ECEB}
 .mc.free .mb{color:var(--acc2)}
 
-/* QR de la mesa: fondo blanco con borde (zona de silencio) para que el celular lo lea aunque el diálogo sea translúcido */
-#qrb{background:#fff;padding:22px;border-radius:14px;width:fit-content;margin:16px auto;box-shadow:0 0 0 1px var(--ln)}
-#qrb canvas,#qrb img{display:block;width:260px;height:260px;image-rendering:pixelated}
-#qrb img{display:none!important}
+/* QR de la mesa: el propio canvas ya trae el borde blanco; aquí solo se centra. NO fijar ancho/alto: escalar un QR a medio píxel lo vuelve ilegible. */
+#qrb canvas{display:block;margin:0 auto;max-width:100%;height:auto;border-radius:10px;box-shadow:0 0 0 1px var(--ln)}
